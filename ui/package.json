@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "check": "bun run lint"
+    "check": "tsc -b --noEmit"
   },
   "dependencies": {
     "@apollo/client": "^4.1.3",

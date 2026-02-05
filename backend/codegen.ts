@@ -11,6 +11,7 @@ const config: CodegenConfig = {
       typeDefsFilePath: './typeDefs.generated.ts',
       typesPluginsConfig: {
         contextType: './context#GraphQLContext',
+        useTypeImports: true,
       },
     }),
     'src/schema/generated/graphql-client.ts': {

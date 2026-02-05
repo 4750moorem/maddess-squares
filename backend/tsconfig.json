@@ -26,5 +26,9 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
-  "exclude": ["src/generated/**", "src/schema/generated/**"]
+  "exclude": [
+    "src/generated/**",
+    "src/schema/generated/**",
+    "src/schema/*.generated.ts"
+  ]
 }

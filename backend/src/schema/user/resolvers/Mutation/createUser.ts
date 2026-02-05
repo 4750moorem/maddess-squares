@@ -6,8 +6,8 @@ export const createUser: NonNullable<MutationResolvers['createUser']> = async (
   _arg,
   context,
 ) => {
-  if (!context.user) {
-    throw new GraphQLError('Unauthorized', {
+    if (!context.user) {
+      throw new GraphQLError('Unauthorized', {
       extensions: { code: 'UNAUTHORIZED' },
     })
   }
