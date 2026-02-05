@@ -88,8 +88,8 @@ This app hosts a **March Madness Squares** game (also known as NCAA Basketball S
 
 - A **10x10 grid** of 100 squares (boxes)
 - Each row and column is assigned a number from **0-9**
-- The **columns (X-axis / top)** represent the last digit of the **winning team's** final score
-- The **rows (Y-axis / side)** represent the last digit of the **losing team's** final score
+- The **rows (Y-axis / side)** represent the last digit of the **winning team's** final score
+- The **columns (X-axis / top)** represent the last digit of the **losing team's** final score
 - Grid numbers are typically hidden until the tournament begins or the admin reveals them
 
 ### How Squares Work
@@ -97,16 +97,16 @@ This app hosts a **March Madness Squares** game (also known as NCAA Basketball S
 - Pool members claim squares on the grid before the tournament starts
 - Each square a member owns applies to **every game** in the tournament (unlike Super Bowl Squares which is just one game)
 - At the end of each game, the winning square is determined by:
-  1. Take the last digit of the winning team's score → find that column
-  2. Take the last digit of the losing team's score → find that row
-  3. The intersection of that column and row is the winning square
+  1. Take the last digit of the winning team's score → find that row
+  2. Take the last digit of the losing team's score → find that column
+  3. The intersection of that row and column is the winning square
 
 ### Example
 
 If North Carolina beats Miami 73-64:
-- Winning team (North Carolina): 73 → last digit is **3** (column)
-- Losing team (Miami): 64 → last digit is **4** (row)
-- The square at column 3, row 4 wins for that game
+- Winning team (North Carolina): 73 → last digit is **3** (row)
+- Losing team (Miami): 64 → last digit is **4** (column)
+- The square at row 3, column 4 wins for that game
 
 ### Prizes & Winners
 
