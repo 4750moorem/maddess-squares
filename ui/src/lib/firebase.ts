@@ -2,12 +2,12 @@ import { initializeApp, type FirebaseApp } from 'firebase/app'
 import { getAuth, type Auth } from 'firebase/auth'
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: 'AIzaSyD3vhXBdXbG0g4ZBP7MYVLhQsEuU8VN6Qs',
+  authDomain: 'madness-squares.firebaseapp.com',
+  projectId: 'madness-squares',
+  storageBucket: 'madness-squares.firebasestorage.app',
+  messagingSenderId: '973055652864',
+  appId: '1:973055652864:web:28f8449d06f167457f14e5',
 }
 
 export const firebaseApp: FirebaseApp = initializeApp(firebaseConfig)
