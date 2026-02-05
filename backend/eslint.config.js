@@ -18,7 +18,7 @@ export default defineConfig([
       globals: globals.node,
     },
   },
-nr   {
+  {
     files: ['src/schema/**/resolver.ts', 'src/schema/**/mutations.ts'],
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',

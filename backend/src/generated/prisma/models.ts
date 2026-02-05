@@ -9,4 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/HealthCheck.ts'
+export type * from './models/User.ts'
+export type * from './models/Game.ts'
+export type * from './models/GamePlayer.ts'
 export type * from './commonInputTypes.ts'

@@ -1,7 +1,7 @@
-import type { QueryResolvers } from './../../../types.generated'
+import type { MutationResolvers } from './../../../types.generated'
 import { GraphQLError } from 'graphql'
 
-export const user: NonNullable<QueryResolvers['user']> = async (
+export const deleteGame: NonNullable<MutationResolvers['deleteGame']> = async (
   _parent,
   args,
   context,
@@ -12,7 +12,9 @@ export const user: NonNullable<QueryResolvers['user']> = async (
     })
   }
 
-  return context.prisma.user.findUnique({
+  await context.prisma.game.delete({
     where: { id: args.id },
   })
+
+  return true
 }

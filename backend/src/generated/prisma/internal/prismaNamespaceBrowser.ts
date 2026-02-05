@@ -51,7 +51,10 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  HealthCheck: 'HealthCheck'
+  HealthCheck: 'HealthCheck',
+  User: 'User',
+  Game: 'Game',
+  GamePlayer: 'GamePlayer'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -78,6 +81,40 @@ export const HealthCheckScalarFieldEnum = {
 export type HealthCheckScalarFieldEnum = (typeof HealthCheckScalarFieldEnum)[keyof typeof HealthCheckScalarFieldEnum]
 
 
+export const UserScalarFieldEnum = {
+  id: 'id',
+  firebaseUserId: 'firebaseUserId',
+  email: 'email',
+  phoneNumber: 'phoneNumber',
+  displayName: 'displayName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const GameScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GameScalarFieldEnum = (typeof GameScalarFieldEnum)[keyof typeof GameScalarFieldEnum]
+
+
+export const GamePlayerScalarFieldEnum = {
+  id: 'id',
+  gameId: 'gameId',
+  userId: 'userId',
+  joinedAt: 'joinedAt'
+} as const
+
+export type GamePlayerScalarFieldEnum = (typeof GamePlayerScalarFieldEnum)[keyof typeof GamePlayerScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -92,4 +129,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

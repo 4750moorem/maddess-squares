@@ -15,23 +15,126 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
 };
+
+export type AddUserToGameInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  gameId: Scalars['ID']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  role: GameUserRole;
+};
+
+export type CreateGameInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+};
+
+export type CreateUserInput = {
+  displayName?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  firebaseUserId: Scalars['String']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Game = {
+  __typename?: 'Game';
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  owners: Array<User>;
+  players: Array<GamePlayer>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type GamePlayer = {
+  __typename?: 'GamePlayer';
+  game: Game;
+  gameId: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  joinedAt: Scalars['DateTime']['output'];
+  user: User;
+  userId: Scalars['String']['output'];
+};
+
+export enum GameUserRole {
+  Owner = 'OWNER',
+  Player = 'PLAYER'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createUser?: Maybe<User>;
+  addUserToGame?: Maybe<Game>;
+  createGame: Game;
+  createUser: User;
+  deleteGame: Scalars['Boolean']['output'];
+  deleteUser: Scalars['Boolean']['output'];
+  removeUserFromGame?: Maybe<Game>;
+  updateGame?: Maybe<Game>;
+  updateUser?: Maybe<User>;
+};
+
+
+export type MutationAddUserToGameArgs = {
+  input: AddUserToGameInput;
+};
+
+
+export type MutationCreateGameArgs = {
+  input: CreateGameInput;
 };
 
 
 export type MutationCreateUserArgs = {
-  email: Scalars['String']['input'];
+  input: CreateUserInput;
+};
+
+
+export type MutationDeleteGameArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationRemoveUserFromGameArgs = {
+  input: RemoveUserFromGameInput;
+};
+
+
+export type MutationUpdateGameArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateGameInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateUserInput;
 };
 
 export type Query = {
   __typename?: 'Query';
   dbStatus: Scalars['String']['output'];
+  game?: Maybe<Game>;
+  games: Array<Game>;
   hello: Scalars['String']['output'];
+  me?: Maybe<User>;
+  myGames: Array<Game>;
   user?: Maybe<User>;
+  userByEmail?: Maybe<User>;
+  userByFirebaseId?: Maybe<User>;
+  userByPhoneNumber?: Maybe<User>;
+  users: Array<User>;
+};
+
+
+export type QueryGameArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -39,10 +142,49 @@ export type QueryUserArgs = {
   id: Scalars['ID']['input'];
 };
 
+
+export type QueryUserByEmailArgs = {
+  email: Scalars['String']['input'];
+};
+
+
+export type QueryUserByFirebaseIdArgs = {
+  firebaseUserId: Scalars['String']['input'];
+};
+
+
+export type QueryUserByPhoneNumberArgs = {
+  phoneNumber: Scalars['String']['input'];
+};
+
+export type RemoveUserFromGameInput = {
+  gameId: Scalars['ID']['input'];
+  role: GameUserRole;
+  userId: Scalars['ID']['input'];
+};
+
+export type UpdateGameInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateUserInput = {
+  displayName?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type User = {
   __typename?: 'User';
-  email: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  displayName?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  firebaseUserId: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  ownedGames: Array<Game>;
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  playerGames: Array<GamePlayer>;
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 
