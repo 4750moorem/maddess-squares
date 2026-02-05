@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client/react';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -86,14 +85,13 @@ export function useAppStatusLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHo
           const options = {...defaultOptions, ...baseOptions}
           return ApolloReactHooks.useLazyQuery<AppStatusQuery, AppStatusQueryVariables>(AppStatusDocument, options);
         }
-// @ts-ignore
-export function useAppStatusSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<AppStatusQuery, AppStatusQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<AppStatusQuery, AppStatusQueryVariables>;
-export function useAppStatusSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<AppStatusQuery, AppStatusQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<AppStatusQuery | undefined, AppStatusQueryVariables>;
-export function useAppStatusSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<AppStatusQuery, AppStatusQueryVariables>) {
+export function useAppStatusSuspenseQuery(
+  baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<AppStatusQuery, AppStatusQueryVariables>
+): ApolloReactHooks.UseSuspenseQueryResult<AppStatusQuery | undefined, AppStatusQueryVariables> {
           const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<AppStatusQuery, AppStatusQueryVariables>(AppStatusDocument, options);
+          return ApolloReactHooks.useSuspenseQuery<AppStatusQuery | undefined, AppStatusQueryVariables>(AppStatusDocument, options);
         }
 export type AppStatusQueryHookResult = ReturnType<typeof useAppStatusQuery>;
 export type AppStatusLazyQueryHookResult = ReturnType<typeof useAppStatusLazyQuery>;
 export type AppStatusSuspenseQueryHookResult = ReturnType<typeof useAppStatusSuspenseQuery>;
-export type AppStatusQueryResult = ApolloReactCommon.QueryResult<AppStatusQuery, AppStatusQueryVariables>;
+export type AppStatusQueryResult = AppStatusQueryHookResult;

@@ -1,6 +1,4 @@
-import type { GraphQLConfig } from 'graphql-config'
-
-const config: GraphQLConfig = {
+const config = {
   schema: ['src/schema/**/*.gql'],
   documents: ['src/**/*.graphql', 'src/**/*.gql'],
 }

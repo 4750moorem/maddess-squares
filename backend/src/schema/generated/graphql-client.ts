@@ -1,4 +1,5 @@
-import { GraphQLClient, RequestOptions } from 'graphql-request';
+import { GraphQLClient } from 'graphql-request';
+import type { RequestOptions } from 'graphql-request';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;

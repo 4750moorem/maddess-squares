@@ -10,7 +10,10 @@
     "db:up": "docker compose -f ../docker-compose.yml up -d db",
     "db:down": "docker compose -f ../docker-compose.yml down",
     "db:bootstrap": "bun run prisma migrate dev --name init && bun run prisma generate",
-    "prisma": "prisma"
+    "prisma": "prisma",
+    "lint": "tsc --noEmit",
+    "check": "bun run lint",
+    "build": "bun run schema:codegen && bun build src/index.ts --outdir dist"
   },
   "devDependencies": {
     "@eddeee888/gcg-typescript-resolver-files": "^0.15.0",
