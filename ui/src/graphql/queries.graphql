@@ -1,0 +1,8 @@
+query AppStatus {
+  hello
+  dbStatus
+  user(id: "1") {
+    id
+    email
+  }
+}

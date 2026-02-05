@@ -1,0 +1,14 @@
+{
+  "name": "maddess-squares",
+  "private": true,
+  "workspaces": [
+    "UI",
+    "backend",
+    "infra"
+  ],
+  "scripts": {
+    "dev:ui": "bun --cwd UI dev",
+    "dev:api": "bun --cwd backend dev",
+    "lint": "echo \"No root lint yet\""
+  }
+}
