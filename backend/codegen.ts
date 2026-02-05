@@ -12,6 +12,11 @@ const config: CodegenConfig = {
       typesPluginsConfig: {
         contextType: './context#GraphQLContext',
         useTypeImports: true,
+        mappers: {
+          User: '../generated/prisma/client#User as PrismaUser',
+          Game: '../generated/prisma/client#Game as PrismaGame',
+          GamePlayer: '../generated/prisma/client#GamePlayer as PrismaGamePlayer',
+        },
       },
     }),
     'src/schema/generated/graphql-client.ts': {

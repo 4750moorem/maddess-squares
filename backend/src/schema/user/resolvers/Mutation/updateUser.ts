@@ -1,7 +1,7 @@
 import type { MutationResolvers } from './../../../types.generated'
 import { GraphQLError } from 'graphql'
 
-export const createUser: NonNullable<MutationResolvers['createUser']> = async (
+export const updateUser: NonNullable<MutationResolvers['updateUser']> = async (
   _parent,
   args,
   context,
@@ -12,9 +12,9 @@ export const createUser: NonNullable<MutationResolvers['createUser']> = async (
     })
   }
 
-  return context.prisma.user.create({
+  return context.prisma.user.update({
+    where: { id: args.id },
     data: {
-      firebaseUserId: args.input.firebaseUserId,
       email: args.input.email,
       phoneNumber: args.input.phoneNumber,
       displayName: args.input.displayName,

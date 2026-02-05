@@ -1,14 +1,43 @@
+scalar DateTime
+
 type User {
   id: ID!
-  email: String!
+  firebaseUserId: String!
+  email: String
+  phoneNumber: String
+  displayName: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  ownedGames: [Game!]!
+  playerGames: [GamePlayer!]!
+}
+
+input CreateUserInput {
+  firebaseUserId: String!
+  email: String
+  phoneNumber: String
+  displayName: String
+}
+
+input UpdateUserInput {
+  email: String
+  phoneNumber: String
+  displayName: String
 }
 
 type Query {
   hello: String!
   dbStatus: String!
   user(id: ID!): User
+  userByFirebaseId(firebaseUserId: String!): User
+  userByEmail(email: String!): User
+  userByPhoneNumber(phoneNumber: String!): User
+  users: [User!]!
+  me: User
 }
 
 type Mutation {
-  createUser(email: String!): User
+  createUser(input: CreateUserInput!): User!
+  updateUser(id: ID!, input: UpdateUserInput!): User
+  deleteUser(id: ID!): Boolean!
 }

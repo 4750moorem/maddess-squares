@@ -1,14 +1,98 @@
+input AddUserToGameInput {
+  email: String
+  gameId: ID!
+  phoneNumber: String
+  role: GameUserRole!
+}
+
+input CreateGameInput {
+  description: String
+  name: String!
+}
+
+input CreateUserInput {
+  displayName: String
+  email: String
+  firebaseUserId: String!
+  phoneNumber: String
+}
+
+scalar DateTime
+
+type Game {
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  name: String!
+  owners: [User!]!
+  players: [GamePlayer!]!
+  updatedAt: DateTime!
+}
+
+type GamePlayer {
+  game: Game!
+  gameId: String!
+  id: ID!
+  joinedAt: DateTime!
+  user: User!
+  userId: String!
+}
+
+enum GameUserRole {
+  OWNER
+  PLAYER
+}
+
 type Mutation {
-  createUser(email: String!): User
+  addUserToGame(input: AddUserToGameInput!): Game
+  createGame(input: CreateGameInput!): Game!
+  createUser(input: CreateUserInput!): User!
+  deleteGame(id: ID!): Boolean!
+  deleteUser(id: ID!): Boolean!
+  removeUserFromGame(input: RemoveUserFromGameInput!): Game
+  updateGame(id: ID!, input: UpdateGameInput!): Game
+  updateUser(id: ID!, input: UpdateUserInput!): User
 }
 
 type Query {
   dbStatus: String!
+  game(id: ID!): Game
+  games: [Game!]!
   hello: String!
+  me: User
+  myGames: [Game!]!
   user(id: ID!): User
+  userByEmail(email: String!): User
+  userByFirebaseId(firebaseUserId: String!): User
+  userByPhoneNumber(phoneNumber: String!): User
+  users: [User!]!
+}
+
+input RemoveUserFromGameInput {
+  gameId: ID!
+  role: GameUserRole!
+  userId: ID!
+}
+
+input UpdateGameInput {
+  description: String
+  name: String
+}
+
+input UpdateUserInput {
+  displayName: String
+  email: String
+  phoneNumber: String
 }
 
 type User {
-  email: String!
+  createdAt: DateTime!
+  displayName: String
+  email: String
+  firebaseUserId: String!
   id: ID!
+  ownedGames: [Game!]!
+  phoneNumber: String
+  playerGames: [GamePlayer!]!
+  updatedAt: DateTime!
 }

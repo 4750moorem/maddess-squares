@@ -1,7 +1,7 @@
 import type { QueryResolvers } from './../../../types.generated'
 import { GraphQLError } from 'graphql'
 
-export const user: NonNullable<QueryResolvers['user']> = async (
+export const userByEmail: NonNullable<QueryResolvers['userByEmail']> = async (
   _parent,
   args,
   context,
@@ -13,6 +13,6 @@ export const user: NonNullable<QueryResolvers['user']> = async (
   }
 
   return context.prisma.user.findUnique({
-    where: { id: args.id },
+    where: { email: args.email },
   })
 }

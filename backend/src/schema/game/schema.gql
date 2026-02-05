@@ -1,0 +1,60 @@
+enum GameUserRole {
+  PLAYER
+  OWNER
+}
+
+type Game {
+  id: ID!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  owners: [User!]!
+  players: [GamePlayer!]!
+}
+
+type GamePlayer {
+  id: ID!
+  gameId: String!
+  userId: String!
+  joinedAt: DateTime!
+  game: Game!
+  user: User!
+}
+
+input CreateGameInput {
+  name: String!
+  description: String
+}
+
+input UpdateGameInput {
+  name: String
+  description: String
+}
+
+input AddUserToGameInput {
+  gameId: ID!
+  role: GameUserRole!
+  email: String
+  phoneNumber: String
+}
+
+input RemoveUserFromGameInput {
+  gameId: ID!
+  userId: ID!
+  role: GameUserRole!
+}
+
+extend type Query {
+  game(id: ID!): Game
+  games: [Game!]!
+  myGames: [Game!]!
+}
+
+extend type Mutation {
+  createGame(input: CreateGameInput!): Game!
+  updateGame(id: ID!, input: UpdateGameInput!): Game
+  deleteGame(id: ID!): Boolean!
+  addUserToGame(input: AddUserToGameInput!): Game
+  removeUserFromGame(input: RemoveUserFromGameInput!): Game
+}

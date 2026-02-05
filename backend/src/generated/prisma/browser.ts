@@ -22,3 +22,18 @@ export * from './enums.ts';
  * 
  */
 export type HealthCheck = Prisma.HealthCheckModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
+/**
+ * Model Game
+ * 
+ */
+export type Game = Prisma.GameModel
+/**
+ * Model GamePlayer
+ * 
+ */
+export type GamePlayer = Prisma.GamePlayerModel
