@@ -6,3 +6,56 @@ query AppStatus {
     email
   }
 }
+
+query Me {
+  me {
+    id
+    firebaseUserId
+    email
+    displayName
+  }
+}
+
+query MyGames {
+  myGames {
+    id
+    name
+    description
+    createdAt
+    owners {
+      id
+      email
+      displayName
+    }
+    players {
+      id
+      user {
+        id
+        email
+        displayName
+      }
+    }
+  }
+}
+
+mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    id
+    firebaseUserId
+    email
+    displayName
+  }
+}
+
+mutation CreateGame($input: CreateGameInput!) {
+  createGame(input: $input) {
+    id
+    name
+    description
+    createdAt
+    owners {
+      id
+      email
+    }
+  }
+}

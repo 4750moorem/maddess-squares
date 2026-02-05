@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
+import { useCreateUserMutation } from '@/graphql/generated'
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -12,6 +13,7 @@ function Login() {
 
   const { signIn, signUp, user } = useAuth()
   const navigate = useNavigate()
+  const [createUser] = useCreateUserMutation()
 
   if (user) {
     navigate('/', { replace: true })
@@ -25,7 +27,18 @@ function Login() {
 
     try {
       if (isSignUp) {
-        await signUp(email, password)
+        const userCredential = await signUp(email, password)
+        if (userCredential) {
+          await createUser({
+            variables: {
+              input: {
+                firebaseUserId: userCredential.uid,
+                email: userCredential.email ?? undefined,
+                displayName: userCredential.displayName ?? undefined,
+              },
+            },
+          })
+        }
       } else {
         await signIn(email, password)
       }
