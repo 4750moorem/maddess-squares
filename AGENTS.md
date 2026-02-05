@@ -79,3 +79,50 @@ Env you will likely need:
 
 - Everything should be type-safe with Prisma or GraphQL generated types.
 - We do not need DB enums.
+
+## Game Rules & Terminology
+
+This app hosts a **March Madness Squares** game (also known as NCAA Basketball Squares or Madness Squares). The concept is similar to Super Bowl Squares but applied to the NCAA Men's Basketball Tournament.
+
+### The Grid
+
+- A **10x10 grid** of 100 squares (boxes)
+- Each row and column is assigned a number from **0-9**
+- The **rows (Y-axis / side)** represent the last digit of the **winning team's** final score
+- The **columns (X-axis / top)** represent the last digit of the **losing team's** final score
+- Grid numbers are typically hidden until the tournament begins or the admin reveals them
+
+### How Squares Work
+
+- Pool members claim squares on the grid before the tournament starts
+- Each square a member owns applies to **every game** in the tournament (unlike Super Bowl Squares which is just one game)
+- At the end of each game, the winning square is determined by:
+  1. Take the last digit of the winning team's score → find that row
+  2. Take the last digit of the losing team's score → find that column
+  3. The intersection of that row and column is the winning square
+
+### Example
+
+If North Carolina beats Miami 73-64:
+- Winning team (North Carolina): 73 → last digit is **3** (row)
+- Losing team (Miami): 64 → last digit is **4** (column)
+- The square at row 3, column 4 wins for that game
+
+### Prizes & Winners
+
+- Each game produces a winner (the owner of the winning square)
+- Winners are tracked per game and aggregated across the tournament
+- Common prize structures include:
+  - **Per-game prizes**: A fixed amount for each game won
+  - **Round-based prizes**: Different prize amounts for different tournament rounds (Round of 64, Round of 32, Sweet 16, Elite 8, Final Four, Championship)
+  - **Total wins**: Prizes for members with the most total winning squares
+  - **Empty squares**: If a winning square is unclaimed, the prize may roll over or be split
+
+### Key Terms
+
+- **Square/Box**: A single cell in the 10x10 grid that can be claimed by a member
+- **Winning Square**: The square that corresponds to the final score's last digits for a game
+- **Grid Numbers**: The 0-9 values assigned to each row and column (often randomly assigned)
+- **Pool Member**: A participant who claims squares in the pool
+- **Commissioner/Admin**: The person who manages the pool, reveals numbers, and handles prizes
+- **Round**: Tournament stage (R1=Round of 64, R2=Round of 32, R3=Sweet 16, R4=Elite 8, R5=Final Four, R6=Championship)
