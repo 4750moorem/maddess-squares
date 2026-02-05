@@ -4,7 +4,7 @@ import { registerSW } from 'virtual:pwa-register'
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import { ApolloProvider } from '@apollo/client/react'
 import './tailwind.css'
-import App from './App.tsx'
+import Routes from './routes.tsx'
 
 registerSW({ immediate: true })
 
@@ -16,7 +16,7 @@ const client = new ApolloClient({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <Routes />
     </ApolloProvider>
   </StrictMode>,
 )
