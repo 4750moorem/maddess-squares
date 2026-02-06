@@ -1,5 +1,5 @@
 import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import type { User as PrismaUser, Game as PrismaGame, GamePlayer as PrismaGamePlayer } from '../generated/prisma/client';
+import type { User as PrismaUser, Game as PrismaGame, GamePlayer as PrismaGamePlayer, Grid as PrismaGrid, Square as PrismaSquare } from '../generated/prisma/client';
 import type { GraphQLContext } from './context';
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
@@ -64,10 +64,21 @@ export type GameUserRole =
   | 'OWNER'
   | 'PLAYER';
 
+export type Grid = {
+  __typename?: 'Grid';
+  columnOrder: Array<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  creator: User;
+  id: Scalars['ID']['output'];
+  rowOrder: Array<Scalars['Int']['output']>;
+  squares: Array<Square>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addUserToGame?: Maybe<Game>;
   createGame: Game;
+  createGrid: Grid;
   createUser: User;
   deleteGame: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
@@ -123,6 +134,7 @@ export type Query = {
   dbStatus: Scalars['String']['output'];
   game?: Maybe<Game>;
   games: Array<Game>;
+  grid?: Maybe<Grid>;
   hello: Scalars['String']['output'];
   me?: Maybe<User>;
   myGames: Array<Game>;
@@ -135,6 +147,11 @@ export type Query = {
 
 
 export type QuerygameArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QuerygridArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -162,6 +179,17 @@ export type RemoveUserFromGameInput = {
   gameId: Scalars['ID']['input'];
   role: GameUserRole;
   userId: Scalars['ID']['input'];
+};
+
+export type Square = {
+  __typename?: 'Square';
+  columnIndex: Scalars['Int']['output'];
+  columnValue: Scalars['Int']['output'];
+  gridId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  player?: Maybe<User>;
+  rowIndex: Scalars['Int']['output'];
+  rowValue: Scalars['Int']['output'];
 };
 
 export type UpdateGameInput = {
@@ -270,10 +298,13 @@ export type ResolversTypes = {
   Game: ResolverTypeWrapper<PrismaGame>;
   GamePlayer: ResolverTypeWrapper<PrismaGamePlayer>;
   GameUserRole: ResolverTypeWrapper<'PLAYER' | 'OWNER'>;
+  Grid: ResolverTypeWrapper<PrismaGrid>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   RemoveUserFromGameInput: RemoveUserFromGameInput;
+  Square: ResolverTypeWrapper<PrismaSquare>;
   UpdateGameInput: UpdateGameInput;
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<PrismaUser>;
@@ -289,10 +320,13 @@ export type ResolversParentTypes = {
   DateTime: Scalars['DateTime']['output'];
   Game: PrismaGame;
   GamePlayer: PrismaGamePlayer;
+  Grid: PrismaGrid;
+  Int: Scalars['Int']['output'];
   Mutation: Record<PropertyKey, never>;
   Boolean: Scalars['Boolean']['output'];
   Query: Record<PropertyKey, never>;
   RemoveUserFromGameInput: RemoveUserFromGameInput;
+  Square: PrismaSquare;
   UpdateGameInput: UpdateGameInput;
   UpdateUserInput: UpdateUserInput;
   User: PrismaUser;
@@ -323,9 +357,19 @@ export type GamePlayerResolvers<ContextType = GraphQLContext, ParentType extends
 
 export type GameUserRoleResolvers = EnumResolverSignature<{ OWNER?: any, PLAYER?: any }, ResolversTypes['GameUserRole']>;
 
+export type GridResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Grid'] = ResolversParentTypes['Grid']> = {
+  columnOrder?: Resolver<Array<ResolversTypes['Int']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  creator?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  rowOrder?: Resolver<Array<ResolversTypes['Int']>, ParentType, ContextType>;
+  squares?: Resolver<Array<ResolversTypes['Square']>, ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addUserToGame?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<MutationaddUserToGameArgs, 'input'>>;
   createGame?: Resolver<ResolversTypes['Game'], ParentType, ContextType, RequireFields<MutationcreateGameArgs, 'input'>>;
+  createGrid?: Resolver<ResolversTypes['Grid'], ParentType, ContextType>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationcreateUserArgs, 'input'>>;
   deleteGame?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationdeleteGameArgs, 'id'>>;
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationdeleteUserArgs, 'id'>>;
@@ -338,6 +382,7 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
   dbStatus?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   game?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<QuerygameArgs, 'id'>>;
   games?: Resolver<Array<ResolversTypes['Game']>, ParentType, ContextType>;
+  grid?: Resolver<Maybe<ResolversTypes['Grid']>, ParentType, ContextType, RequireFields<QuerygridArgs, 'id'>>;
   hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   myGames?: Resolver<Array<ResolversTypes['Game']>, ParentType, ContextType>;
@@ -346,6 +391,16 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
   userByFirebaseId?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryuserByFirebaseIdArgs, 'firebaseUserId'>>;
   userByPhoneNumber?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryuserByPhoneNumberArgs, 'phoneNumber'>>;
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+};
+
+export type SquareResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Square'] = ResolversParentTypes['Square']> = {
+  columnIndex?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  columnValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  gridId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  player?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  rowIndex?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rowValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -365,8 +420,10 @@ export type Resolvers<ContextType = GraphQLContext> = {
   Game?: GameResolvers<ContextType>;
   GamePlayer?: GamePlayerResolvers<ContextType>;
   GameUserRole?: GameUserRoleResolvers;
+  Grid?: GridResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Square?: SquareResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 

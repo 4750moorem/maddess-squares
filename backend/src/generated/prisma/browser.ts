@@ -37,3 +37,13 @@ export type Game = Prisma.GameModel
  * 
  */
 export type GamePlayer = Prisma.GamePlayerModel
+/**
+ * Model Grid
+ * 
+ */
+export type Grid = Prisma.GridModel
+/**
+ * Model Square
+ * 
+ */
+export type Square = Prisma.SquareModel

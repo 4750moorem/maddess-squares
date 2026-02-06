@@ -16,6 +16,8 @@ const config: CodegenConfig = {
           User: '../generated/prisma/client#User as PrismaUser',
           Game: '../generated/prisma/client#Game as PrismaGame',
           GamePlayer: '../generated/prisma/client#GamePlayer as PrismaGamePlayer',
+          Grid: '../generated/prisma/client#Grid as PrismaGrid',
+          Square: '../generated/prisma/client#Square as PrismaSquare',
         },
       },
     }),

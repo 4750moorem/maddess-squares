@@ -43,9 +43,19 @@ enum GameUserRole {
   PLAYER
 }
 
+type Grid {
+  columnOrder: [Int!]!
+  createdAt: DateTime!
+  creator: User!
+  id: ID!
+  rowOrder: [Int!]!
+  squares: [Square!]!
+}
+
 type Mutation {
   addUserToGame(input: AddUserToGameInput!): Game
   createGame(input: CreateGameInput!): Game!
+  createGrid: Grid!
   createUser(input: CreateUserInput!): User!
   deleteGame(id: ID!): Boolean!
   deleteUser(id: ID!): Boolean!
@@ -58,6 +68,7 @@ type Query {
   dbStatus: String!
   game(id: ID!): Game
   games: [Game!]!
+  grid(id: ID!): Grid
   hello: String!
   me: User
   myGames: [Game!]!
@@ -72,6 +83,16 @@ input RemoveUserFromGameInput {
   gameId: ID!
   role: GameUserRole!
   userId: ID!
+}
+
+type Square {
+  columnIndex: Int!
+  columnValue: Int!
+  gridId: ID!
+  id: ID!
+  player: User
+  rowIndex: Int!
+  rowValue: Int!
 }
 
 input UpdateGameInput {

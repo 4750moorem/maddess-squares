@@ -387,7 +387,9 @@ export const ModelName = {
   HealthCheck: 'HealthCheck',
   User: 'User',
   Game: 'Game',
-  GamePlayer: 'GamePlayer'
+  GamePlayer: 'GamePlayer',
+  Grid: 'Grid',
+  Square: 'Square'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "healthCheck" | "user" | "game" | "gamePlayer"
+    modelProps: "healthCheck" | "user" | "game" | "gamePlayer" | "grid" | "square"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +705,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Grid: {
+      payload: Prisma.$GridPayload<ExtArgs>
+      fields: Prisma.GridFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GridFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GridPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GridFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GridPayload>
+        }
+        findFirst: {
+          args: Prisma.GridFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GridPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GridFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GridPayload>
+        }
+        findMany: {
+          args: Prisma.GridFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GridPayload>[]
+        }
+        create: {
+          args: Prisma.GridCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GridPayload>
+        }
+        createMany: {
+          args: Prisma.GridCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GridCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GridPayload>[]
+        }
+        delete: {
+          args: Prisma.GridDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GridPayload>
+        }
+        update: {
+          args: Prisma.GridUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GridPayload>
+        }
+        deleteMany: {
+          args: Prisma.GridDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GridUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GridUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GridPayload>[]
+        }
+        upsert: {
+          args: Prisma.GridUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GridPayload>
+        }
+        aggregate: {
+          args: Prisma.GridAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGrid>
+        }
+        groupBy: {
+          args: Prisma.GridGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GridGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GridCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GridCountAggregateOutputType> | number
+        }
+      }
+    }
+    Square: {
+      payload: Prisma.$SquarePayload<ExtArgs>
+      fields: Prisma.SquareFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SquareFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SquarePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SquareFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SquarePayload>
+        }
+        findFirst: {
+          args: Prisma.SquareFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SquarePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SquareFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SquarePayload>
+        }
+        findMany: {
+          args: Prisma.SquareFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SquarePayload>[]
+        }
+        create: {
+          args: Prisma.SquareCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SquarePayload>
+        }
+        createMany: {
+          args: Prisma.SquareCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SquareCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SquarePayload>[]
+        }
+        delete: {
+          args: Prisma.SquareDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SquarePayload>
+        }
+        update: {
+          args: Prisma.SquareUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SquarePayload>
+        }
+        deleteMany: {
+          args: Prisma.SquareDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SquareUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SquareUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SquarePayload>[]
+        }
+        upsert: {
+          args: Prisma.SquareUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SquarePayload>
+        }
+        aggregate: {
+          args: Prisma.SquareAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSquare>
+        }
+        groupBy: {
+          args: Prisma.SquareGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SquareGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SquareCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SquareCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -784,6 +934,31 @@ export const GamePlayerScalarFieldEnum = {
 export type GamePlayerScalarFieldEnum = (typeof GamePlayerScalarFieldEnum)[keyof typeof GamePlayerScalarFieldEnum]
 
 
+export const GridScalarFieldEnum = {
+  id: 'id',
+  creatorId: 'creatorId',
+  rowOrder: 'rowOrder',
+  columnOrder: 'columnOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GridScalarFieldEnum = (typeof GridScalarFieldEnum)[keyof typeof GridScalarFieldEnum]
+
+
+export const SquareScalarFieldEnum = {
+  id: 'id',
+  gridId: 'gridId',
+  rowIndex: 'rowIndex',
+  columnIndex: 'columnIndex',
+  rowValue: 'rowValue',
+  columnValue: 'columnValue',
+  playerId: 'playerId'
+} as const
+
+export type SquareScalarFieldEnum = (typeof SquareScalarFieldEnum)[keyof typeof SquareScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -843,6 +1018,13 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -850,9 +1032,16 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 
 
 /**
- * Reference to a field of type 'Int[]'
+ * Reference to a field of type 'Float'
  */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -954,6 +1143,8 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   game?: Prisma.GameOmit
   gamePlayer?: Prisma.GamePlayerOmit
+  grid?: Prisma.GridOmit
+  square?: Prisma.SquareOmit
 }
 
 /* Types for Logging */
