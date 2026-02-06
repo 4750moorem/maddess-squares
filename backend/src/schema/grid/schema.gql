@@ -1,0 +1,26 @@
+type Grid {
+  id: ID!
+  rowOrder: [Int!]!
+  columnOrder: [Int!]!
+  squares: [Square!]!
+  creator: User!
+  createdAt: DateTime!
+}
+
+type Square {
+  id: ID!
+  gridId: ID!
+  rowIndex: Int!
+  columnIndex: Int!
+  rowValue: Int!
+  columnValue: Int!
+  player: User
+}
+
+extend type Query {
+  grid(id: ID!): Grid
+}
+
+extend type Mutation {
+  createGrid: Grid!
+}

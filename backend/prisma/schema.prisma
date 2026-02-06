@@ -21,8 +21,10 @@ model User {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  ownedGames  Game[]       @relation("GameOwners")
-  playerGames GamePlayer[]
+  ownedGames   Game[]       @relation("GameOwners")
+  playerGames  GamePlayer[]
+  createdGrids Grid[]       @relation("GridCreator")
+  squares      Square[]     @relation("SquarePlayer")
 }
 
 model Game {
@@ -46,4 +48,29 @@ model GamePlayer {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([gameId, userId])
+}
+
+model Grid {
+  id          String   @id @default(cuid())
+  creatorId   String
+  creator     User     @relation("GridCreator", fields: [creatorId], references: [id])
+  rowOrder    Int[]
+  columnOrder Int[]
+  squares     Square[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Square {
+  id          String  @id @default(cuid())
+  gridId      String
+  grid        Grid    @relation(fields: [gridId], references: [id])
+  rowIndex    Int
+  columnIndex Int
+  rowValue    Int
+  columnValue Int
+  playerId    String?
+  player      User?   @relation("SquarePlayer", fields: [playerId], references: [id])
+
+  @@unique([gridId, rowIndex, columnIndex])
 }

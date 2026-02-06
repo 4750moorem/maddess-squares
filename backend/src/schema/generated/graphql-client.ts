@@ -63,10 +63,21 @@ export enum GameUserRole {
   Player = 'PLAYER'
 }
 
+export type Grid = {
+  __typename?: 'Grid';
+  columnOrder: Array<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  creator: User;
+  id: Scalars['ID']['output'];
+  rowOrder: Array<Scalars['Int']['output']>;
+  squares: Array<Square>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addUserToGame?: Maybe<Game>;
   createGame: Game;
+  createGrid: Grid;
   createUser: User;
   deleteGame: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
@@ -122,6 +133,7 @@ export type Query = {
   dbStatus: Scalars['String']['output'];
   game?: Maybe<Game>;
   games: Array<Game>;
+  grid?: Maybe<Grid>;
   hello: Scalars['String']['output'];
   me?: Maybe<User>;
   myGames: Array<Game>;
@@ -134,6 +146,11 @@ export type Query = {
 
 
 export type QueryGameArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGridArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -161,6 +178,17 @@ export type RemoveUserFromGameInput = {
   gameId: Scalars['ID']['input'];
   role: GameUserRole;
   userId: Scalars['ID']['input'];
+};
+
+export type Square = {
+  __typename?: 'Square';
+  columnIndex: Scalars['Int']['output'];
+  columnValue: Scalars['Int']['output'];
+  gridId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  player?: Maybe<User>;
+  rowIndex: Scalars['Int']['output'];
+  rowValue: Scalars['Int']['output'];
 };
 
 export type UpdateGameInput = {
