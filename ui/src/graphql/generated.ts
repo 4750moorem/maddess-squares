@@ -1,5 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
 import { gql } from '@apollo/client';
-// @ts-ignore
 import * as Apollo from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client/react';
 export type Maybe<T> = T | null;
@@ -27,6 +28,11 @@ export type AddUserToGameInput = {
   role: GameUserRole;
 };
 
+export type AssignGridToGameInput = {
+  gameId: Scalars['ID']['input'];
+  gridId: Scalars['ID']['input'];
+};
+
 export type CreateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -43,6 +49,7 @@ export type Game = {
   __typename?: 'Game';
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
+  grid?: Maybe<Grid>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   owners: Array<User>;
@@ -66,21 +73,39 @@ export const GameUserRole = {
 } as const;
 
 export type GameUserRole = typeof GameUserRole[keyof typeof GameUserRole];
+export type Grid = {
+  __typename?: 'Grid';
+  columnOrder: Array<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  creator: User;
+  id: Scalars['ID']['output'];
+  rowOrder: Array<Scalars['Int']['output']>;
+  squares: Array<Square>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addUserToGame?: Maybe<Game>;
+  assignGridToGame?: Maybe<Game>;
   createGame: Game;
+  createGrid: Grid;
   createUser: User;
   deleteGame: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
   removeUserFromGame?: Maybe<Game>;
   updateGame?: Maybe<Game>;
+  updateSquare?: Maybe<Square>;
   updateUser?: Maybe<User>;
 };
 
 
 export type MutationAddUserToGameArgs = {
   input: AddUserToGameInput;
+};
+
+
+export type MutationAssignGridToGameArgs = {
+  input: AssignGridToGameInput;
 };
 
 
@@ -115,6 +140,12 @@ export type MutationUpdateGameArgs = {
 };
 
 
+export type MutationUpdateSquareArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateSquareInput;
+};
+
+
 export type MutationUpdateUserArgs = {
   id: Scalars['ID']['input'];
   input: UpdateUserInput;
@@ -125,6 +156,7 @@ export type Query = {
   dbStatus: Scalars['String']['output'];
   game?: Maybe<Game>;
   games: Array<Game>;
+  grid?: Maybe<Grid>;
   hello: Scalars['String']['output'];
   me?: Maybe<User>;
   myGames: Array<Game>;
@@ -137,6 +169,11 @@ export type Query = {
 
 
 export type QueryGameArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGridArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -166,9 +203,24 @@ export type RemoveUserFromGameInput = {
   userId: Scalars['ID']['input'];
 };
 
+export type Square = {
+  __typename?: 'Square';
+  columnIndex: Scalars['Int']['output'];
+  columnValue: Scalars['Int']['output'];
+  gridId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  player?: Maybe<User>;
+  rowIndex: Scalars['Int']['output'];
+  rowValue: Scalars['Int']['output'];
+};
+
 export type UpdateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateSquareInput = {
+  value?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
@@ -203,7 +255,14 @@ export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: st
 export type MyGamesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyGamesQuery = { __typename?: 'Query', myGames: Array<{ __typename?: 'Game', id: string, name: string, description?: string | null, createdAt: any, owners: Array<{ __typename?: 'User', id: string, email?: string | null, displayName?: string | null }>, players: Array<{ __typename?: 'GamePlayer', id: string, user: { __typename?: 'User', id: string, email?: string | null, displayName?: string | null } }> }> };
+export type MyGamesQuery = { __typename?: 'Query', myGames: Array<{ __typename?: 'Game', id: string, name: string, description?: string | null, createdAt: any, owners: Array<{ __typename?: 'User', id: string, email?: string | null, displayName?: string | null }>, players: Array<{ __typename?: 'GamePlayer', id: string, user: { __typename?: 'User', id: string, email?: string | null, displayName?: string | null } }>, grid?: { __typename?: 'Grid', id: string } | null }> };
+
+export type GameGridQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GameGridQuery = { __typename?: 'Query', game?: { __typename?: 'Game', id: string, grid?: { __typename?: 'Grid', id: string, rowOrder: Array<number>, columnOrder: Array<number>, squares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, player?: { __typename?: 'User', id: string, displayName?: string | null, email?: string | null } | null }> } | null } | null };
 
 export type CreateUserMutationVariables = Exact<{
   input: CreateUserInput;
@@ -218,6 +277,26 @@ export type CreateGameMutationVariables = Exact<{
 
 
 export type CreateGameMutation = { __typename?: 'Mutation', createGame: { __typename?: 'Game', id: string, name: string, description?: string | null, createdAt: any, owners: Array<{ __typename?: 'User', id: string, email?: string | null }> } };
+
+export type CreateGridMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateGridMutation = { __typename?: 'Mutation', createGrid: { __typename?: 'Grid', id: string, rowOrder: Array<number>, columnOrder: Array<number>, squares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, player?: { __typename?: 'User', id: string, displayName?: string | null } | null }> } };
+
+export type AssignGridToGameMutationVariables = Exact<{
+  input: AssignGridToGameInput;
+}>;
+
+
+export type AssignGridToGameMutation = { __typename?: 'Mutation', assignGridToGame?: { __typename?: 'Game', id: string, grid?: { __typename?: 'Grid', id: string } | null } | null };
+
+export type UpdateSquareMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  input: UpdateSquareInput;
+}>;
+
+
+export type UpdateSquareMutation = { __typename?: 'Mutation', updateSquare?: { __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, player?: { __typename?: 'User', id: string, displayName?: string | null, email?: string | null } | null } | null };
 
 
 export const AppStatusDocument = gql`
@@ -256,7 +335,6 @@ export function useAppStatusLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHo
         }
 // @ts-ignore
 export function useAppStatusSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<AppStatusQuery, AppStatusQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<AppStatusQuery, AppStatusQueryVariables>;
-// @ts-ignore
 export function useAppStatusSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<AppStatusQuery, AppStatusQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<AppStatusQuery | undefined, AppStatusQueryVariables>;
 export function useAppStatusSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<AppStatusQuery, AppStatusQueryVariables>) {
           const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
@@ -301,7 +379,6 @@ export function useMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptio
         }
 // @ts-ignore
 export function useMeSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<MeQuery, MeQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<MeQuery, MeQueryVariables>;
-// @ts-ignore
 export function useMeSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MeQuery, MeQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<MeQuery | undefined, MeQueryVariables>;
 export function useMeSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MeQuery, MeQueryVariables>) {
           const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
@@ -329,6 +406,9 @@ export const MyGamesDocument = gql`
         email
         displayName
       }
+    }
+    grid {
+      id
     }
   }
 }
@@ -359,7 +439,6 @@ export function useMyGamesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHook
         }
 // @ts-ignore
 export function useMyGamesSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<MyGamesQuery, MyGamesQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<MyGamesQuery, MyGamesQueryVariables>;
-// @ts-ignore
 export function useMyGamesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MyGamesQuery, MyGamesQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<MyGamesQuery | undefined, MyGamesQueryVariables>;
 export function useMyGamesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MyGamesQuery, MyGamesQueryVariables>) {
           const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
@@ -368,6 +447,65 @@ export function useMyGamesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken
 export type MyGamesQueryHookResult = ReturnType<typeof useMyGamesQuery>;
 export type MyGamesLazyQueryHookResult = ReturnType<typeof useMyGamesLazyQuery>;
 export type MyGamesSuspenseQueryHookResult = ReturnType<typeof useMyGamesSuspenseQuery>;
+export const GameGridDocument = gql`
+    query GameGrid($id: ID!) {
+  game(id: $id) {
+    id
+    grid {
+      id
+      rowOrder
+      columnOrder
+      squares {
+        id
+        rowIndex
+        columnIndex
+        rowValue
+        columnValue
+        player {
+          id
+          displayName
+          email
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGameGridQuery__
+ *
+ * To run a query within a React component, call `useGameGridQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGameGridQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGameGridQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGameGridQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GameGridQuery, GameGridQueryVariables> & ({ variables: GameGridQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GameGridQuery, GameGridQueryVariables>(GameGridDocument, options);
+      }
+export function useGameGridLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GameGridQuery, GameGridQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GameGridQuery, GameGridQueryVariables>(GameGridDocument, options);
+        }
+// @ts-ignore
+export function useGameGridSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<GameGridQuery, GameGridQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<GameGridQuery, GameGridQueryVariables>;
+export function useGameGridSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GameGridQuery, GameGridQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<GameGridQuery | undefined, GameGridQueryVariables>;
+export function useGameGridSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GameGridQuery, GameGridQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<GameGridQuery, GameGridQueryVariables>(GameGridDocument, options);
+        }
+export type GameGridQueryHookResult = ReturnType<typeof useGameGridQuery>;
+export type GameGridLazyQueryHookResult = ReturnType<typeof useGameGridLazyQuery>;
+export type GameGridSuspenseQueryHookResult = ReturnType<typeof useGameGridSuspenseQuery>;
 export const CreateUserDocument = gql`
     mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {
@@ -438,3 +576,116 @@ export function useCreateGameMutation(baseOptions?: ApolloReactHooks.MutationHoo
         return ApolloReactHooks.useMutation<CreateGameMutation, CreateGameMutationVariables>(CreateGameDocument, options);
       }
 export type CreateGameMutationHookResult = ReturnType<typeof useCreateGameMutation>;
+export const CreateGridDocument = gql`
+    mutation CreateGrid {
+  createGrid {
+    id
+    rowOrder
+    columnOrder
+    squares {
+      id
+      rowIndex
+      columnIndex
+      player {
+        id
+        displayName
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useCreateGridMutation__
+ *
+ * To run a mutation, you first call `useCreateGridMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateGridMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createGridMutation, { data, loading, error }] = useCreateGridMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateGridMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateGridMutation, CreateGridMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateGridMutation, CreateGridMutationVariables>(CreateGridDocument, options);
+      }
+export type CreateGridMutationHookResult = ReturnType<typeof useCreateGridMutation>;
+export const AssignGridToGameDocument = gql`
+    mutation AssignGridToGame($input: AssignGridToGameInput!) {
+  assignGridToGame(input: $input) {
+    id
+    grid {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useAssignGridToGameMutation__
+ *
+ * To run a mutation, you first call `useAssignGridToGameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAssignGridToGameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [assignGridToGameMutation, { data, loading, error }] = useAssignGridToGameMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAssignGridToGameMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AssignGridToGameMutation, AssignGridToGameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<AssignGridToGameMutation, AssignGridToGameMutationVariables>(AssignGridToGameDocument, options);
+      }
+export type AssignGridToGameMutationHookResult = ReturnType<typeof useAssignGridToGameMutation>;
+export const UpdateSquareDocument = gql`
+    mutation UpdateSquare($id: ID!, $input: UpdateSquareInput!) {
+  updateSquare(id: $id, input: $input) {
+    id
+    rowIndex
+    columnIndex
+    rowValue
+    columnValue
+    player {
+      id
+      displayName
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useUpdateSquareMutation__
+ *
+ * To run a mutation, you first call `useUpdateSquareMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSquareMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSquareMutation, { data, loading, error }] = useUpdateSquareMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateSquareMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateSquareMutation, UpdateSquareMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<UpdateSquareMutation, UpdateSquareMutationVariables>(UpdateSquareDocument, options);
+      }
+export type UpdateSquareMutationHookResult = ReturnType<typeof useUpdateSquareMutation>;

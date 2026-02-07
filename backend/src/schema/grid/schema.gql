@@ -21,6 +21,17 @@ extend type Query {
   grid(id: ID!): Grid
 }
 
+input UpdateSquareInput {
+  value: String
+}
+
+input AssignGridToGameInput {
+  gridId: ID!
+  gameId: ID!
+}
+
 extend type Mutation {
   createGrid: Grid!
+  updateSquare(id: ID!, input: UpdateSquareInput!): Square
+  assignGridToGame(input: AssignGridToGameInput!): Game
 }

@@ -5,6 +5,11 @@ input AddUserToGameInput {
   role: GameUserRole!
 }
 
+input AssignGridToGameInput {
+  gameId: ID!
+  gridId: ID!
+}
+
 input CreateGameInput {
   description: String
   name: String!
@@ -22,6 +27,7 @@ scalar DateTime
 type Game {
   createdAt: DateTime!
   description: String
+  grid: Grid
   id: ID!
   name: String!
   owners: [User!]!
@@ -54,6 +60,7 @@ type Grid {
 
 type Mutation {
   addUserToGame(input: AddUserToGameInput!): Game
+  assignGridToGame(input: AssignGridToGameInput!): Game
   createGame(input: CreateGameInput!): Game!
   createGrid: Grid!
   createUser(input: CreateUserInput!): User!
@@ -61,6 +68,7 @@ type Mutation {
   deleteUser(id: ID!): Boolean!
   removeUserFromGame(input: RemoveUserFromGameInput!): Game
   updateGame(id: ID!, input: UpdateGameInput!): Game
+  updateSquare(id: ID!, input: UpdateSquareInput!): Square
   updateUser(id: ID!, input: UpdateUserInput!): User
 }
 
@@ -98,6 +106,10 @@ type Square {
 input UpdateGameInput {
   description: String
   name: String
+}
+
+input UpdateSquareInput {
+  value: String
 }
 
 input UpdateUserInput {

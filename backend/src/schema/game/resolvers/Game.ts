@@ -13,4 +13,11 @@ export const Game: GameResolvers = {
       where: { gameId: String(parent.id) },
     })
   },
+  grid: async (parent, _args, context) => {
+    const game = await context.prisma.game.findUnique({
+      where: { id: String(parent.id) },
+      include: { grid: true },
+    })
+    return game?.grid ?? null
+  },
 }

@@ -11,6 +11,7 @@ type Game {
   updatedAt: DateTime!
   owners: [User!]!
   players: [GamePlayer!]!
+  grid: Grid
 }
 
 type GamePlayer {

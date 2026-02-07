@@ -222,6 +222,7 @@ export type GridWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Grid"> | Date | string
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   squares?: Prisma.SquareListRelationFilter
+  game?: Prisma.XOR<Prisma.GameNullableScalarRelationFilter, Prisma.GameWhereInput> | null
 }
 
 export type GridOrderByWithRelationInput = {
@@ -233,6 +234,7 @@ export type GridOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   creator?: Prisma.UserOrderByWithRelationInput
   squares?: Prisma.SquareOrderByRelationAggregateInput
+  game?: Prisma.GameOrderByWithRelationInput
 }
 
 export type GridWhereUniqueInput = Prisma.AtLeast<{
@@ -247,6 +249,7 @@ export type GridWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Grid"> | Date | string
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   squares?: Prisma.SquareListRelationFilter
+  game?: Prisma.XOR<Prisma.GameNullableScalarRelationFilter, Prisma.GameWhereInput> | null
 }, "id">
 
 export type GridOrderByWithAggregationInput = {
@@ -283,6 +286,7 @@ export type GridCreateInput = {
   updatedAt?: Date | string
   creator: Prisma.UserCreateNestedOneWithoutCreatedGridsInput
   squares?: Prisma.SquareCreateNestedManyWithoutGridInput
+  game?: Prisma.GameCreateNestedOneWithoutGridInput
 }
 
 export type GridUncheckedCreateInput = {
@@ -293,6 +297,7 @@ export type GridUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   squares?: Prisma.SquareUncheckedCreateNestedManyWithoutGridInput
+  game?: Prisma.GameUncheckedCreateNestedOneWithoutGridInput
 }
 
 export type GridUpdateInput = {
@@ -303,6 +308,7 @@ export type GridUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedGridsNestedInput
   squares?: Prisma.SquareUpdateManyWithoutGridNestedInput
+  game?: Prisma.GameUpdateOneWithoutGridNestedInput
 }
 
 export type GridUncheckedUpdateInput = {
@@ -313,6 +319,7 @@ export type GridUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   squares?: Prisma.SquareUncheckedUpdateManyWithoutGridNestedInput
+  game?: Prisma.GameUncheckedUpdateOneWithoutGridNestedInput
 }
 
 export type GridCreateManyInput = {
@@ -349,6 +356,11 @@ export type GridListRelationFilter = {
 
 export type GridOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type GridNullableScalarRelationFilter = {
+  is?: Prisma.GridWhereInput | null
+  isNot?: Prisma.GridWhereInput | null
 }
 
 export type IntNullableListFilter<$PrismaModel = never> = {
@@ -439,6 +451,22 @@ export type GridUncheckedUpdateManyWithoutCreatorNestedInput = {
   deleteMany?: Prisma.GridScalarWhereInput | Prisma.GridScalarWhereInput[]
 }
 
+export type GridCreateNestedOneWithoutGameInput = {
+  create?: Prisma.XOR<Prisma.GridCreateWithoutGameInput, Prisma.GridUncheckedCreateWithoutGameInput>
+  connectOrCreate?: Prisma.GridCreateOrConnectWithoutGameInput
+  connect?: Prisma.GridWhereUniqueInput
+}
+
+export type GridUpdateOneWithoutGameNestedInput = {
+  create?: Prisma.XOR<Prisma.GridCreateWithoutGameInput, Prisma.GridUncheckedCreateWithoutGameInput>
+  connectOrCreate?: Prisma.GridCreateOrConnectWithoutGameInput
+  upsert?: Prisma.GridUpsertWithoutGameInput
+  disconnect?: Prisma.GridWhereInput | boolean
+  delete?: Prisma.GridWhereInput | boolean
+  connect?: Prisma.GridWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GridUpdateToOneWithWhereWithoutGameInput, Prisma.GridUpdateWithoutGameInput>, Prisma.GridUncheckedUpdateWithoutGameInput>
+}
+
 export type GridCreaterowOrderInput = {
   set: number[]
 }
@@ -478,6 +506,7 @@ export type GridCreateWithoutCreatorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   squares?: Prisma.SquareCreateNestedManyWithoutGridInput
+  game?: Prisma.GameCreateNestedOneWithoutGridInput
 }
 
 export type GridUncheckedCreateWithoutCreatorInput = {
@@ -487,6 +516,7 @@ export type GridUncheckedCreateWithoutCreatorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   squares?: Prisma.SquareUncheckedCreateNestedManyWithoutGridInput
+  game?: Prisma.GameUncheckedCreateNestedOneWithoutGridInput
 }
 
 export type GridCreateOrConnectWithoutCreatorInput = {
@@ -527,6 +557,62 @@ export type GridScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Grid"> | Date | string
 }
 
+export type GridCreateWithoutGameInput = {
+  id?: string
+  rowOrder?: Prisma.GridCreaterowOrderInput | number[]
+  columnOrder?: Prisma.GridCreatecolumnOrderInput | number[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  creator: Prisma.UserCreateNestedOneWithoutCreatedGridsInput
+  squares?: Prisma.SquareCreateNestedManyWithoutGridInput
+}
+
+export type GridUncheckedCreateWithoutGameInput = {
+  id?: string
+  creatorId: string
+  rowOrder?: Prisma.GridCreaterowOrderInput | number[]
+  columnOrder?: Prisma.GridCreatecolumnOrderInput | number[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  squares?: Prisma.SquareUncheckedCreateNestedManyWithoutGridInput
+}
+
+export type GridCreateOrConnectWithoutGameInput = {
+  where: Prisma.GridWhereUniqueInput
+  create: Prisma.XOR<Prisma.GridCreateWithoutGameInput, Prisma.GridUncheckedCreateWithoutGameInput>
+}
+
+export type GridUpsertWithoutGameInput = {
+  update: Prisma.XOR<Prisma.GridUpdateWithoutGameInput, Prisma.GridUncheckedUpdateWithoutGameInput>
+  create: Prisma.XOR<Prisma.GridCreateWithoutGameInput, Prisma.GridUncheckedCreateWithoutGameInput>
+  where?: Prisma.GridWhereInput
+}
+
+export type GridUpdateToOneWithWhereWithoutGameInput = {
+  where?: Prisma.GridWhereInput
+  data: Prisma.XOR<Prisma.GridUpdateWithoutGameInput, Prisma.GridUncheckedUpdateWithoutGameInput>
+}
+
+export type GridUpdateWithoutGameInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  rowOrder?: Prisma.GridUpdaterowOrderInput | number[]
+  columnOrder?: Prisma.GridUpdatecolumnOrderInput | number[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  creator?: Prisma.UserUpdateOneRequiredWithoutCreatedGridsNestedInput
+  squares?: Prisma.SquareUpdateManyWithoutGridNestedInput
+}
+
+export type GridUncheckedUpdateWithoutGameInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
+  rowOrder?: Prisma.GridUpdaterowOrderInput | number[]
+  columnOrder?: Prisma.GridUpdatecolumnOrderInput | number[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  squares?: Prisma.SquareUncheckedUpdateManyWithoutGridNestedInput
+}
+
 export type GridCreateWithoutSquaresInput = {
   id?: string
   rowOrder?: Prisma.GridCreaterowOrderInput | number[]
@@ -534,6 +620,7 @@ export type GridCreateWithoutSquaresInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   creator: Prisma.UserCreateNestedOneWithoutCreatedGridsInput
+  game?: Prisma.GameCreateNestedOneWithoutGridInput
 }
 
 export type GridUncheckedCreateWithoutSquaresInput = {
@@ -543,6 +630,7 @@ export type GridUncheckedCreateWithoutSquaresInput = {
   columnOrder?: Prisma.GridCreatecolumnOrderInput | number[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  game?: Prisma.GameUncheckedCreateNestedOneWithoutGridInput
 }
 
 export type GridCreateOrConnectWithoutSquaresInput = {
@@ -568,6 +656,7 @@ export type GridUpdateWithoutSquaresInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedGridsNestedInput
+  game?: Prisma.GameUpdateOneWithoutGridNestedInput
 }
 
 export type GridUncheckedUpdateWithoutSquaresInput = {
@@ -577,6 +666,7 @@ export type GridUncheckedUpdateWithoutSquaresInput = {
   columnOrder?: Prisma.GridUpdatecolumnOrderInput | number[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  game?: Prisma.GameUncheckedUpdateOneWithoutGridNestedInput
 }
 
 export type GridCreateManyCreatorInput = {
@@ -594,6 +684,7 @@ export type GridUpdateWithoutCreatorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   squares?: Prisma.SquareUpdateManyWithoutGridNestedInput
+  game?: Prisma.GameUpdateOneWithoutGridNestedInput
 }
 
 export type GridUncheckedUpdateWithoutCreatorInput = {
@@ -603,6 +694,7 @@ export type GridUncheckedUpdateWithoutCreatorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   squares?: Prisma.SquareUncheckedUpdateManyWithoutGridNestedInput
+  game?: Prisma.GameUncheckedUpdateOneWithoutGridNestedInput
 }
 
 export type GridUncheckedUpdateManyWithoutCreatorInput = {
@@ -653,6 +745,7 @@ export type GridSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   squares?: boolean | Prisma.Grid$squaresArgs<ExtArgs>
+  game?: boolean | Prisma.Grid$gameArgs<ExtArgs>
   _count?: boolean | Prisma.GridCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["grid"]>
 
@@ -689,6 +782,7 @@ export type GridOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type GridInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   squares?: boolean | Prisma.Grid$squaresArgs<ExtArgs>
+  game?: boolean | Prisma.Grid$gameArgs<ExtArgs>
   _count?: boolean | Prisma.GridCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type GridIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -703,6 +797,7 @@ export type $GridPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     creator: Prisma.$UserPayload<ExtArgs>
     squares: Prisma.$SquarePayload<ExtArgs>[]
+    game: Prisma.$GamePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1107,6 +1202,7 @@ export interface Prisma__GridClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   creator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   squares<T extends Prisma.Grid$squaresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Grid$squaresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SquarePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  game<T extends Prisma.Grid$gameArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Grid$gameArgs<ExtArgs>>): Prisma.Prisma__GameClient<runtime.Types.Result.GetResult<Prisma.$GamePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1559,6 +1655,25 @@ export type Grid$squaresArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.SquareScalarFieldEnum | Prisma.SquareScalarFieldEnum[]
+}
+
+/**
+ * Grid.game
+ */
+export type Grid$gameArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Game
+   */
+  select?: Prisma.GameSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Game
+   */
+  omit?: Prisma.GameOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GameInclude<ExtArgs> | null
+  where?: Prisma.GameWhereInput
 }
 
 /**
