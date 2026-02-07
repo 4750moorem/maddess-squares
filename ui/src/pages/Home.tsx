@@ -10,9 +10,9 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog'
 import {
-  MarchMadnessGrid as MarchMadnessGridComponent,
+  Grid,
   type SquareType,
-} from '@/components/MarchMadnessGrid'
+} from '@/components/Grid'
 import {
   useMyGamesQuery,
   useMeQuery,
@@ -268,7 +268,7 @@ function Home() {
                   </div>
                 ) : gridData?.game?.grid ? (
                   <div className="flex justify-center">
-                    <MarchMadnessGridComponent
+                    <Grid
                       grid={gridData.game.grid}
                       currentUserId={meData?.me?.id}
                       onSquareClick={handleSquareClick}

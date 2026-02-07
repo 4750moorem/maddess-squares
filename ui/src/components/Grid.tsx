@@ -74,7 +74,7 @@ function GridSquare({
   )
 }
 
-export function MarchMadnessGrid({
+export function Grid({
   grid,
   currentUserId,
   onSquareClick,
