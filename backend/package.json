@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "bun run schema:codegen && bun build src/index.ts --outdir dist --target node",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "seed:test-user": "bun run scripts/seed-test-user.ts"
   },
   "devDependencies": {
     "@eddeee888/gcg-typescript-resolver-files": "^0.15.0",

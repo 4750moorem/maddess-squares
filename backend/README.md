@@ -47,4 +47,20 @@ bun run db:bootstrap
 
 # prisma CLI passthrough
 bun run prisma
+
+# seed test user (for testing)
+bun run seed:test-user
 ```
+
+## Testing Setup
+
+Before testing the application, seed the test user:
+
+```bash
+bun run seed:test-user
+```
+
+This creates a user with:
+- Email: `test12@gmail.com`
+- Password: `Asdfjkl12!` (Firebase account)
+- Firebase ID: `MwCFg682UzSRCT0FXdUx4x76B2D3`
