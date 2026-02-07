@@ -45,10 +45,26 @@ docker compose up -d db
 # optional: run migrations + generate Prisma client
 bun --cwd backend run db:bootstrap
 
+# seed test user (for testing)
+bun --cwd backend run seed:test-user
+
 # run API and UI in separate terminals
 bun --cwd backend dev
 bun --cwd ui dev
 ```
+
+## Testing Setup
+
+Before testing the application, seed the test user:
+
+```bash
+bun --cwd backend run seed:test-user
+```
+
+This creates a user with:
+- Email: `test12@gmail.com`
+- Password: `Asdfjkl12!` (Firebase account)
+- Firebase ID: `MwCFg682UzSRCT0FXdUx4x76B2D3`
 
 Env you will likely need:
 
