@@ -15,6 +15,7 @@ registerSW({ immediate: true })
 const httpLink = new HttpLink({ uri: import.meta.env.VITE_API_URL })
 
 const authLink = setContext(async (_, { headers }) => {
+  await auth.authStateReady()
   const user = auth.currentUser
   const token = user ? await user.getIdToken() : null
   return {
