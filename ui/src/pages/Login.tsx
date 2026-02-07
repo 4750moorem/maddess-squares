@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { useCreateUserMutation } from '@/graphql/generated'
+import { toast } from 'sonner'
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -29,27 +30,75 @@ function Login() {
       if (isSignUp) {
         const userCredential = await signUp(email, password)
         if (userCredential) {
-          await createUser({
-            variables: {
-              input: {
-                firebaseUserId: userCredential.uid,
-                email: userCredential.email ?? undefined,
-                displayName: userCredential.displayName ?? undefined,
+          try {
+            await createUser({
+              variables: {
+                input: {
+                  firebaseUserId: userCredential.uid,
+                  email: userCredential.email ?? undefined,
+                  displayName: userCredential.displayName ?? undefined,
+                },
               },
-            },
-          })
+            })
+            toast.success('Account created successfully', {
+              description: 'Welcome to March Madness Squares!',
+            })
+          } catch (createUserErr) {
+            const createUserMessage =
+              createUserErr instanceof Error
+                ? createUserErr.message
+                : 'Failed to create user profile'
+            toast.error('Account setup incomplete', {
+              description: createUserMessage,
+            })
+          }
         }
       } else {
         await signIn(email, password)
+        toast.success('Signed in successfully', {
+          description: 'Welcome back!',
+        })
       }
       navigate('/', { replace: true })
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'An error occurred'
-      setError(message)
+      const friendlyMessage = getFriendlyErrorMessage(message)
+      setError(friendlyMessage)
+      toast.error(isSignUp ? 'Sign up failed' : 'Sign in failed', {
+        description: friendlyMessage,
+      })
     } finally {
       setLoading(false)
     }
+  }
+
+  const getFriendlyErrorMessage = (message: string): string => {
+    if (message.includes('auth/invalid-credential')) {
+      return 'Invalid email or password. Please try again.'
+    }
+    if (message.includes('auth/email-already-in-use')) {
+      return 'This email is already registered. Try signing in instead.'
+    }
+    if (message.includes('auth/weak-password')) {
+      return 'Password is too weak. Please use at least 6 characters.'
+    }
+    if (message.includes('auth/invalid-email')) {
+      return 'Please enter a valid email address.'
+    }
+    if (message.includes('auth/user-not-found')) {
+      return 'No account found with this email. Try creating one.'
+    }
+    if (message.includes('auth/wrong-password')) {
+      return 'Incorrect password. Please try again.'
+    }
+    if (message.includes('auth/too-many-requests')) {
+      return 'Too many failed attempts. Please try again later.'
+    }
+    if (message.includes('auth/network-request-failed')) {
+      return 'Network error. Please check your connection.'
+    }
+    return message
   }
 
   return (
