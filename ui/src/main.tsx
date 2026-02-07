@@ -9,6 +9,7 @@ import './tailwind.css'
 import AppRoutes from './routes.tsx'
 import { AuthProvider } from './contexts/AuthContext'
 import { auth } from './lib/firebase'
+import { Toaster } from './components/ui/sonner'
 
 registerSW({ immediate: true })
 
@@ -36,6 +37,7 @@ createRoot(document.getElementById('root')!).render(
     <AuthProvider>
       <ApolloProvider client={client}>
         <AppRoutes />
+        <Toaster />
       </ApolloProvider>
     </AuthProvider>
   </StrictMode>,

@@ -8,6 +8,7 @@ import {
   MyGamesDocument,
   type MyGamesQuery,
 } from '@/graphql/generated'
+import { toast } from 'sonner'
 
 function Home() {
   const { user, signOut } = useAuth()
@@ -22,19 +23,32 @@ function Home() {
     e.preventDefault()
     if (!gameName.trim()) return
 
-    await createGame({
-      variables: {
-        input: {
-          name: gameName.trim(),
-          description: gameDescription.trim() || undefined,
+    try {
+      const result = await createGame({
+        variables: {
+          input: {
+            name: gameName.trim(),
+            description: gameDescription.trim() || undefined,
+          },
         },
-      },
-      refetchQueries: [{ query: MyGamesDocument }],
-    })
+        refetchQueries: [{ query: MyGamesDocument }],
+      })
 
-    setGameName('')
-    setGameDescription('')
-    setShowCreateForm(false)
+      if (result.data?.createGame) {
+        toast.success('Game created successfully', {
+          description: `"${result.data.createGame.name}" is ready to go!`,
+        })
+        setGameName('')
+        setGameDescription('')
+        setShowCreateForm(false)
+      }
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'An unexpected error occurred'
+      toast.error('Failed to create game', {
+        description: message,
+      })
+    }
   }
 
   const getUserRole = (game: MyGamesQuery['myGames'][number]) => {
