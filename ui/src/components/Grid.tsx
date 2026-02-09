@@ -50,7 +50,7 @@ function GridSquare({
         <button
           type="button"
           onClick={handleClick}
-          className={`flex aspect-square h-[6vw] min-h-[40px] max-h-[80px] w-[6vw] min-w-[40px] max-w-[80px] items-center justify-center border border-border text-xs transition-all hover:scale-110 ${
+          className={`flex h-[5vw] min-h-[36px] max-h-[60px] w-[8vw] min-w-[50px] max-w-[100px] items-center justify-center border border-border text-xs transition-all hover:scale-110 ${
             isOwner
               ? 'cursor-pointer bg-primary/20 hover:bg-primary/30'
               : square.player
@@ -92,11 +92,11 @@ export function Grid({
     <div className="overflow-x-auto">
       <div className="inline-block">
         <div className="flex">
-          <div className="flex aspect-square h-[6vw] min-h-[40px] max-h-[80px] w-[6vw] min-w-[40px] max-w-[80px] items-center justify-center border border-transparent" />
+          <div className="flex h-[5vw] min-h-[36px] max-h-[60px] w-[8vw] min-w-[50px] max-w-[100px] items-center justify-center border border-transparent" />
           {grid.columnOrder.map((colValue, colIndex) => (
             <div
               key={colIndex}
-              className="flex aspect-square h-[6vw] min-h-[40px] max-h-[80px] w-[6vw] min-w-[40px] max-w-[80px] items-center justify-center border border-border bg-muted font-medium"
+              className="flex h-[5vw] min-h-[36px] max-h-[60px] w-[8vw] min-w-[50px] max-w-[100px] items-center justify-center border border-border bg-muted font-medium"
             >
               {colValue}
             </div>
@@ -104,12 +104,12 @@ export function Grid({
         </div>
         {grid.rowOrder.map((rowValue, rowIndex) => (
           <div key={rowIndex} className="flex">
-            <div className="flex aspect-square h-[6vw] min-h-[40px] max-h-[80px] w-[6vw] min-w-[40px] max-w-[80px] items-center justify-center border border-border bg-muted font-medium">
+            <div className="flex h-[5vw] min-h-[36px] max-h-[60px] w-[8vw] min-w-[50px] max-w-[100px] items-center justify-center border border-border bg-muted font-medium">
               {rowValue}
             </div>
             {grid.columnOrder.map((_, colIndex) => {
               const square = squaresByPosition.get(`${rowIndex}-${colIndex}`)
-              if (!square) return <div key={colIndex} className="aspect-square h-[6vw] min-h-[40px] max-h-[80px] w-[6vw] min-w-[40px] max-w-[80px] border border-border" />
+              if (!square) return <div key={colIndex} className="h-[5vw] min-h-[36px] max-h-[60px] w-[8vw] min-w-[50px] max-w-[100px] border border-border" />
               return (
                 <GridSquare
                   key={square.id}
