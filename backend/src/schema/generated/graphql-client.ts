@@ -25,6 +25,11 @@ export type AddUserToGameInput = {
   role: GameUserRole;
 };
 
+export type AssignGridToGameInput = {
+  gameId: Scalars['ID']['input'];
+  gridId: Scalars['ID']['input'];
+};
+
 export type CreateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -41,6 +46,7 @@ export type Game = {
   __typename?: 'Game';
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
+  grid?: Maybe<Grid>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   owners: Array<User>;
@@ -76,6 +82,7 @@ export type Grid = {
 export type Mutation = {
   __typename?: 'Mutation';
   addUserToGame?: Maybe<Game>;
+  assignGridToGame?: Maybe<Game>;
   createGame: Game;
   createGrid: Grid;
   createUser: User;
@@ -83,12 +90,18 @@ export type Mutation = {
   deleteUser: Scalars['Boolean']['output'];
   removeUserFromGame?: Maybe<Game>;
   updateGame?: Maybe<Game>;
+  updateSquare?: Maybe<Square>;
   updateUser?: Maybe<User>;
 };
 
 
 export type MutationAddUserToGameArgs = {
   input: AddUserToGameInput;
+};
+
+
+export type MutationAssignGridToGameArgs = {
+  input: AssignGridToGameInput;
 };
 
 
@@ -120,6 +133,12 @@ export type MutationRemoveUserFromGameArgs = {
 export type MutationUpdateGameArgs = {
   id: Scalars['ID']['input'];
   input: UpdateGameInput;
+};
+
+
+export type MutationUpdateSquareArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateSquareInput;
 };
 
 
@@ -194,6 +213,10 @@ export type Square = {
 export type UpdateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateSquareInput = {
+  value?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {

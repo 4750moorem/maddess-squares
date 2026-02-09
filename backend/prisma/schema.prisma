@@ -33,9 +33,11 @@ model Game {
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  gridId      String?  @unique
 
   owners  User[]       @relation("GameOwners")
   players GamePlayer[]
+  grid    Grid?        @relation("GameGrid", fields: [gridId], references: [id])
 }
 
 model GamePlayer {
@@ -59,6 +61,7 @@ model Grid {
   squares     Square[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  game        Game?    @relation("GameGrid")
 }
 
 model Square {

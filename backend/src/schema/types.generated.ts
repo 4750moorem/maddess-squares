@@ -27,6 +27,11 @@ export type AddUserToGameInput = {
   role: GameUserRole;
 };
 
+export type AssignGridToGameInput = {
+  gameId: Scalars['ID']['input'];
+  gridId: Scalars['ID']['input'];
+};
+
 export type CreateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -43,6 +48,7 @@ export type Game = {
   __typename?: 'Game';
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
+  grid?: Maybe<Grid>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   owners: Array<User>;
@@ -77,6 +83,7 @@ export type Grid = {
 export type Mutation = {
   __typename?: 'Mutation';
   addUserToGame?: Maybe<Game>;
+  assignGridToGame?: Maybe<Game>;
   createGame: Game;
   createGrid: Grid;
   createUser: User;
@@ -84,12 +91,18 @@ export type Mutation = {
   deleteUser: Scalars['Boolean']['output'];
   removeUserFromGame?: Maybe<Game>;
   updateGame?: Maybe<Game>;
+  updateSquare?: Maybe<Square>;
   updateUser?: Maybe<User>;
 };
 
 
 export type MutationaddUserToGameArgs = {
   input: AddUserToGameInput;
+};
+
+
+export type MutationassignGridToGameArgs = {
+  input: AssignGridToGameInput;
 };
 
 
@@ -121,6 +134,12 @@ export type MutationremoveUserFromGameArgs = {
 export type MutationupdateGameArgs = {
   id: Scalars['ID']['input'];
   input: UpdateGameInput;
+};
+
+
+export type MutationupdateSquareArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateSquareInput;
 };
 
 
@@ -195,6 +214,10 @@ export type Square = {
 export type UpdateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateSquareInput = {
+  value?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
@@ -292,6 +315,7 @@ export type ResolversTypes = {
   AddUserToGameInput: AddUserToGameInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  AssignGridToGameInput: AssignGridToGameInput;
   CreateGameInput: CreateGameInput;
   CreateUserInput: CreateUserInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
@@ -306,6 +330,7 @@ export type ResolversTypes = {
   RemoveUserFromGameInput: RemoveUserFromGameInput;
   Square: ResolverTypeWrapper<PrismaSquare>;
   UpdateGameInput: UpdateGameInput;
+  UpdateSquareInput: UpdateSquareInput;
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<PrismaUser>;
 };
@@ -315,6 +340,7 @@ export type ResolversParentTypes = {
   AddUserToGameInput: AddUserToGameInput;
   String: Scalars['String']['output'];
   ID: Scalars['ID']['output'];
+  AssignGridToGameInput: AssignGridToGameInput;
   CreateGameInput: CreateGameInput;
   CreateUserInput: CreateUserInput;
   DateTime: Scalars['DateTime']['output'];
@@ -328,6 +354,7 @@ export type ResolversParentTypes = {
   RemoveUserFromGameInput: RemoveUserFromGameInput;
   Square: PrismaSquare;
   UpdateGameInput: UpdateGameInput;
+  UpdateSquareInput: UpdateSquareInput;
   UpdateUserInput: UpdateUserInput;
   User: PrismaUser;
 };
@@ -339,6 +366,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export type GameResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Game'] = ResolversParentTypes['Game']> = {
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  grid?: Resolver<Maybe<ResolversTypes['Grid']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owners?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
@@ -368,6 +396,7 @@ export type GridResolvers<ContextType = GraphQLContext, ParentType extends Resol
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addUserToGame?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<MutationaddUserToGameArgs, 'input'>>;
+  assignGridToGame?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<MutationassignGridToGameArgs, 'input'>>;
   createGame?: Resolver<ResolversTypes['Game'], ParentType, ContextType, RequireFields<MutationcreateGameArgs, 'input'>>;
   createGrid?: Resolver<ResolversTypes['Grid'], ParentType, ContextType>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationcreateUserArgs, 'input'>>;
@@ -375,6 +404,7 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationdeleteUserArgs, 'id'>>;
   removeUserFromGame?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<MutationremoveUserFromGameArgs, 'input'>>;
   updateGame?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<MutationupdateGameArgs, 'id' | 'input'>>;
+  updateSquare?: Resolver<Maybe<ResolversTypes['Square']>, ParentType, ContextType, RequireFields<MutationupdateSquareArgs, 'id' | 'input'>>;
   updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationupdateUserArgs, 'id' | 'input'>>;
 };
 
