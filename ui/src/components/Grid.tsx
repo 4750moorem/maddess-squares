@@ -59,7 +59,7 @@ function GridSquare({
           }`}
         >
           {initials && (
-            <span className="text-[10px] font-semibold text-muted-foreground">
+            <span className="text-[clamp(0.5rem,1vw,0.75rem)] font-medium text-muted-foreground">
               {initials}
             </span>
           )}
@@ -93,11 +93,12 @@ export function Grid({
       <div className="inline-block retro-shadow rounded-md border-2 border-border overflow-hidden">
         {/* Column headers */}
         <div className="flex">
-          <div className="flex h-10 w-10 items-center justify-center border-r border-b border-border bg-muted" />
+
+          <div className="flex h-[5vw] min-h-[36px] max-h-[60px] w-[8vw] min-w-[50px] max-w-[100px] items-center justify-center border border-transparent" />
           {grid.columnOrder.map((colValue, colIndex) => (
             <div
               key={colIndex}
-              className="flex h-10 w-10 items-center justify-center border-r border-b border-border bg-muted font-mono text-sm font-bold text-foreground"
+              className="flex h-[5vw] min-h-[36px] max-h-[60px] w-[8vw] min-w-[50px] max-w-[100px] items-center justify-center border border-border bg-muted font-medium"
             >
               {colValue}
             </div>
@@ -106,12 +107,14 @@ export function Grid({
         {/* Rows */}
         {grid.rowOrder.map((rowValue, rowIndex) => (
           <div key={rowIndex} className="flex">
-            <div className="flex h-10 w-10 items-center justify-center border-r border-b border-border bg-muted font-mono text-sm font-bold text-foreground">
+
+            <div className="flex h-[5vw] min-h-[36px] max-h-[60px] w-[8vw] min-w-[50px] max-w-[100px] items-center justify-center border border-border bg-muted font-medium">
               {rowValue}
             </div>
             {grid.columnOrder.map((_, colIndex) => {
               const square = squaresByPosition.get(`${rowIndex}-${colIndex}`)
-              if (!square) return <div key={colIndex} className="h-10 w-10 border-r border-b border-border bg-card" />
+
+              if (!square) return <div key={colIndex} className="h-[5vw] min-h-[36px] max-h-[60px] w-[8vw] min-w-[50px] max-w-[100px] border border-border" />
               return (
                 <GridSquare
                   key={square.id}

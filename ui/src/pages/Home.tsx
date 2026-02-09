@@ -111,41 +111,44 @@ function Home() {
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-background text-foreground">
-        {/* Top bar */}
-        <header className="border-b-2 border-border bg-card">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-primary">
-                Maddess Squares
-              </span>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="font-mono text-xs text-muted-foreground">
-                {user?.email}
-              </span>
-              <Button variant="outline" size="sm" onClick={signOut}>
-                Sign Out
-              </Button>
-            </div>
-          </div>
-        </header>
-
-        <main className="mx-auto max-w-5xl px-6 py-10">
-          <div className="space-y-8">
-            {/* Page heading */}
-            <div className="flex items-end justify-between">
-              <div className="space-y-1">
-                <h1 className="text-3xl font-bold tracking-tight">My Games</h1>
-                <p className="text-sm text-muted-foreground">
-                  Manage your pools and view grids
-                </p>
+        <div className="mx-auto px-6 py-8">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                <div className="space-y-1">
+                  <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
+                    March Madness Squares
+                  </p>
+                  <h1 className="text-3xl font-semibold">My Games</h1>
+                </div>
+                <div className="flex items-center gap-3">
+                  <select
+                    value={selectedGameId ?? ''}
+                    onChange={(e) => setSelectedGameId(e.target.value || null)}
+                    className="rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  >
+                    <option value="">Select a game</option>
+                    {gamesData?.myGames.map((game) => (
+                      <option key={game.id} value={game.id}>
+                        {game.name} ({getUserRole(game)})
+                      </option>
+                    ))}
+                  </select>
+                  <Button size="sm" onClick={() => setShowCreateForm(!showCreateForm)}>
+                    {showCreateForm ? 'Cancel' : 'Create Game'}
+                  </Button>
+                </div>
               </div>
-              <Button onClick={() => setShowCreateForm(!showCreateForm)}>
-                {showCreateForm ? 'Cancel' : '+ New Game'}
-              </Button>
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-muted-foreground">
+                  {user?.email}
+                </span>
+                <Button variant="outline" size="sm" onClick={signOut}>
+                  Sign Out
+                </Button>
+              </div>
             </div>
 
-            {/* Create game form */}
             {showCreateForm && (
               <div className="retro-card p-6">
                 <h2 className="mb-4 text-lg font-bold">Create New Game</h2>
@@ -190,79 +193,11 @@ function Home() {
               </div>
             )}
 
-            {/* Games table */}
-            <div className="retro-card overflow-hidden">
-              {gamesLoading ? (
-                <div className="p-8 text-center text-muted-foreground">
-                  Loading games...
-                </div>
-              ) : !gamesData?.myGames?.length ? (
-                <div className="p-8 text-center text-muted-foreground">
-                  No games yet. Create your first game!
-                </div>
-              ) : (
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b-2 border-border bg-muted/50">
-                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Name
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Description
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Role
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Created
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {gamesData.myGames.map((game) => (
-                      <tr
-                        key={game.id}
-                        onClick={() => setSelectedGameId(game.id)}
-                        className={`cursor-pointer border-b-2 border-border last:border-b-0 transition-colors hover:bg-primary/5 ${
-                          selectedGameId === game.id
-                            ? 'bg-primary/10'
-                            : ''
-                        }`}
-                      >
-                        <td className="px-6 py-4 text-sm font-semibold">
-                          {game.name}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-muted-foreground">
-                          {game.description || '-'}
-                        </td>
-                        <td className="px-6 py-4">
-                          <span
-                            className={`inline-flex rounded-sm border px-2 py-0.5 font-mono text-xs font-semibold uppercase ${
-                              getUserRole(game) === 'Owner'
-                                ? 'border-primary/30 bg-primary/10 text-primary'
-                                : 'border-border bg-muted text-muted-foreground'
-                            }`}
-                          >
-                            {getUserRole(game)}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 font-mono text-xs text-muted-foreground">
-                          {new Date(game.createdAt).toLocaleDateString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-
-            {/* Grid section */}
             {selectedGameId && (
-              <div className="retro-card p-6">
-                <div className="mb-6 flex items-center justify-between">
-                  <h2 className="text-lg font-bold">
-                    Grid for{' '}
-                    <span className="text-primary">{selectedGame?.name}</span>
+              <div>
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-lg font-medium">
+                    Grid for {selectedGame?.name}
                   </h2>
                   {isGameOwner && !gridData?.game?.grid && (
                     <Button
@@ -297,8 +232,18 @@ function Home() {
                 )}
               </div>
             )}
+
+            {!selectedGameId && (
+              <div className="py-12 text-center text-muted-foreground">
+                {gamesLoading
+                  ? 'Loading games...'
+                  : !gamesData?.myGames?.length
+                    ? 'No games yet. Create your first game!'
+                    : 'Select a game from the dropdown above.'}
+              </div>
+            )}
           </div>
-        </main>
+        </div>
       </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
