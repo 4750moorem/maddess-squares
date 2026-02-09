@@ -111,14 +111,33 @@ function Home() {
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-background text-foreground">
-        <div className="mx-auto max-w-4xl px-6 py-12">
+        <div className="mx-auto px-6 py-8">
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
-                  March Madness Squares
-                </p>
-                <h1 className="text-3xl font-semibold">My Games</h1>
+              <div className="flex items-center gap-6">
+                <div className="space-y-1">
+                  <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
+                    March Madness Squares
+                  </p>
+                  <h1 className="text-3xl font-semibold">My Games</h1>
+                </div>
+                <div className="flex items-center gap-3">
+                  <select
+                    value={selectedGameId ?? ''}
+                    onChange={(e) => setSelectedGameId(e.target.value || null)}
+                    className="rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  >
+                    <option value="">Select a game</option>
+                    {gamesData?.myGames.map((game) => (
+                      <option key={game.id} value={game.id}>
+                        {game.name} ({getUserRole(game)})
+                      </option>
+                    ))}
+                  </select>
+                  <Button size="sm" onClick={() => setShowCreateForm(!showCreateForm)}>
+                    {showCreateForm ? 'Cancel' : 'Create Game'}
+                  </Button>
+                </div>
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-sm text-muted-foreground">
@@ -128,12 +147,6 @@ function Home() {
                   Sign Out
                 </Button>
               </div>
-            </div>
-
-            <div className="flex justify-end">
-              <Button onClick={() => setShowCreateForm(!showCreateForm)}>
-                {showCreateForm ? 'Cancel' : 'Create Game'}
-              </Button>
             </div>
 
             {showCreateForm && (
@@ -180,71 +193,8 @@ function Home() {
               </div>
             )}
 
-            <div className="rounded-lg border border-border bg-card">
-              {gamesLoading ? (
-                <div className="p-6 text-center text-muted-foreground">
-                  Loading games...
-                </div>
-              ) : !gamesData?.myGames?.length ? (
-                <div className="p-6 text-center text-muted-foreground">
-                  No games yet. Create your first game!
-                </div>
-              ) : (
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-border">
-                      <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground">
-                        Name
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground">
-                        Description
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground">
-                        Role
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground">
-                        Created
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {gamesData.myGames.map((game) => (
-                      <tr
-                        key={game.id}
-                        onClick={() => setSelectedGameId(game.id)}
-                        className={`cursor-pointer border-b border-border last:border-b-0 transition-colors hover:bg-muted/50 ${
-                          selectedGameId === game.id ? 'bg-muted/30' : ''
-                        }`}
-                      >
-                        <td className="px-6 py-4 text-sm font-medium">
-                          {game.name}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-muted-foreground">
-                          {game.description || '-'}
-                        </td>
-                        <td className="px-6 py-4">
-                          <span
-                            className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                              getUserRole(game) === 'Owner'
-                                ? 'bg-primary/10 text-primary'
-                                : 'bg-muted text-muted-foreground'
-                            }`}
-                          >
-                            {getUserRole(game)}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-muted-foreground">
-                          {new Date(game.createdAt).toLocaleDateString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-
             {selectedGameId && (
-              <div className="rounded-lg border border-border bg-card p-6">
+              <div>
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-lg font-medium">
                     Grid for {selectedGame?.name}
@@ -280,6 +230,16 @@ function Home() {
                     {isGameOwner && ' Click "Create Grid" to create one.'}
                   </div>
                 )}
+              </div>
+            )}
+
+            {!selectedGameId && (
+              <div className="py-12 text-center text-muted-foreground">
+                {gamesLoading
+                  ? 'Loading games...'
+                  : !gamesData?.myGames?.length
+                    ? 'No games yet. Create your first game!'
+                    : 'Select a game from the dropdown above.'}
               </div>
             )}
           </div>
