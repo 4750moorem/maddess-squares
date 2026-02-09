@@ -3,8 +3,8 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '../src/generated/prisma/client'
 
 const TEST_USER = {
-  firebaseUserId: 'MwCFg682UzSRCT0FXdUx4x76B2D3',
-  email: 'test12@gmail.com',
+  firebaseUserId: 'f3HDpg5GFCQA5QmTUElrNUqUUbG3',
+  email: '4750moorem@gmail.com',
   displayName: 'Test User',
 }
 

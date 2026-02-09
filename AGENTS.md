@@ -55,18 +55,25 @@ bun --cwd ui dev
 
 ## Testing Setup
 
-Before testing the application, seed the test user:
+**IMPORTANT: Always use this test account when testing the application.** Do not create new Firebase users or accounts. This is a real Firebase account that must stay in sync with the seeded database user.
+
+### Test Account Credentials
+
+- **Email:** `4750moorem@gmail.com`
+- **Password:** `Asdfjkl12!@`
+- **Firebase ID:** `f3HDpg5GFCQA5QmTUElrNUqUUbG3`
+
+### Database Setup
+
+If the database is empty or freshly created, seed the test user:
 
 ```bash
 bun --cwd backend run seed:test-user
 ```
 
-This creates a user with:
-- Email: `test12@gmail.com`
-- Password: `Asdfjkl12!` (Firebase account)
-- Firebase ID: `MwCFg682UzSRCT0FXdUx4x76B2D3`
+This inserts the test account into the local Postgres database so the backend can look up the user after Firebase authentication.
 
-Env you will likely need:
+### Env you will likely need
 
 - `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/march_maddess?schema=public`
 - `VITE_API_URL=http://localhost:4000/graphql`
