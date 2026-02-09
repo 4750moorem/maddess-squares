@@ -111,39 +111,49 @@ function Home() {
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-background text-foreground">
-        <div className="mx-auto max-w-4xl px-6 py-12">
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
-                  March Madness Squares
-                </p>
-                <h1 className="text-3xl font-semibold">My Games</h1>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="text-sm text-muted-foreground">
-                  {user?.email}
-                </span>
-                <Button variant="outline" size="sm" onClick={signOut}>
-                  Sign Out
-                </Button>
-              </div>
+        {/* Top bar */}
+        <header className="border-b-2 border-border bg-card">
+          <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-primary">
+                Maddess Squares
+              </span>
             </div>
+            <div className="flex items-center gap-4">
+              <span className="font-mono text-xs text-muted-foreground">
+                {user?.email}
+              </span>
+              <Button variant="outline" size="sm" onClick={signOut}>
+                Sign Out
+              </Button>
+            </div>
+          </div>
+        </header>
 
-            <div className="flex justify-end">
+        <main className="mx-auto max-w-5xl px-6 py-10">
+          <div className="space-y-8">
+            {/* Page heading */}
+            <div className="flex items-end justify-between">
+              <div className="space-y-1">
+                <h1 className="text-3xl font-bold tracking-tight">My Games</h1>
+                <p className="text-sm text-muted-foreground">
+                  Manage your pools and view grids
+                </p>
+              </div>
               <Button onClick={() => setShowCreateForm(!showCreateForm)}>
-                {showCreateForm ? 'Cancel' : 'Create Game'}
+                {showCreateForm ? 'Cancel' : '+ New Game'}
               </Button>
             </div>
 
+            {/* Create game form */}
             {showCreateForm && (
-              <div className="rounded-lg border border-border bg-card p-6">
-                <h2 className="mb-4 text-lg font-medium">Create New Game</h2>
+              <div className="retro-card p-6">
+                <h2 className="mb-4 text-lg font-bold">Create New Game</h2>
                 <form onSubmit={handleCreateGame} className="space-y-4">
                   <div className="space-y-2">
                     <label
                       htmlFor="gameName"
-                      className="text-sm font-medium text-foreground"
+                      className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                     >
                       Game Name
                     </label>
@@ -153,14 +163,14 @@ function Home() {
                       value={gameName}
                       onChange={(e) => setGameName(e.target.value)}
                       required
-                      className="w-full rounded-lg border border-border bg-card px-4 py-2 text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                      className="retro-input w-full"
                       placeholder="Enter game name"
                     />
                   </div>
                   <div className="space-y-2">
                     <label
                       htmlFor="gameDescription"
-                      className="text-sm font-medium text-foreground"
+                      className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                     >
                       Description (optional)
                     </label>
@@ -169,7 +179,7 @@ function Home() {
                       type="text"
                       value={gameDescription}
                       onChange={(e) => setGameDescription(e.target.value)}
-                      className="w-full rounded-lg border border-border bg-card px-4 py-2 text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                      className="retro-input w-full"
                       placeholder="Enter description"
                     />
                   </div>
@@ -180,29 +190,30 @@ function Home() {
               </div>
             )}
 
-            <div className="rounded-lg border border-border bg-card">
+            {/* Games table */}
+            <div className="retro-card overflow-hidden">
               {gamesLoading ? (
-                <div className="p-6 text-center text-muted-foreground">
+                <div className="p-8 text-center text-muted-foreground">
                   Loading games...
                 </div>
               ) : !gamesData?.myGames?.length ? (
-                <div className="p-6 text-center text-muted-foreground">
+                <div className="p-8 text-center text-muted-foreground">
                   No games yet. Create your first game!
                 </div>
               ) : (
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-border">
-                      <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground">
+                    <tr className="border-b-2 border-border bg-muted/50">
+                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Name
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground">
+                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Description
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground">
+                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Role
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground">
+                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Created
                       </th>
                     </tr>
@@ -212,11 +223,13 @@ function Home() {
                       <tr
                         key={game.id}
                         onClick={() => setSelectedGameId(game.id)}
-                        className={`cursor-pointer border-b border-border last:border-b-0 transition-colors hover:bg-muted/50 ${
-                          selectedGameId === game.id ? 'bg-muted/30' : ''
+                        className={`cursor-pointer border-b-2 border-border last:border-b-0 transition-colors hover:bg-primary/5 ${
+                          selectedGameId === game.id
+                            ? 'bg-primary/10'
+                            : ''
                         }`}
                       >
-                        <td className="px-6 py-4 text-sm font-medium">
+                        <td className="px-6 py-4 text-sm font-semibold">
                           {game.name}
                         </td>
                         <td className="px-6 py-4 text-sm text-muted-foreground">
@@ -224,16 +237,16 @@ function Home() {
                         </td>
                         <td className="px-6 py-4">
                           <span
-                            className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+                            className={`inline-flex rounded-sm border px-2 py-0.5 font-mono text-xs font-semibold uppercase ${
                               getUserRole(game) === 'Owner'
-                                ? 'bg-primary/10 text-primary'
-                                : 'bg-muted text-muted-foreground'
+                                ? 'border-primary/30 bg-primary/10 text-primary'
+                                : 'border-border bg-muted text-muted-foreground'
                             }`}
                           >
                             {getUserRole(game)}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-sm text-muted-foreground">
+                        <td className="px-6 py-4 font-mono text-xs text-muted-foreground">
                           {new Date(game.createdAt).toLocaleDateString()}
                         </td>
                       </tr>
@@ -243,11 +256,13 @@ function Home() {
               )}
             </div>
 
+            {/* Grid section */}
             {selectedGameId && (
-              <div className="rounded-lg border border-border bg-card p-6">
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-lg font-medium">
-                    Grid for {selectedGame?.name}
+              <div className="retro-card p-6">
+                <div className="mb-6 flex items-center justify-between">
+                  <h2 className="text-lg font-bold">
+                    Grid for{' '}
+                    <span className="text-primary">{selectedGame?.name}</span>
                   </h2>
                   {isGameOwner && !gridData?.game?.grid && (
                     <Button
@@ -283,7 +298,7 @@ function Home() {
               </div>
             )}
           </div>
-        </div>
+        </main>
       </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -307,8 +322,14 @@ function Home() {
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
               This square will win when the winning team&apos;s score ends in{' '}
-              {selectedSquare?.rowValue} and the losing team&apos;s score ends in{' '}
-              {selectedSquare?.columnValue}.
+              <span className="font-mono font-semibold text-foreground">
+                {selectedSquare?.rowValue}
+              </span>{' '}
+              and the losing team&apos;s score ends in{' '}
+              <span className="font-mono font-semibold text-foreground">
+                {selectedSquare?.columnValue}
+              </span>
+              .
             </p>
           </div>
         </DialogContent>

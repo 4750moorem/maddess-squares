@@ -53,71 +53,81 @@ function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto max-w-md px-6 py-12">
-        <div className="space-y-6">
-          <div className="space-y-2 text-center">
-            <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
-              March Madness Squares
+    <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
+      <div className="w-full max-w-md px-6">
+        <div className="space-y-8">
+          {/* Header */}
+          <div className="space-y-3 text-center">
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-primary">
+              Maddess Squares
             </p>
-            <h1 className="text-3xl font-semibold">
+            <h1 className="text-3xl font-bold tracking-tight">
               {isSignUp ? 'Create Account' : 'Sign In'}
             </h1>
+            <p className="text-sm text-muted-foreground">
+              {isSignUp
+                ? 'Join the pool and claim your squares'
+                : 'Welcome back to the tournament'}
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label
-                htmlFor="email"
-                className="text-sm font-medium text-foreground"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full rounded-lg border border-border bg-card px-4 py-2 text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                placeholder="you@example.com"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label
-                htmlFor="password"
-                className="text-sm font-medium text-foreground"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full rounded-lg border border-border bg-card px-4 py-2 text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                placeholder="••••••••"
-              />
-            </div>
-
-            {error && (
-              <div className="rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-2 text-sm text-red-500">
-                {error}
+          {/* Form card */}
+          <div className="retro-card p-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-2">
+                <label
+                  htmlFor="email"
+                  className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="retro-input w-full"
+                  placeholder="you@example.com"
+                />
               </div>
-            )}
 
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading
-                ? 'Loading...'
-                : isSignUp
-                  ? 'Create Account'
-                  : 'Sign In'}
-            </Button>
-          </form>
+              <div className="space-y-2">
+                <label
+                  htmlFor="password"
+                  className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                >
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="retro-input w-full"
+                  placeholder="••••••••"
+                />
+              </div>
 
+              {error && (
+                <div className="rounded-md border-2 border-destructive/50 bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive">
+                  {error}
+                </div>
+              )}
+
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading
+                  ? 'Loading...'
+                  : isSignUp
+                    ? 'Create Account'
+                    : 'Sign In'}
+              </Button>
+            </form>
+          </div>
+
+          {/* Toggle sign up / sign in */}
           <div className="text-center">
             <button
               type="button"
@@ -125,7 +135,7 @@ function Login() {
                 setIsSignUp(!isSignUp)
                 setError(null)
               }}
-              className="text-sm text-muted-foreground hover:text-foreground"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {isSignUp
                 ? 'Already have an account? Sign in'

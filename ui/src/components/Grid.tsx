@@ -50,16 +50,16 @@ function GridSquare({
         <button
           type="button"
           onClick={handleClick}
-          className={`flex h-10 w-10 items-center justify-center border border-border text-xs transition-colors ${
+          className={`flex h-10 w-10 items-center justify-center border-r border-b border-border font-mono text-xs transition-colors ${
             isOwner
-              ? 'cursor-pointer bg-primary/20 hover:bg-primary/30'
+              ? 'cursor-pointer bg-primary/15 hover:bg-primary/25'
               : square.player
-                ? 'cursor-default bg-muted/50'
+                ? 'cursor-default bg-muted/40'
                 : 'cursor-default bg-card'
           }`}
         >
           {initials && (
-            <span className="text-[10px] font-medium text-muted-foreground">
+            <span className="text-[10px] font-semibold text-muted-foreground">
               {initials}
             </span>
           )}
@@ -90,26 +90,28 @@ export function Grid({
 
   return (
     <div className="overflow-x-auto">
-      <div className="inline-block">
+      <div className="inline-block retro-shadow rounded-md border-2 border-border overflow-hidden">
+        {/* Column headers */}
         <div className="flex">
-          <div className="flex h-10 w-10 items-center justify-center border border-transparent" />
+          <div className="flex h-10 w-10 items-center justify-center border-r border-b border-border bg-muted" />
           {grid.columnOrder.map((colValue, colIndex) => (
             <div
               key={colIndex}
-              className="flex h-10 w-10 items-center justify-center border border-border bg-muted font-medium"
+              className="flex h-10 w-10 items-center justify-center border-r border-b border-border bg-muted font-mono text-sm font-bold text-foreground"
             >
               {colValue}
             </div>
           ))}
         </div>
+        {/* Rows */}
         {grid.rowOrder.map((rowValue, rowIndex) => (
           <div key={rowIndex} className="flex">
-            <div className="flex h-10 w-10 items-center justify-center border border-border bg-muted font-medium">
+            <div className="flex h-10 w-10 items-center justify-center border-r border-b border-border bg-muted font-mono text-sm font-bold text-foreground">
               {rowValue}
             </div>
             {grid.columnOrder.map((_, colIndex) => {
               const square = squaresByPosition.get(`${rowIndex}-${colIndex}`)
-              if (!square) return <div key={colIndex} className="h-10 w-10 border border-border" />
+              if (!square) return <div key={colIndex} className="h-10 w-10 border-r border-b border-border bg-card" />
               return (
                 <GridSquare
                   key={square.id}
