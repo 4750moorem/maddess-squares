@@ -17,6 +17,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
 };
 
 export type AddUserToGameInput = {
@@ -34,6 +35,17 @@ export type AssignGridToGameInput = {
 export type CreateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
+};
+
+export type CreateNotificationInput = {
+  actionType: NotificationAction;
+  description: Scalars['String']['input'];
+  gameId?: InputMaybe<Scalars['String']['input']>;
+  iconType: Scalars['String']['input'];
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  title: Scalars['String']['input'];
+  triggeredByUserId?: InputMaybe<Scalars['String']['input']>;
+  userId: Scalars['String']['input'];
 };
 
 export type CreateUserInput = {
@@ -87,6 +99,7 @@ export type Mutation = {
   assignGridToGame?: Maybe<Game>;
   createGame: Game;
   createGrid: Grid;
+  createNotification: Notification;
   createUser: User;
   deleteGame: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
@@ -109,6 +122,11 @@ export type MutationAssignGridToGameArgs = {
 
 export type MutationCreateGameArgs = {
   input: CreateGameInput;
+};
+
+
+export type MutationCreateNotificationArgs = {
+  input: CreateNotificationInput;
 };
 
 
@@ -149,6 +167,32 @@ export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
 };
 
+export type Notification = {
+  __typename?: 'Notification';
+  actionType: NotificationAction;
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  gameId?: Maybe<Scalars['String']['output']>;
+  iconType: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  read: Scalars['Boolean']['output'];
+  title: Scalars['String']['output'];
+  triggeredByUserId?: Maybe<Scalars['String']['output']>;
+  userId: Scalars['String']['output'];
+};
+
+export const NotificationAction = {
+  GameCompleted: 'GAME_COMPLETED',
+  GameInvite: 'GAME_INVITE',
+  GameStarted: 'GAME_STARTED',
+  General: 'GENERAL',
+  GridAssigned: 'GRID_ASSIGNED',
+  PlayerJoined: 'PLAYER_JOINED',
+  SquareClaimed: 'SQUARE_CLAIMED'
+} as const;
+
+export type NotificationAction = typeof NotificationAction[keyof typeof NotificationAction];
 export type Query = {
   __typename?: 'Query';
   dbStatus: Scalars['String']['output'];
@@ -158,6 +202,7 @@ export type Query = {
   hello: Scalars['String']['output'];
   me?: Maybe<User>;
   myGames: Array<Game>;
+  notifications: Array<Notification>;
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
   userByFirebaseId?: Maybe<User>;
@@ -173,6 +218,11 @@ export type QueryGameArgs = {
 
 export type QueryGridArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryNotificationsArgs = {
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -212,6 +262,16 @@ export type Square = {
   rowValue: Scalars['Int']['output'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  notificationAdded: Notification;
+};
+
+
+export type SubscriptionNotificationAddedArgs = {
+  userId: Scalars['String']['input'];
+};
+
 export type UpdateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -239,6 +299,27 @@ export type User = {
   playerGames: Array<GamePlayer>;
   updatedAt: Scalars['DateTime']['output'];
 };
+
+export type NotificationsQueryVariables = Exact<{
+  userId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type NotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gameId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean }> };
+
+export type CreateNotificationMutationVariables = Exact<{
+  input: CreateNotificationInput;
+}>;
+
+
+export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification: { __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gameId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean } };
+
+export type NotificationAddedSubscriptionVariables = Exact<{
+  userId: Scalars['String']['input'];
+}>;
+
+
+export type NotificationAddedSubscription = { __typename?: 'Subscription', notificationAdded: { __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gameId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean } };
 
 export type AppStatusQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -297,6 +378,137 @@ export type UpdateSquareMutationVariables = Exact<{
 export type UpdateSquareMutation = { __typename?: 'Mutation', updateSquare?: { __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, player?: { __typename?: 'User', id: string, displayName?: string | null, email?: string | null } | null } | null };
 
 
+export const NotificationsDocument = gql`
+    query Notifications($userId: String) {
+  notifications(userId: $userId) {
+    id
+    userId
+    actionType
+    iconType
+    title
+    description
+    metadata
+    gameId
+    triggeredByUserId
+    createdAt
+    read
+  }
+}
+    `;
+
+/**
+ * __useNotificationsQuery__
+ *
+ * To run a query within a React component, call `useNotificationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNotificationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNotificationsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNotificationsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<NotificationsQuery, NotificationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<NotificationsQuery, NotificationsQueryVariables>(NotificationsDocument, options);
+      }
+export function useNotificationsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<NotificationsQuery, NotificationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<NotificationsQuery, NotificationsQueryVariables>(NotificationsDocument, options);
+        }
+// @ts-ignore
+export function useNotificationsSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<NotificationsQuery, NotificationsQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<NotificationsQuery, NotificationsQueryVariables>;
+export function useNotificationsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<NotificationsQuery, NotificationsQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<NotificationsQuery | undefined, NotificationsQueryVariables>;
+export function useNotificationsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<NotificationsQuery, NotificationsQueryVariables>) {
+          const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useSuspenseQuery<NotificationsQuery, NotificationsQueryVariables>(NotificationsDocument, options);
+        }
+export type NotificationsQueryHookResult = ReturnType<typeof useNotificationsQuery>;
+export type NotificationsLazyQueryHookResult = ReturnType<typeof useNotificationsLazyQuery>;
+export type NotificationsSuspenseQueryHookResult = ReturnType<typeof useNotificationsSuspenseQuery>;
+export const CreateNotificationDocument = gql`
+    mutation CreateNotification($input: CreateNotificationInput!) {
+  createNotification(input: $input) {
+    id
+    userId
+    actionType
+    iconType
+    title
+    description
+    metadata
+    gameId
+    triggeredByUserId
+    createdAt
+    read
+  }
+}
+    `;
+
+/**
+ * __useCreateNotificationMutation__
+ *
+ * To run a mutation, you first call `useCreateNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNotificationMutation, { data, loading, error }] = useCreateNotificationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateNotificationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateNotificationMutation, CreateNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<CreateNotificationMutation, CreateNotificationMutationVariables>(CreateNotificationDocument, options);
+      }
+export type CreateNotificationMutationHookResult = ReturnType<typeof useCreateNotificationMutation>;
+export const NotificationAddedDocument = gql`
+    subscription NotificationAdded($userId: String!) {
+  notificationAdded(userId: $userId) {
+    id
+    userId
+    actionType
+    iconType
+    title
+    description
+    metadata
+    gameId
+    triggeredByUserId
+    createdAt
+    read
+  }
+}
+    `;
+
+/**
+ * __useNotificationAddedSubscription__
+ *
+ * To run a query within a React component, call `useNotificationAddedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNotificationAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNotificationAddedSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNotificationAddedSubscription(baseOptions: ApolloReactHooks.SubscriptionHookOptions<NotificationAddedSubscription, NotificationAddedSubscriptionVariables> & ({ variables: NotificationAddedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useSubscription<NotificationAddedSubscription, NotificationAddedSubscriptionVariables>(NotificationAddedDocument, options);
+      }
+export type NotificationAddedSubscriptionHookResult = ReturnType<typeof useNotificationAddedSubscription>;
 export const AppStatusDocument = gql`
     query AppStatus {
   hello

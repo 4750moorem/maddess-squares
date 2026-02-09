@@ -1,0 +1,47 @@
+query Notifications($userId: String) {
+  notifications(userId: $userId) {
+    id
+    userId
+    actionType
+    iconType
+    title
+    description
+    metadata
+    gameId
+    triggeredByUserId
+    createdAt
+    read
+  }
+}
+
+mutation CreateNotification($input: CreateNotificationInput!) {
+  createNotification(input: $input) {
+    id
+    userId
+    actionType
+    iconType
+    title
+    description
+    metadata
+    gameId
+    triggeredByUserId
+    createdAt
+    read
+  }
+}
+
+subscription NotificationAdded($userId: String!) {
+  notificationAdded(userId: $userId) {
+    id
+    userId
+    actionType
+    iconType
+    title
+    description
+    metadata
+    gameId
+    triggeredByUserId
+    createdAt
+    read
+  }
+}

@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
 };
 
 export type AddUserToGameInput = {
@@ -33,6 +34,17 @@ export type AssignGridToGameInput = {
 export type CreateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
+};
+
+export type CreateNotificationInput = {
+  actionType: NotificationAction;
+  description: Scalars['String']['input'];
+  gameId?: InputMaybe<Scalars['String']['input']>;
+  iconType: Scalars['String']['input'];
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  title: Scalars['String']['input'];
+  triggeredByUserId?: InputMaybe<Scalars['String']['input']>;
+  userId: Scalars['String']['input'];
 };
 
 export type CreateUserInput = {
@@ -85,6 +97,7 @@ export type Mutation = {
   assignGridToGame?: Maybe<Game>;
   createGame: Game;
   createGrid: Grid;
+  createNotification: Notification;
   createUser: User;
   deleteGame: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
@@ -107,6 +120,11 @@ export type MutationAssignGridToGameArgs = {
 
 export type MutationCreateGameArgs = {
   input: CreateGameInput;
+};
+
+
+export type MutationCreateNotificationArgs = {
+  input: CreateNotificationInput;
 };
 
 
@@ -147,6 +165,31 @@ export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
 };
 
+export type Notification = {
+  __typename?: 'Notification';
+  actionType: NotificationAction;
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  gameId?: Maybe<Scalars['String']['output']>;
+  iconType: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  read: Scalars['Boolean']['output'];
+  title: Scalars['String']['output'];
+  triggeredByUserId?: Maybe<Scalars['String']['output']>;
+  userId: Scalars['String']['output'];
+};
+
+export enum NotificationAction {
+  GameCompleted = 'GAME_COMPLETED',
+  GameInvite = 'GAME_INVITE',
+  GameStarted = 'GAME_STARTED',
+  General = 'GENERAL',
+  GridAssigned = 'GRID_ASSIGNED',
+  PlayerJoined = 'PLAYER_JOINED',
+  SquareClaimed = 'SQUARE_CLAIMED'
+}
+
 export type Query = {
   __typename?: 'Query';
   dbStatus: Scalars['String']['output'];
@@ -156,6 +199,7 @@ export type Query = {
   hello: Scalars['String']['output'];
   me?: Maybe<User>;
   myGames: Array<Game>;
+  notifications: Array<Notification>;
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
   userByFirebaseId?: Maybe<User>;
@@ -171,6 +215,11 @@ export type QueryGameArgs = {
 
 export type QueryGridArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryNotificationsArgs = {
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -208,6 +257,16 @@ export type Square = {
   player?: Maybe<User>;
   rowIndex: Scalars['Int']['output'];
   rowValue: Scalars['Int']['output'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  notificationAdded: Notification;
+};
+
+
+export type SubscriptionNotificationAddedArgs = {
+  userId: Scalars['String']['input'];
 };
 
 export type UpdateGameInput = {

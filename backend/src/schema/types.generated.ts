@@ -1,5 +1,5 @@
 import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import type { User as PrismaUser, Game as PrismaGame, GamePlayer as PrismaGamePlayer, Grid as PrismaGrid, Square as PrismaSquare } from '../generated/prisma/client';
+import type { User as PrismaUser, Game as PrismaGame, GamePlayer as PrismaGamePlayer, Grid as PrismaGrid, Square as PrismaSquare, Notification as PrismaNotification } from '../generated/prisma/client';
 import type { GraphQLContext } from './context';
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
@@ -18,6 +18,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: Date | string; output: Date | string; }
+  JSON: { input: any; output: any; }
 };
 
 export type AddUserToGameInput = {
@@ -35,6 +36,17 @@ export type AssignGridToGameInput = {
 export type CreateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
+};
+
+export type CreateNotificationInput = {
+  actionType: NotificationAction;
+  description: Scalars['String']['input'];
+  gameId?: InputMaybe<Scalars['String']['input']>;
+  iconType: Scalars['String']['input'];
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  title: Scalars['String']['input'];
+  triggeredByUserId?: InputMaybe<Scalars['String']['input']>;
+  userId: Scalars['String']['input'];
 };
 
 export type CreateUserInput = {
@@ -86,6 +98,7 @@ export type Mutation = {
   assignGridToGame?: Maybe<Game>;
   createGame: Game;
   createGrid: Grid;
+  createNotification: Notification;
   createUser: User;
   deleteGame: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
@@ -108,6 +121,11 @@ export type MutationassignGridToGameArgs = {
 
 export type MutationcreateGameArgs = {
   input: CreateGameInput;
+};
+
+
+export type MutationcreateNotificationArgs = {
+  input: CreateNotificationInput;
 };
 
 
@@ -148,6 +166,30 @@ export type MutationupdateUserArgs = {
   input: UpdateUserInput;
 };
 
+export type Notification = {
+  __typename?: 'Notification';
+  actionType: NotificationAction;
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  gameId?: Maybe<Scalars['String']['output']>;
+  iconType: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  read: Scalars['Boolean']['output'];
+  title: Scalars['String']['output'];
+  triggeredByUserId?: Maybe<Scalars['String']['output']>;
+  userId: Scalars['String']['output'];
+};
+
+export type NotificationAction =
+  | 'GAME_COMPLETED'
+  | 'GAME_INVITE'
+  | 'GAME_STARTED'
+  | 'GENERAL'
+  | 'GRID_ASSIGNED'
+  | 'PLAYER_JOINED'
+  | 'SQUARE_CLAIMED';
+
 export type Query = {
   __typename?: 'Query';
   dbStatus: Scalars['String']['output'];
@@ -157,6 +199,7 @@ export type Query = {
   hello: Scalars['String']['output'];
   me?: Maybe<User>;
   myGames: Array<Game>;
+  notifications: Array<Notification>;
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
   userByFirebaseId?: Maybe<User>;
@@ -172,6 +215,11 @@ export type QuerygameArgs = {
 
 export type QuerygridArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QuerynotificationsArgs = {
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -209,6 +257,16 @@ export type Square = {
   player?: Maybe<User>;
   rowIndex: Scalars['Int']['output'];
   rowValue: Scalars['Int']['output'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  notificationAdded: Notification;
+};
+
+
+export type SubscriptionnotificationAddedArgs = {
+  userId: Scalars['String']['input'];
 };
 
 export type UpdateGameInput = {
@@ -317,6 +375,7 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   AssignGridToGameInput: AssignGridToGameInput;
   CreateGameInput: CreateGameInput;
+  CreateNotificationInput: CreateNotificationInput;
   CreateUserInput: CreateUserInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Game: ResolverTypeWrapper<PrismaGame>;
@@ -324,11 +383,15 @@ export type ResolversTypes = {
   GameUserRole: ResolverTypeWrapper<'PLAYER' | 'OWNER'>;
   Grid: ResolverTypeWrapper<PrismaGrid>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Notification: ResolverTypeWrapper<PrismaNotification>;
+  NotificationAction: ResolverTypeWrapper<'GAME_INVITE' | 'GAME_STARTED' | 'SQUARE_CLAIMED' | 'GAME_COMPLETED' | 'PLAYER_JOINED' | 'GRID_ASSIGNED' | 'GENERAL'>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   RemoveUserFromGameInput: RemoveUserFromGameInput;
   Square: ResolverTypeWrapper<PrismaSquare>;
+  Subscription: ResolverTypeWrapper<Record<PropertyKey, never>>;
   UpdateGameInput: UpdateGameInput;
   UpdateSquareInput: UpdateSquareInput;
   UpdateUserInput: UpdateUserInput;
@@ -342,17 +405,21 @@ export type ResolversParentTypes = {
   ID: Scalars['ID']['output'];
   AssignGridToGameInput: AssignGridToGameInput;
   CreateGameInput: CreateGameInput;
+  CreateNotificationInput: CreateNotificationInput;
   CreateUserInput: CreateUserInput;
   DateTime: Scalars['DateTime']['output'];
   Game: PrismaGame;
   GamePlayer: PrismaGamePlayer;
   Grid: PrismaGrid;
   Int: Scalars['Int']['output'];
+  JSON: Scalars['JSON']['output'];
   Mutation: Record<PropertyKey, never>;
   Boolean: Scalars['Boolean']['output'];
+  Notification: PrismaNotification;
   Query: Record<PropertyKey, never>;
   RemoveUserFromGameInput: RemoveUserFromGameInput;
   Square: PrismaSquare;
+  Subscription: Record<PropertyKey, never>;
   UpdateGameInput: UpdateGameInput;
   UpdateSquareInput: UpdateSquareInput;
   UpdateUserInput: UpdateUserInput;
@@ -394,11 +461,16 @@ export type GridResolvers<ContextType = GraphQLContext, ParentType extends Resol
   squares?: Resolver<Array<ResolversTypes['Square']>, ParentType, ContextType>;
 };
 
+export interface JSONScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
+  name: 'JSON';
+}
+
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addUserToGame?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<MutationaddUserToGameArgs, 'input'>>;
   assignGridToGame?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<MutationassignGridToGameArgs, 'input'>>;
   createGame?: Resolver<ResolversTypes['Game'], ParentType, ContextType, RequireFields<MutationcreateGameArgs, 'input'>>;
   createGrid?: Resolver<ResolversTypes['Grid'], ParentType, ContextType>;
+  createNotification?: Resolver<ResolversTypes['Notification'], ParentType, ContextType, RequireFields<MutationcreateNotificationArgs, 'input'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationcreateUserArgs, 'input'>>;
   deleteGame?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationdeleteGameArgs, 'id'>>;
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationdeleteUserArgs, 'id'>>;
@@ -408,6 +480,22 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
   updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationupdateUserArgs, 'id' | 'input'>>;
 };
 
+export type NotificationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Notification'] = ResolversParentTypes['Notification']> = {
+  actionType?: Resolver<ResolversTypes['NotificationAction'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  gameId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  iconType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  read?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  triggeredByUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type NotificationActionResolvers = EnumResolverSignature<{ GAME_COMPLETED?: any, GAME_INVITE?: any, GAME_STARTED?: any, GENERAL?: any, GRID_ASSIGNED?: any, PLAYER_JOINED?: any, SQUARE_CLAIMED?: any }, ResolversTypes['NotificationAction']>;
+
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   dbStatus?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   game?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<QuerygameArgs, 'id'>>;
@@ -416,6 +504,7 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
   hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   myGames?: Resolver<Array<ResolversTypes['Game']>, ParentType, ContextType>;
+  notifications?: Resolver<Array<ResolversTypes['Notification']>, ParentType, ContextType, Partial<QuerynotificationsArgs>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryuserArgs, 'id'>>;
   userByEmail?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryuserByEmailArgs, 'email'>>;
   userByFirebaseId?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryuserByFirebaseIdArgs, 'firebaseUserId'>>;
@@ -431,6 +520,10 @@ export type SquareResolvers<ContextType = GraphQLContext, ParentType extends Res
   player?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   rowIndex?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   rowValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+};
+
+export type SubscriptionResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  notificationAdded?: SubscriptionResolver<ResolversTypes['Notification'], "notificationAdded", ParentType, ContextType, RequireFields<SubscriptionnotificationAddedArgs, 'userId'>>;
 };
 
 export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -451,9 +544,13 @@ export type Resolvers<ContextType = GraphQLContext> = {
   GamePlayer?: GamePlayerResolvers<ContextType>;
   GameUserRole?: GameUserRoleResolvers;
   Grid?: GridResolvers<ContextType>;
+  JSON?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
+  Notification?: NotificationResolvers<ContextType>;
+  NotificationAction?: NotificationActionResolvers;
   Query?: QueryResolvers<ContextType>;
   Square?: SquareResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 

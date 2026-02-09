@@ -9,7 +9,14 @@
 * 🟢 You can import this file directly.
 */
 
+export const NotificationAction = {
+  GAME_INVITE: 'GAME_INVITE',
+  GAME_STARTED: 'GAME_STARTED',
+  SQUARE_CLAIMED: 'SQUARE_CLAIMED',
+  GAME_COMPLETED: 'GAME_COMPLETED',
+  PLAYER_JOINED: 'PLAYER_JOINED',
+  GRID_ASSIGNED: 'GRID_ASSIGNED',
+  GENERAL: 'GENERAL'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type NotificationAction = (typeof NotificationAction)[keyof typeof NotificationAction]

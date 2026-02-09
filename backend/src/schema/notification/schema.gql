@@ -1,0 +1,48 @@
+scalar JSON
+
+enum NotificationAction {
+  GAME_INVITE
+  GAME_STARTED
+  SQUARE_CLAIMED
+  GAME_COMPLETED
+  PLAYER_JOINED
+  GRID_ASSIGNED
+  GENERAL
+}
+
+type Notification {
+  id: ID!
+  userId: String!
+  actionType: NotificationAction!
+  iconType: String!
+  title: String!
+  description: String!
+  metadata: JSON
+  gameId: String
+  triggeredByUserId: String
+  createdAt: DateTime!
+  read: Boolean!
+}
+
+input CreateNotificationInput {
+  userId: String!
+  actionType: NotificationAction!
+  iconType: String!
+  title: String!
+  description: String!
+  metadata: JSON
+  gameId: String
+  triggeredByUserId: String
+}
+
+extend type Query {
+  notifications(userId: String): [Notification!]!
+}
+
+extend type Mutation {
+  createNotification(input: CreateNotificationInput!): Notification!
+}
+
+type Subscription {
+  notificationAdded(userId: String!): Notification!
+}

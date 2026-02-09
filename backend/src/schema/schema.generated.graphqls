@@ -15,6 +15,17 @@ input CreateGameInput {
   name: String!
 }
 
+input CreateNotificationInput {
+  actionType: NotificationAction!
+  description: String!
+  gameId: String
+  iconType: String!
+  metadata: JSON
+  title: String!
+  triggeredByUserId: String
+  userId: String!
+}
+
 input CreateUserInput {
   displayName: String
   email: String
@@ -58,11 +69,14 @@ type Grid {
   squares: [Square!]!
 }
 
+scalar JSON
+
 type Mutation {
   addUserToGame(input: AddUserToGameInput!): Game
   assignGridToGame(input: AssignGridToGameInput!): Game
   createGame(input: CreateGameInput!): Game!
   createGrid: Grid!
+  createNotification(input: CreateNotificationInput!): Notification!
   createUser(input: CreateUserInput!): User!
   deleteGame(id: ID!): Boolean!
   deleteUser(id: ID!): Boolean!
@@ -70,6 +84,30 @@ type Mutation {
   updateGame(id: ID!, input: UpdateGameInput!): Game
   updateSquare(id: ID!, input: UpdateSquareInput!): Square
   updateUser(id: ID!, input: UpdateUserInput!): User
+}
+
+type Notification {
+  actionType: NotificationAction!
+  createdAt: DateTime!
+  description: String!
+  gameId: String
+  iconType: String!
+  id: ID!
+  metadata: JSON
+  read: Boolean!
+  title: String!
+  triggeredByUserId: String
+  userId: String!
+}
+
+enum NotificationAction {
+  GAME_COMPLETED
+  GAME_INVITE
+  GAME_STARTED
+  GENERAL
+  GRID_ASSIGNED
+  PLAYER_JOINED
+  SQUARE_CLAIMED
 }
 
 type Query {
@@ -80,6 +118,7 @@ type Query {
   hello: String!
   me: User
   myGames: [Game!]!
+  notifications(userId: String): [Notification!]!
   user(id: ID!): User
   userByEmail(email: String!): User
   userByFirebaseId(firebaseUserId: String!): User
@@ -101,6 +140,10 @@ type Square {
   player: User
   rowIndex: Int!
   rowValue: Int!
+}
+
+type Subscription {
+  notificationAdded(userId: String!): Notification!
 }
 
 input UpdateGameInput {
