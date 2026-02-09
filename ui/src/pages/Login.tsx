@@ -63,42 +63,13 @@ function Login() {
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'An error occurred'
-      const friendlyMessage = getFriendlyErrorMessage(message)
-      setError(friendlyMessage)
+      setError(message)
       toast.error(isSignUp ? 'Sign up failed' : 'Sign in failed', {
-        description: friendlyMessage,
+        description: message,
       })
     } finally {
       setLoading(false)
     }
-  }
-
-  const getFriendlyErrorMessage = (message: string): string => {
-    if (message.includes('auth/invalid-credential')) {
-      return 'Invalid email or password. Please try again.'
-    }
-    if (message.includes('auth/email-already-in-use')) {
-      return 'This email is already registered. Try signing in instead.'
-    }
-    if (message.includes('auth/weak-password')) {
-      return 'Password is too weak. Please use at least 6 characters.'
-    }
-    if (message.includes('auth/invalid-email')) {
-      return 'Please enter a valid email address.'
-    }
-    if (message.includes('auth/user-not-found')) {
-      return 'No account found with this email. Try creating one.'
-    }
-    if (message.includes('auth/wrong-password')) {
-      return 'Incorrect password. Please try again.'
-    }
-    if (message.includes('auth/too-many-requests')) {
-      return 'Too many failed attempts. Please try again later.'
-    }
-    if (message.includes('auth/network-request-failed')) {
-      return 'Network error. Please check your connection.'
-    }
-    return message
   }
 
   return (
