@@ -20,6 +20,7 @@ import {
   useGameGridQuery,
   useCreateGridMutation,
   useAssignGridToGameMutation,
+  useBulkAddPlayersMutation,
   MyGamesDocument,
   type MyGamesQuery,
 } from '@/graphql/generated'
@@ -38,6 +39,11 @@ function Home() {
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
   const [selectedSquare, setSelectedSquare] = useState<SquareType | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showAddPlayers, setShowAddPlayers] = useState(false)
+  const [players, setPlayers] = useState([
+    { firstName: '', lastName: '', email: '', phoneNumber: '' },
+  ])
+  const [bulkAddPlayers, { loading: addingPlayers }] = useBulkAddPlayersMutation()
 
   const { data: gridData, loading: gridLoading } = useGameGridQuery({
     variables: { id: selectedGameId ?? '' },
@@ -86,6 +92,41 @@ function Home() {
     setIsModalOpen(true)
   }
 
+  const addPlayerRow = () => {
+    setPlayers([...players, { firstName: '', lastName: '', email: '', phoneNumber: '' }])
+  }
+
+  const removePlayerRow = (index: number) => {
+    setPlayers(players.filter((_, i) => i !== index))
+  }
+
+  const updatePlayer = (index: number, field: 'firstName' | 'lastName' | 'email' | 'phoneNumber', value: string) => {
+    const updated = [...players]
+    updated[index] = { ...updated[index], [field]: value }
+    setPlayers(updated)
+  }
+
+  const handleBulkAdd = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!selectedGameId) return
+
+    const validPlayers = players.filter((p) => p.firstName.trim() && p.lastName.trim())
+    if (validPlayers.length === 0) return
+
+    await bulkAddPlayers({
+      variables: {
+        input: {
+          gameId: selectedGameId,
+          players: validPlayers,
+        },
+      },
+      refetchQueries: [{ query: MyGamesDocument }],
+    })
+
+    setPlayers([{ firstName: '', lastName: '', email: '', phoneNumber: '' }])
+    setShowAddPlayers(false)
+  }
+
   const getUserRole = (game: MyGamesQuery['myGames'][number]) => {
     const currentUserId = meData?.me?.id
     if (!currentUserId) return 'Unknown'
@@ -96,7 +137,7 @@ function Home() {
     if (isOwner) return 'Owner'
 
     const isPlayer = game.players.some(
-      (player: { user: { id: string } }) => player.user.id === currentUserId,
+      (player) => player.user?.id === currentUserId,
     )
     if (isPlayer) return 'Player'
 
@@ -199,18 +240,93 @@ function Home() {
                   <h2 className="text-lg font-medium">
                     Grid for {selectedGame?.name}
                   </h2>
-                  {isGameOwner && !gridData?.game?.grid && (
-                    <Button
-                      onClick={handleCreateAndAssignGrid}
-                      disabled={createGridLoading || assignGridLoading}
-                      size="sm"
-                    >
-                      {createGridLoading || assignGridLoading
-                        ? 'Creating...'
-                        : 'Create Grid'}
-                    </Button>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {isGameOwner && !gridData?.game?.grid && (
+                      <Button
+                        onClick={handleCreateAndAssignGrid}
+                        disabled={createGridLoading || assignGridLoading}
+                        size="sm"
+                      >
+                        {createGridLoading || assignGridLoading
+                          ? 'Creating...'
+                          : 'Create Grid'}
+                      </Button>
+                    )}
+                    {isGameOwner && gridData?.game?.grid && (
+                      <Button
+                        onClick={() => setShowAddPlayers(!showAddPlayers)}
+                        size="sm"
+                        variant="outline"
+                      >
+                        {showAddPlayers ? 'Cancel' : 'Add Players'}
+                      </Button>
+                    )}
+                  </div>
                 </div>
+
+                {showAddPlayers && (
+                  <div className="retro-card p-6">
+                    <h3 className="mb-4 text-lg font-bold">Add Players</h3>
+                    <form onSubmit={handleBulkAdd} className="space-y-4">
+                      {players.map((player, idx) => (
+                        <div key={idx} className="relative space-y-2 rounded border border-border p-4">
+                          {players.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removePlayerRow(idx)}
+                              className="absolute top-2 right-2 text-muted-foreground hover:text-foreground"
+                            >
+                              X
+                            </button>
+                          )}
+                          <div className="grid grid-cols-2 gap-2">
+                            <input
+                              type="text"
+                              value={player.firstName}
+                              onChange={(e) => updatePlayer(idx, 'firstName', e.target.value)}
+                              className="retro-input"
+                              placeholder="First Name *"
+                              required
+                            />
+                            <input
+                              type="text"
+                              value={player.lastName}
+                              onChange={(e) => updatePlayer(idx, 'lastName', e.target.value)}
+                              className="retro-input"
+                              placeholder="Last Name *"
+                              required
+                            />
+                          </div>
+                          <input
+                            type="email"
+                            value={player.email}
+                            onChange={(e) => updatePlayer(idx, 'email', e.target.value)}
+                            className="retro-input w-full"
+                            placeholder="Email (optional)"
+                          />
+                          <input
+                            type="tel"
+                            value={player.phoneNumber}
+                            onChange={(e) => updatePlayer(idx, 'phoneNumber', e.target.value)}
+                            className="retro-input w-full"
+                            placeholder="Phone Number (optional)"
+                          />
+                        </div>
+                      ))}
+                      <p className="text-xs text-muted-foreground">
+                        * Required fields. If email or phone number is provided, an invite will be sent.
+                      </p>
+                      <div className="flex gap-2">
+                        <Button type="button" onClick={addPlayerRow} variant="outline">
+                          Add Another Player
+                        </Button>
+                        <Button type="submit" disabled={addingPlayers}>
+                          {addingPlayers ? 'Adding...' : 'Add Players'}
+                        </Button>
+                      </div>
+                    </form>
+                  </div>
+                )}
 
                 {gridLoading ? (
                   <div className="text-center text-muted-foreground">

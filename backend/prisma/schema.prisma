@@ -14,7 +14,7 @@ model HealthCheck {
 
 model User {
   id             String   @id @default(cuid())
-  firebaseUserId String   @unique
+  firebaseUserId String?  @unique
   email          String?  @unique
   phoneNumber    String?  @unique
   displayName    String?
@@ -43,16 +43,31 @@ model Game {
   notifications Notification[] @relation("GameNotifications")
 }
 
-model GamePlayer {
-  id        String   @id @default(cuid())
-  gameId    String
-  userId    String
-  joinedAt  DateTime @default(now())
+model TempPlayer {
+  id          String       @id @default(cuid())
+  firstName   String
+  lastName    String
+  email       String?
+  phoneNumber String?
+  createdAt   DateTime     @default(now())
 
-  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gamePlayers GamePlayer[]
+}
+
+model GamePlayer {
+  id         String   @id @default(cuid())
+  gameId     String
+  userId     String?
+  tempUserId String?
+  joinedAt   DateTime @default(now())
+
+  game       Game        @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user       User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tempPlayer TempPlayer? @relation(fields: [tempUserId], references: [id], onDelete: Cascade)
+  squares    Square[]    @relation("SquareGamePlayer")
 
   @@unique([gameId, userId])
+  @@unique([gameId, tempUserId])
 }
 
 model Grid {
@@ -75,8 +90,10 @@ model Square {
   columnIndex Int
   rowValue    Int
   columnValue Int
-  playerId    String?
-  player      User?   @relation("SquarePlayer", fields: [playerId], references: [id])
+  playerId     String?
+  player       User?       @relation("SquarePlayer", fields: [playerId], references: [id])
+  gamePlayerId String?
+  gamePlayer   GamePlayer? @relation("SquareGamePlayer", fields: [gamePlayerId], references: [id])
 
   @@unique([gridId, rowIndex, columnIndex])
 }

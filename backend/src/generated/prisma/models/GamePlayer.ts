@@ -28,6 +28,7 @@ export type GamePlayerMinAggregateOutputType = {
   id: string | null
   gameId: string | null
   userId: string | null
+  tempUserId: string | null
   joinedAt: Date | null
 }
 
@@ -35,6 +36,7 @@ export type GamePlayerMaxAggregateOutputType = {
   id: string | null
   gameId: string | null
   userId: string | null
+  tempUserId: string | null
   joinedAt: Date | null
 }
 
@@ -42,6 +44,7 @@ export type GamePlayerCountAggregateOutputType = {
   id: number
   gameId: number
   userId: number
+  tempUserId: number
   joinedAt: number
   _all: number
 }
@@ -51,6 +54,7 @@ export type GamePlayerMinAggregateInputType = {
   id?: true
   gameId?: true
   userId?: true
+  tempUserId?: true
   joinedAt?: true
 }
 
@@ -58,6 +62,7 @@ export type GamePlayerMaxAggregateInputType = {
   id?: true
   gameId?: true
   userId?: true
+  tempUserId?: true
   joinedAt?: true
 }
 
@@ -65,6 +70,7 @@ export type GamePlayerCountAggregateInputType = {
   id?: true
   gameId?: true
   userId?: true
+  tempUserId?: true
   joinedAt?: true
   _all?: true
 }
@@ -144,7 +150,8 @@ export type GamePlayerGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type GamePlayerGroupByOutputType = {
   id: string
   gameId: string
-  userId: string
+  userId: string | null
+  tempUserId: string | null
   joinedAt: Date
   _count: GamePlayerCountAggregateOutputType | null
   _min: GamePlayerMinAggregateOutputType | null
@@ -172,38 +179,49 @@ export type GamePlayerWhereInput = {
   NOT?: Prisma.GamePlayerWhereInput | Prisma.GamePlayerWhereInput[]
   id?: Prisma.StringFilter<"GamePlayer"> | string
   gameId?: Prisma.StringFilter<"GamePlayer"> | string
-  userId?: Prisma.StringFilter<"GamePlayer"> | string
+  userId?: Prisma.StringNullableFilter<"GamePlayer"> | string | null
+  tempUserId?: Prisma.StringNullableFilter<"GamePlayer"> | string | null
   joinedAt?: Prisma.DateTimeFilter<"GamePlayer"> | Date | string
   game?: Prisma.XOR<Prisma.GameScalarRelationFilter, Prisma.GameWhereInput>
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  tempPlayer?: Prisma.XOR<Prisma.TempPlayerNullableScalarRelationFilter, Prisma.TempPlayerWhereInput> | null
+  squares?: Prisma.SquareListRelationFilter
 }
 
 export type GamePlayerOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   gameId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tempUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   game?: Prisma.GameOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
+  tempPlayer?: Prisma.TempPlayerOrderByWithRelationInput
+  squares?: Prisma.SquareOrderByRelationAggregateInput
 }
 
 export type GamePlayerWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   gameId_userId?: Prisma.GamePlayerGameIdUserIdCompoundUniqueInput
+  gameId_tempUserId?: Prisma.GamePlayerGameIdTempUserIdCompoundUniqueInput
   AND?: Prisma.GamePlayerWhereInput | Prisma.GamePlayerWhereInput[]
   OR?: Prisma.GamePlayerWhereInput[]
   NOT?: Prisma.GamePlayerWhereInput | Prisma.GamePlayerWhereInput[]
   gameId?: Prisma.StringFilter<"GamePlayer"> | string
-  userId?: Prisma.StringFilter<"GamePlayer"> | string
+  userId?: Prisma.StringNullableFilter<"GamePlayer"> | string | null
+  tempUserId?: Prisma.StringNullableFilter<"GamePlayer"> | string | null
   joinedAt?: Prisma.DateTimeFilter<"GamePlayer"> | Date | string
   game?: Prisma.XOR<Prisma.GameScalarRelationFilter, Prisma.GameWhereInput>
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "gameId_userId">
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  tempPlayer?: Prisma.XOR<Prisma.TempPlayerNullableScalarRelationFilter, Prisma.TempPlayerWhereInput> | null
+  squares?: Prisma.SquareListRelationFilter
+}, "id" | "gameId_userId" | "gameId_tempUserId">
 
 export type GamePlayerOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   gameId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tempUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   _count?: Prisma.GamePlayerCountOrderByAggregateInput
   _max?: Prisma.GamePlayerMaxOrderByAggregateInput
@@ -216,7 +234,8 @@ export type GamePlayerScalarWhereWithAggregatesInput = {
   NOT?: Prisma.GamePlayerScalarWhereWithAggregatesInput | Prisma.GamePlayerScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"GamePlayer"> | string
   gameId?: Prisma.StringWithAggregatesFilter<"GamePlayer"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"GamePlayer"> | string
+  userId?: Prisma.StringNullableWithAggregatesFilter<"GamePlayer"> | string | null
+  tempUserId?: Prisma.StringNullableWithAggregatesFilter<"GamePlayer"> | string | null
   joinedAt?: Prisma.DateTimeWithAggregatesFilter<"GamePlayer"> | Date | string
 }
 
@@ -224,34 +243,43 @@ export type GamePlayerCreateInput = {
   id?: string
   joinedAt?: Date | string
   game: Prisma.GameCreateNestedOneWithoutPlayersInput
-  user: Prisma.UserCreateNestedOneWithoutPlayerGamesInput
+  user?: Prisma.UserCreateNestedOneWithoutPlayerGamesInput
+  tempPlayer?: Prisma.TempPlayerCreateNestedOneWithoutGamePlayersInput
+  squares?: Prisma.SquareCreateNestedManyWithoutGamePlayerInput
 }
 
 export type GamePlayerUncheckedCreateInput = {
   id?: string
   gameId: string
-  userId: string
+  userId?: string | null
+  tempUserId?: string | null
   joinedAt?: Date | string
+  squares?: Prisma.SquareUncheckedCreateNestedManyWithoutGamePlayerInput
 }
 
 export type GamePlayerUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   game?: Prisma.GameUpdateOneRequiredWithoutPlayersNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutPlayerGamesNestedInput
+  user?: Prisma.UserUpdateOneWithoutPlayerGamesNestedInput
+  tempPlayer?: Prisma.TempPlayerUpdateOneWithoutGamePlayersNestedInput
+  squares?: Prisma.SquareUpdateManyWithoutGamePlayerNestedInput
 }
 
 export type GamePlayerUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gameId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tempUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  squares?: Prisma.SquareUncheckedUpdateManyWithoutGamePlayerNestedInput
 }
 
 export type GamePlayerCreateManyInput = {
   id?: string
   gameId: string
-  userId: string
+  userId?: string | null
+  tempUserId?: string | null
   joinedAt?: Date | string
 }
 
@@ -263,7 +291,8 @@ export type GamePlayerUpdateManyMutationInput = {
 export type GamePlayerUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gameId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tempUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -282,10 +311,16 @@ export type GamePlayerGameIdUserIdCompoundUniqueInput = {
   userId: string
 }
 
+export type GamePlayerGameIdTempUserIdCompoundUniqueInput = {
+  gameId: string
+  tempUserId: string
+}
+
 export type GamePlayerCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   gameId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  tempUserId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
 }
 
@@ -293,6 +328,7 @@ export type GamePlayerMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   gameId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  tempUserId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
 }
 
@@ -300,7 +336,13 @@ export type GamePlayerMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   gameId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  tempUserId?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
+}
+
+export type GamePlayerNullableScalarRelationFilter = {
+  is?: Prisma.GamePlayerWhereInput | null
+  isNot?: Prisma.GamePlayerWhereInput | null
 }
 
 export type GamePlayerCreateNestedManyWithoutUserInput = {
@@ -387,16 +429,78 @@ export type GamePlayerUncheckedUpdateManyWithoutGameNestedInput = {
   deleteMany?: Prisma.GamePlayerScalarWhereInput | Prisma.GamePlayerScalarWhereInput[]
 }
 
+export type GamePlayerCreateNestedManyWithoutTempPlayerInput = {
+  create?: Prisma.XOR<Prisma.GamePlayerCreateWithoutTempPlayerInput, Prisma.GamePlayerUncheckedCreateWithoutTempPlayerInput> | Prisma.GamePlayerCreateWithoutTempPlayerInput[] | Prisma.GamePlayerUncheckedCreateWithoutTempPlayerInput[]
+  connectOrCreate?: Prisma.GamePlayerCreateOrConnectWithoutTempPlayerInput | Prisma.GamePlayerCreateOrConnectWithoutTempPlayerInput[]
+  createMany?: Prisma.GamePlayerCreateManyTempPlayerInputEnvelope
+  connect?: Prisma.GamePlayerWhereUniqueInput | Prisma.GamePlayerWhereUniqueInput[]
+}
+
+export type GamePlayerUncheckedCreateNestedManyWithoutTempPlayerInput = {
+  create?: Prisma.XOR<Prisma.GamePlayerCreateWithoutTempPlayerInput, Prisma.GamePlayerUncheckedCreateWithoutTempPlayerInput> | Prisma.GamePlayerCreateWithoutTempPlayerInput[] | Prisma.GamePlayerUncheckedCreateWithoutTempPlayerInput[]
+  connectOrCreate?: Prisma.GamePlayerCreateOrConnectWithoutTempPlayerInput | Prisma.GamePlayerCreateOrConnectWithoutTempPlayerInput[]
+  createMany?: Prisma.GamePlayerCreateManyTempPlayerInputEnvelope
+  connect?: Prisma.GamePlayerWhereUniqueInput | Prisma.GamePlayerWhereUniqueInput[]
+}
+
+export type GamePlayerUpdateManyWithoutTempPlayerNestedInput = {
+  create?: Prisma.XOR<Prisma.GamePlayerCreateWithoutTempPlayerInput, Prisma.GamePlayerUncheckedCreateWithoutTempPlayerInput> | Prisma.GamePlayerCreateWithoutTempPlayerInput[] | Prisma.GamePlayerUncheckedCreateWithoutTempPlayerInput[]
+  connectOrCreate?: Prisma.GamePlayerCreateOrConnectWithoutTempPlayerInput | Prisma.GamePlayerCreateOrConnectWithoutTempPlayerInput[]
+  upsert?: Prisma.GamePlayerUpsertWithWhereUniqueWithoutTempPlayerInput | Prisma.GamePlayerUpsertWithWhereUniqueWithoutTempPlayerInput[]
+  createMany?: Prisma.GamePlayerCreateManyTempPlayerInputEnvelope
+  set?: Prisma.GamePlayerWhereUniqueInput | Prisma.GamePlayerWhereUniqueInput[]
+  disconnect?: Prisma.GamePlayerWhereUniqueInput | Prisma.GamePlayerWhereUniqueInput[]
+  delete?: Prisma.GamePlayerWhereUniqueInput | Prisma.GamePlayerWhereUniqueInput[]
+  connect?: Prisma.GamePlayerWhereUniqueInput | Prisma.GamePlayerWhereUniqueInput[]
+  update?: Prisma.GamePlayerUpdateWithWhereUniqueWithoutTempPlayerInput | Prisma.GamePlayerUpdateWithWhereUniqueWithoutTempPlayerInput[]
+  updateMany?: Prisma.GamePlayerUpdateManyWithWhereWithoutTempPlayerInput | Prisma.GamePlayerUpdateManyWithWhereWithoutTempPlayerInput[]
+  deleteMany?: Prisma.GamePlayerScalarWhereInput | Prisma.GamePlayerScalarWhereInput[]
+}
+
+export type GamePlayerUncheckedUpdateManyWithoutTempPlayerNestedInput = {
+  create?: Prisma.XOR<Prisma.GamePlayerCreateWithoutTempPlayerInput, Prisma.GamePlayerUncheckedCreateWithoutTempPlayerInput> | Prisma.GamePlayerCreateWithoutTempPlayerInput[] | Prisma.GamePlayerUncheckedCreateWithoutTempPlayerInput[]
+  connectOrCreate?: Prisma.GamePlayerCreateOrConnectWithoutTempPlayerInput | Prisma.GamePlayerCreateOrConnectWithoutTempPlayerInput[]
+  upsert?: Prisma.GamePlayerUpsertWithWhereUniqueWithoutTempPlayerInput | Prisma.GamePlayerUpsertWithWhereUniqueWithoutTempPlayerInput[]
+  createMany?: Prisma.GamePlayerCreateManyTempPlayerInputEnvelope
+  set?: Prisma.GamePlayerWhereUniqueInput | Prisma.GamePlayerWhereUniqueInput[]
+  disconnect?: Prisma.GamePlayerWhereUniqueInput | Prisma.GamePlayerWhereUniqueInput[]
+  delete?: Prisma.GamePlayerWhereUniqueInput | Prisma.GamePlayerWhereUniqueInput[]
+  connect?: Prisma.GamePlayerWhereUniqueInput | Prisma.GamePlayerWhereUniqueInput[]
+  update?: Prisma.GamePlayerUpdateWithWhereUniqueWithoutTempPlayerInput | Prisma.GamePlayerUpdateWithWhereUniqueWithoutTempPlayerInput[]
+  updateMany?: Prisma.GamePlayerUpdateManyWithWhereWithoutTempPlayerInput | Prisma.GamePlayerUpdateManyWithWhereWithoutTempPlayerInput[]
+  deleteMany?: Prisma.GamePlayerScalarWhereInput | Prisma.GamePlayerScalarWhereInput[]
+}
+
+export type GamePlayerCreateNestedOneWithoutSquaresInput = {
+  create?: Prisma.XOR<Prisma.GamePlayerCreateWithoutSquaresInput, Prisma.GamePlayerUncheckedCreateWithoutSquaresInput>
+  connectOrCreate?: Prisma.GamePlayerCreateOrConnectWithoutSquaresInput
+  connect?: Prisma.GamePlayerWhereUniqueInput
+}
+
+export type GamePlayerUpdateOneWithoutSquaresNestedInput = {
+  create?: Prisma.XOR<Prisma.GamePlayerCreateWithoutSquaresInput, Prisma.GamePlayerUncheckedCreateWithoutSquaresInput>
+  connectOrCreate?: Prisma.GamePlayerCreateOrConnectWithoutSquaresInput
+  upsert?: Prisma.GamePlayerUpsertWithoutSquaresInput
+  disconnect?: Prisma.GamePlayerWhereInput | boolean
+  delete?: Prisma.GamePlayerWhereInput | boolean
+  connect?: Prisma.GamePlayerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GamePlayerUpdateToOneWithWhereWithoutSquaresInput, Prisma.GamePlayerUpdateWithoutSquaresInput>, Prisma.GamePlayerUncheckedUpdateWithoutSquaresInput>
+}
+
 export type GamePlayerCreateWithoutUserInput = {
   id?: string
   joinedAt?: Date | string
   game: Prisma.GameCreateNestedOneWithoutPlayersInput
+  tempPlayer?: Prisma.TempPlayerCreateNestedOneWithoutGamePlayersInput
+  squares?: Prisma.SquareCreateNestedManyWithoutGamePlayerInput
 }
 
 export type GamePlayerUncheckedCreateWithoutUserInput = {
   id?: string
   gameId: string
+  tempUserId?: string | null
   joinedAt?: Date | string
+  squares?: Prisma.SquareUncheckedCreateNestedManyWithoutGamePlayerInput
 }
 
 export type GamePlayerCreateOrConnectWithoutUserInput = {
@@ -431,20 +535,25 @@ export type GamePlayerScalarWhereInput = {
   NOT?: Prisma.GamePlayerScalarWhereInput | Prisma.GamePlayerScalarWhereInput[]
   id?: Prisma.StringFilter<"GamePlayer"> | string
   gameId?: Prisma.StringFilter<"GamePlayer"> | string
-  userId?: Prisma.StringFilter<"GamePlayer"> | string
+  userId?: Prisma.StringNullableFilter<"GamePlayer"> | string | null
+  tempUserId?: Prisma.StringNullableFilter<"GamePlayer"> | string | null
   joinedAt?: Prisma.DateTimeFilter<"GamePlayer"> | Date | string
 }
 
 export type GamePlayerCreateWithoutGameInput = {
   id?: string
   joinedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutPlayerGamesInput
+  user?: Prisma.UserCreateNestedOneWithoutPlayerGamesInput
+  tempPlayer?: Prisma.TempPlayerCreateNestedOneWithoutGamePlayersInput
+  squares?: Prisma.SquareCreateNestedManyWithoutGamePlayerInput
 }
 
 export type GamePlayerUncheckedCreateWithoutGameInput = {
   id?: string
-  userId: string
+  userId?: string | null
+  tempUserId?: string | null
   joinedAt?: Date | string
+  squares?: Prisma.SquareUncheckedCreateNestedManyWithoutGamePlayerInput
 }
 
 export type GamePlayerCreateOrConnectWithoutGameInput = {
@@ -473,9 +582,100 @@ export type GamePlayerUpdateManyWithWhereWithoutGameInput = {
   data: Prisma.XOR<Prisma.GamePlayerUpdateManyMutationInput, Prisma.GamePlayerUncheckedUpdateManyWithoutGameInput>
 }
 
+export type GamePlayerCreateWithoutTempPlayerInput = {
+  id?: string
+  joinedAt?: Date | string
+  game: Prisma.GameCreateNestedOneWithoutPlayersInput
+  user?: Prisma.UserCreateNestedOneWithoutPlayerGamesInput
+  squares?: Prisma.SquareCreateNestedManyWithoutGamePlayerInput
+}
+
+export type GamePlayerUncheckedCreateWithoutTempPlayerInput = {
+  id?: string
+  gameId: string
+  userId?: string | null
+  joinedAt?: Date | string
+  squares?: Prisma.SquareUncheckedCreateNestedManyWithoutGamePlayerInput
+}
+
+export type GamePlayerCreateOrConnectWithoutTempPlayerInput = {
+  where: Prisma.GamePlayerWhereUniqueInput
+  create: Prisma.XOR<Prisma.GamePlayerCreateWithoutTempPlayerInput, Prisma.GamePlayerUncheckedCreateWithoutTempPlayerInput>
+}
+
+export type GamePlayerCreateManyTempPlayerInputEnvelope = {
+  data: Prisma.GamePlayerCreateManyTempPlayerInput | Prisma.GamePlayerCreateManyTempPlayerInput[]
+  skipDuplicates?: boolean
+}
+
+export type GamePlayerUpsertWithWhereUniqueWithoutTempPlayerInput = {
+  where: Prisma.GamePlayerWhereUniqueInput
+  update: Prisma.XOR<Prisma.GamePlayerUpdateWithoutTempPlayerInput, Prisma.GamePlayerUncheckedUpdateWithoutTempPlayerInput>
+  create: Prisma.XOR<Prisma.GamePlayerCreateWithoutTempPlayerInput, Prisma.GamePlayerUncheckedCreateWithoutTempPlayerInput>
+}
+
+export type GamePlayerUpdateWithWhereUniqueWithoutTempPlayerInput = {
+  where: Prisma.GamePlayerWhereUniqueInput
+  data: Prisma.XOR<Prisma.GamePlayerUpdateWithoutTempPlayerInput, Prisma.GamePlayerUncheckedUpdateWithoutTempPlayerInput>
+}
+
+export type GamePlayerUpdateManyWithWhereWithoutTempPlayerInput = {
+  where: Prisma.GamePlayerScalarWhereInput
+  data: Prisma.XOR<Prisma.GamePlayerUpdateManyMutationInput, Prisma.GamePlayerUncheckedUpdateManyWithoutTempPlayerInput>
+}
+
+export type GamePlayerCreateWithoutSquaresInput = {
+  id?: string
+  joinedAt?: Date | string
+  game: Prisma.GameCreateNestedOneWithoutPlayersInput
+  user?: Prisma.UserCreateNestedOneWithoutPlayerGamesInput
+  tempPlayer?: Prisma.TempPlayerCreateNestedOneWithoutGamePlayersInput
+}
+
+export type GamePlayerUncheckedCreateWithoutSquaresInput = {
+  id?: string
+  gameId: string
+  userId?: string | null
+  tempUserId?: string | null
+  joinedAt?: Date | string
+}
+
+export type GamePlayerCreateOrConnectWithoutSquaresInput = {
+  where: Prisma.GamePlayerWhereUniqueInput
+  create: Prisma.XOR<Prisma.GamePlayerCreateWithoutSquaresInput, Prisma.GamePlayerUncheckedCreateWithoutSquaresInput>
+}
+
+export type GamePlayerUpsertWithoutSquaresInput = {
+  update: Prisma.XOR<Prisma.GamePlayerUpdateWithoutSquaresInput, Prisma.GamePlayerUncheckedUpdateWithoutSquaresInput>
+  create: Prisma.XOR<Prisma.GamePlayerCreateWithoutSquaresInput, Prisma.GamePlayerUncheckedCreateWithoutSquaresInput>
+  where?: Prisma.GamePlayerWhereInput
+}
+
+export type GamePlayerUpdateToOneWithWhereWithoutSquaresInput = {
+  where?: Prisma.GamePlayerWhereInput
+  data: Prisma.XOR<Prisma.GamePlayerUpdateWithoutSquaresInput, Prisma.GamePlayerUncheckedUpdateWithoutSquaresInput>
+}
+
+export type GamePlayerUpdateWithoutSquaresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  game?: Prisma.GameUpdateOneRequiredWithoutPlayersNestedInput
+  user?: Prisma.UserUpdateOneWithoutPlayerGamesNestedInput
+  tempPlayer?: Prisma.TempPlayerUpdateOneWithoutGamePlayersNestedInput
+}
+
+export type GamePlayerUncheckedUpdateWithoutSquaresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  gameId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tempUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type GamePlayerCreateManyUserInput = {
   id?: string
   gameId: string
+  tempUserId?: string | null
   joinedAt?: Date | string
 }
 
@@ -483,104 +683,191 @@ export type GamePlayerUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   game?: Prisma.GameUpdateOneRequiredWithoutPlayersNestedInput
+  tempPlayer?: Prisma.TempPlayerUpdateOneWithoutGamePlayersNestedInput
+  squares?: Prisma.SquareUpdateManyWithoutGamePlayerNestedInput
 }
 
 export type GamePlayerUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gameId?: Prisma.StringFieldUpdateOperationsInput | string
+  tempUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  squares?: Prisma.SquareUncheckedUpdateManyWithoutGamePlayerNestedInput
 }
 
 export type GamePlayerUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gameId?: Prisma.StringFieldUpdateOperationsInput | string
+  tempUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GamePlayerCreateManyGameInput = {
   id?: string
-  userId: string
+  userId?: string | null
+  tempUserId?: string | null
   joinedAt?: Date | string
 }
 
 export type GamePlayerUpdateWithoutGameInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutPlayerGamesNestedInput
+  user?: Prisma.UserUpdateOneWithoutPlayerGamesNestedInput
+  tempPlayer?: Prisma.TempPlayerUpdateOneWithoutGamePlayersNestedInput
+  squares?: Prisma.SquareUpdateManyWithoutGamePlayerNestedInput
 }
 
 export type GamePlayerUncheckedUpdateWithoutGameInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tempUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  squares?: Prisma.SquareUncheckedUpdateManyWithoutGamePlayerNestedInput
 }
 
 export type GamePlayerUncheckedUpdateManyWithoutGameInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tempUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type GamePlayerCreateManyTempPlayerInput = {
+  id?: string
+  gameId: string
+  userId?: string | null
+  joinedAt?: Date | string
+}
+
+export type GamePlayerUpdateWithoutTempPlayerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  game?: Prisma.GameUpdateOneRequiredWithoutPlayersNestedInput
+  user?: Prisma.UserUpdateOneWithoutPlayerGamesNestedInput
+  squares?: Prisma.SquareUpdateManyWithoutGamePlayerNestedInput
+}
+
+export type GamePlayerUncheckedUpdateWithoutTempPlayerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  gameId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  squares?: Prisma.SquareUncheckedUpdateManyWithoutGamePlayerNestedInput
+}
+
+export type GamePlayerUncheckedUpdateManyWithoutTempPlayerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  gameId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type GamePlayerCountOutputType
+ */
+
+export type GamePlayerCountOutputType = {
+  squares: number
+}
+
+export type GamePlayerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  squares?: boolean | GamePlayerCountOutputTypeCountSquaresArgs
+}
+
+/**
+ * GamePlayerCountOutputType without action
+ */
+export type GamePlayerCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GamePlayerCountOutputType
+   */
+  select?: Prisma.GamePlayerCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * GamePlayerCountOutputType without action
+ */
+export type GamePlayerCountOutputTypeCountSquaresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SquareWhereInput
+}
 
 
 export type GamePlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   gameId?: boolean
   userId?: boolean
+  tempUserId?: boolean
   joinedAt?: boolean
   game?: boolean | Prisma.GameDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.GamePlayer$userArgs<ExtArgs>
+  tempPlayer?: boolean | Prisma.GamePlayer$tempPlayerArgs<ExtArgs>
+  squares?: boolean | Prisma.GamePlayer$squaresArgs<ExtArgs>
+  _count?: boolean | Prisma.GamePlayerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gamePlayer"]>
 
 export type GamePlayerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   gameId?: boolean
   userId?: boolean
+  tempUserId?: boolean
   joinedAt?: boolean
   game?: boolean | Prisma.GameDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.GamePlayer$userArgs<ExtArgs>
+  tempPlayer?: boolean | Prisma.GamePlayer$tempPlayerArgs<ExtArgs>
 }, ExtArgs["result"]["gamePlayer"]>
 
 export type GamePlayerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   gameId?: boolean
   userId?: boolean
+  tempUserId?: boolean
   joinedAt?: boolean
   game?: boolean | Prisma.GameDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.GamePlayer$userArgs<ExtArgs>
+  tempPlayer?: boolean | Prisma.GamePlayer$tempPlayerArgs<ExtArgs>
 }, ExtArgs["result"]["gamePlayer"]>
 
 export type GamePlayerSelectScalar = {
   id?: boolean
   gameId?: boolean
   userId?: boolean
+  tempUserId?: boolean
   joinedAt?: boolean
 }
 
-export type GamePlayerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "gameId" | "userId" | "joinedAt", ExtArgs["result"]["gamePlayer"]>
+export type GamePlayerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "gameId" | "userId" | "tempUserId" | "joinedAt", ExtArgs["result"]["gamePlayer"]>
 export type GamePlayerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   game?: boolean | Prisma.GameDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.GamePlayer$userArgs<ExtArgs>
+  tempPlayer?: boolean | Prisma.GamePlayer$tempPlayerArgs<ExtArgs>
+  squares?: boolean | Prisma.GamePlayer$squaresArgs<ExtArgs>
+  _count?: boolean | Prisma.GamePlayerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type GamePlayerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   game?: boolean | Prisma.GameDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.GamePlayer$userArgs<ExtArgs>
+  tempPlayer?: boolean | Prisma.GamePlayer$tempPlayerArgs<ExtArgs>
 }
 export type GamePlayerIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   game?: boolean | Prisma.GameDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.GamePlayer$userArgs<ExtArgs>
+  tempPlayer?: boolean | Prisma.GamePlayer$tempPlayerArgs<ExtArgs>
 }
 
 export type $GamePlayerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "GamePlayer"
   objects: {
     game: Prisma.$GamePayload<ExtArgs>
-    user: Prisma.$UserPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs> | null
+    tempPlayer: Prisma.$TempPlayerPayload<ExtArgs> | null
+    squares: Prisma.$SquarePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     gameId: string
-    userId: string
+    userId: string | null
+    tempUserId: string | null
     joinedAt: Date
   }, ExtArgs["result"]["gamePlayer"]>
   composites: {}
@@ -977,7 +1264,9 @@ readonly fields: GamePlayerFieldRefs;
 export interface Prisma__GamePlayerClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   game<T extends Prisma.GameDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameDefaultArgs<ExtArgs>>): Prisma.Prisma__GameClient<runtime.Types.Result.GetResult<Prisma.$GamePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.GamePlayer$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GamePlayer$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  tempPlayer<T extends Prisma.GamePlayer$tempPlayerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GamePlayer$tempPlayerArgs<ExtArgs>>): Prisma.Prisma__TempPlayerClient<runtime.Types.Result.GetResult<Prisma.$TempPlayerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  squares<T extends Prisma.GamePlayer$squaresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GamePlayer$squaresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SquarePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1010,6 +1299,7 @@ export interface GamePlayerFieldRefs {
   readonly id: Prisma.FieldRef<"GamePlayer", 'String'>
   readonly gameId: Prisma.FieldRef<"GamePlayer", 'String'>
   readonly userId: Prisma.FieldRef<"GamePlayer", 'String'>
+  readonly tempUserId: Prisma.FieldRef<"GamePlayer", 'String'>
   readonly joinedAt: Prisma.FieldRef<"GamePlayer", 'DateTime'>
 }
     
@@ -1404,6 +1694,68 @@ export type GamePlayerDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many GamePlayers to delete.
    */
   limit?: number
+}
+
+/**
+ * GamePlayer.user
+ */
+export type GamePlayer$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * GamePlayer.tempPlayer
+ */
+export type GamePlayer$tempPlayerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TempPlayer
+   */
+  select?: Prisma.TempPlayerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TempPlayer
+   */
+  omit?: Prisma.TempPlayerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TempPlayerInclude<ExtArgs> | null
+  where?: Prisma.TempPlayerWhereInput
+}
+
+/**
+ * GamePlayer.squares
+ */
+export type GamePlayer$squaresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Square
+   */
+  select?: Prisma.SquareSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Square
+   */
+  omit?: Prisma.SquareOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SquareInclude<ExtArgs> | null
+  where?: Prisma.SquareWhereInput
+  orderBy?: Prisma.SquareOrderByWithRelationInput | Prisma.SquareOrderByWithRelationInput[]
+  cursor?: Prisma.SquareWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SquareScalarFieldEnum | Prisma.SquareScalarFieldEnum[]
 }
 
 /**

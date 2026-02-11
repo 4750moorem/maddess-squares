@@ -10,6 +10,11 @@ input AssignGridToGameInput {
   gridId: ID!
 }
 
+input BulkAddPlayersInput {
+  gameId: ID!
+  players: [PlayerInput!]!
+}
+
 input CreateGameInput {
   description: String
   name: String!
@@ -29,7 +34,7 @@ input CreateNotificationInput {
 input CreateUserInput {
   displayName: String
   email: String
-  firebaseUserId: String!
+  firebaseUserId: String
   phoneNumber: String
 }
 
@@ -47,12 +52,18 @@ type Game {
 }
 
 type GamePlayer {
+  displayName: String
+  email: String
+  fullName: String
   game: Game!
   gameId: String!
   id: ID!
   joinedAt: DateTime!
-  user: User!
-  userId: String!
+  phoneNumber: String
+  tempPlayer: TempPlayer
+  tempUserId: String
+  user: User
+  userId: String
 }
 
 enum GameUserRole {
@@ -74,6 +85,7 @@ scalar JSON
 type Mutation {
   addUserToGame(input: AddUserToGameInput!): Game
   assignGridToGame(input: AssignGridToGameInput!): Game
+  bulkAddPlayers(input: BulkAddPlayersInput!): Game
   createGame(input: CreateGameInput!): Game!
   createGrid: Grid!
   createNotification(input: CreateNotificationInput!): Notification!
@@ -108,6 +120,13 @@ enum NotificationAction {
   GRID_ASSIGNED
   PLAYER_JOINED
   SQUARE_CLAIMED
+}
+
+input PlayerInput {
+  email: String
+  firstName: String!
+  lastName: String!
+  phoneNumber: String
 }
 
 type Query {
@@ -146,6 +165,14 @@ type Subscription {
   notificationAdded(userId: String!): Notification!
 }
 
+type TempPlayer {
+  email: String
+  firstName: String!
+  id: ID!
+  lastName: String!
+  phoneNumber: String
+}
+
 input UpdateGameInput {
   description: String
   name: String
@@ -165,7 +192,7 @@ type User {
   createdAt: DateTime!
   displayName: String
   email: String
-  firebaseUserId: String!
+  firebaseUserId: String
   id: ID!
   ownedGames: [Game!]!
   phoneNumber: String

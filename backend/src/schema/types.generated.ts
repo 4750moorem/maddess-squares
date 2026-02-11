@@ -1,5 +1,5 @@
 import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import type { User as PrismaUser, Game as PrismaGame, GamePlayer as PrismaGamePlayer, Grid as PrismaGrid, Square as PrismaSquare, Notification as PrismaNotification } from '../generated/prisma/client';
+import type { User as PrismaUser, Game as PrismaGame, GamePlayer as PrismaGamePlayer, Grid as PrismaGrid, Square as PrismaSquare, Notification as PrismaNotification, TempPlayer as PrismaTempPlayer } from '../generated/prisma/client';
 import type { GraphQLContext } from './context';
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
@@ -33,6 +33,11 @@ export type AssignGridToGameInput = {
   gridId: Scalars['ID']['input'];
 };
 
+export type BulkAddPlayersInput = {
+  gameId: Scalars['ID']['input'];
+  players: Array<PlayerInput>;
+};
+
 export type CreateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -52,7 +57,7 @@ export type CreateNotificationInput = {
 export type CreateUserInput = {
   displayName?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
-  firebaseUserId: Scalars['String']['input'];
+  firebaseUserId?: InputMaybe<Scalars['String']['input']>;
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -70,12 +75,18 @@ export type Game = {
 
 export type GamePlayer = {
   __typename?: 'GamePlayer';
+  displayName?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  fullName?: Maybe<Scalars['String']['output']>;
   game: Game;
   gameId: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   joinedAt: Scalars['DateTime']['output'];
-  user: User;
-  userId: Scalars['String']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  tempPlayer?: Maybe<TempPlayer>;
+  tempUserId?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['String']['output']>;
 };
 
 export type GameUserRole =
@@ -96,6 +107,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addUserToGame?: Maybe<Game>;
   assignGridToGame?: Maybe<Game>;
+  bulkAddPlayers?: Maybe<Game>;
   createGame: Game;
   createGrid: Grid;
   createNotification: Notification;
@@ -116,6 +128,11 @@ export type MutationaddUserToGameArgs = {
 
 export type MutationassignGridToGameArgs = {
   input: AssignGridToGameInput;
+};
+
+
+export type MutationbulkAddPlayersArgs = {
+  input: BulkAddPlayersInput;
 };
 
 
@@ -189,6 +206,13 @@ export type NotificationAction =
   | 'GRID_ASSIGNED'
   | 'PLAYER_JOINED'
   | 'SQUARE_CLAIMED';
+
+export type PlayerInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type Query = {
   __typename?: 'Query';
@@ -269,6 +293,15 @@ export type SubscriptionnotificationAddedArgs = {
   userId: Scalars['String']['input'];
 };
 
+export type TempPlayer = {
+  __typename?: 'TempPlayer';
+  email?: Maybe<Scalars['String']['output']>;
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  lastName: Scalars['String']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+};
+
 export type UpdateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -289,7 +322,7 @@ export type User = {
   createdAt: Scalars['DateTime']['output'];
   displayName?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
-  firebaseUserId: Scalars['String']['output'];
+  firebaseUserId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   ownedGames: Array<Game>;
   phoneNumber?: Maybe<Scalars['String']['output']>;
@@ -374,6 +407,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   AssignGridToGameInput: AssignGridToGameInput;
+  BulkAddPlayersInput: BulkAddPlayersInput;
   CreateGameInput: CreateGameInput;
   CreateNotificationInput: CreateNotificationInput;
   CreateUserInput: CreateUserInput;
@@ -388,10 +422,12 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Notification: ResolverTypeWrapper<PrismaNotification>;
   NotificationAction: ResolverTypeWrapper<'GAME_INVITE' | 'GAME_STARTED' | 'SQUARE_CLAIMED' | 'GAME_COMPLETED' | 'PLAYER_JOINED' | 'GRID_ASSIGNED' | 'GENERAL'>;
+  PlayerInput: PlayerInput;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   RemoveUserFromGameInput: RemoveUserFromGameInput;
   Square: ResolverTypeWrapper<PrismaSquare>;
   Subscription: ResolverTypeWrapper<Record<PropertyKey, never>>;
+  TempPlayer: ResolverTypeWrapper<PrismaTempPlayer>;
   UpdateGameInput: UpdateGameInput;
   UpdateSquareInput: UpdateSquareInput;
   UpdateUserInput: UpdateUserInput;
@@ -404,6 +440,7 @@ export type ResolversParentTypes = {
   String: Scalars['String']['output'];
   ID: Scalars['ID']['output'];
   AssignGridToGameInput: AssignGridToGameInput;
+  BulkAddPlayersInput: BulkAddPlayersInput;
   CreateGameInput: CreateGameInput;
   CreateNotificationInput: CreateNotificationInput;
   CreateUserInput: CreateUserInput;
@@ -416,10 +453,12 @@ export type ResolversParentTypes = {
   Mutation: Record<PropertyKey, never>;
   Boolean: Scalars['Boolean']['output'];
   Notification: PrismaNotification;
+  PlayerInput: PlayerInput;
   Query: Record<PropertyKey, never>;
   RemoveUserFromGameInput: RemoveUserFromGameInput;
   Square: PrismaSquare;
   Subscription: Record<PropertyKey, never>;
+  TempPlayer: PrismaTempPlayer;
   UpdateGameInput: UpdateGameInput;
   UpdateSquareInput: UpdateSquareInput;
   UpdateUserInput: UpdateUserInput;
@@ -442,12 +481,18 @@ export type GameResolvers<ContextType = GraphQLContext, ParentType extends Resol
 };
 
 export type GamePlayerResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['GamePlayer'] = ResolversParentTypes['GamePlayer']> = {
+  displayName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  fullName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   game?: Resolver<ResolversTypes['Game'], ParentType, ContextType>;
   gameId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   joinedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tempPlayer?: Resolver<Maybe<ResolversTypes['TempPlayer']>, ParentType, ContextType>;
+  tempUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type GameUserRoleResolvers = EnumResolverSignature<{ OWNER?: any, PLAYER?: any }, ResolversTypes['GameUserRole']>;
@@ -468,6 +513,7 @@ export interface JSONScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addUserToGame?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<MutationaddUserToGameArgs, 'input'>>;
   assignGridToGame?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<MutationassignGridToGameArgs, 'input'>>;
+  bulkAddPlayers?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<MutationbulkAddPlayersArgs, 'input'>>;
   createGame?: Resolver<ResolversTypes['Game'], ParentType, ContextType, RequireFields<MutationcreateGameArgs, 'input'>>;
   createGrid?: Resolver<ResolversTypes['Grid'], ParentType, ContextType>;
   createNotification?: Resolver<ResolversTypes['Notification'], ParentType, ContextType, RequireFields<MutationcreateNotificationArgs, 'input'>>;
@@ -526,11 +572,19 @@ export type SubscriptionResolvers<ContextType = GraphQLContext, ParentType exten
   notificationAdded?: SubscriptionResolver<ResolversTypes['Notification'], "notificationAdded", ParentType, ContextType, RequireFields<SubscriptionnotificationAddedArgs, 'userId'>>;
 };
 
+export type TempPlayerResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['TempPlayer'] = ResolversParentTypes['TempPlayer']> = {
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
+
 export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   displayName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  firebaseUserId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  firebaseUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   ownedGames?: Resolver<Array<ResolversTypes['Game']>, ParentType, ContextType>;
   phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -551,6 +605,7 @@ export type Resolvers<ContextType = GraphQLContext> = {
   Query?: QueryResolvers<ContextType>;
   Square?: SquareResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
+  TempPlayer?: TempPlayerResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 

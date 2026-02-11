@@ -54,6 +54,7 @@ export const ModelName = {
   HealthCheck: 'HealthCheck',
   User: 'User',
   Game: 'Game',
+  TempPlayer: 'TempPlayer',
   GamePlayer: 'GamePlayer',
   Grid: 'Grid',
   Square: 'Square',
@@ -109,10 +110,23 @@ export const GameScalarFieldEnum = {
 export type GameScalarFieldEnum = (typeof GameScalarFieldEnum)[keyof typeof GameScalarFieldEnum]
 
 
+export const TempPlayerScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phoneNumber: 'phoneNumber',
+  createdAt: 'createdAt'
+} as const
+
+export type TempPlayerScalarFieldEnum = (typeof TempPlayerScalarFieldEnum)[keyof typeof TempPlayerScalarFieldEnum]
+
+
 export const GamePlayerScalarFieldEnum = {
   id: 'id',
   gameId: 'gameId',
   userId: 'userId',
+  tempUserId: 'tempUserId',
   joinedAt: 'joinedAt'
 } as const
 
@@ -138,7 +152,8 @@ export const SquareScalarFieldEnum = {
   columnIndex: 'columnIndex',
   rowValue: 'rowValue',
   columnValue: 'columnValue',
-  playerId: 'playerId'
+  playerId: 'playerId',
+  gamePlayerId: 'gamePlayerId'
 } as const
 
 export type SquareScalarFieldEnum = (typeof SquareScalarFieldEnum)[keyof typeof SquareScalarFieldEnum]

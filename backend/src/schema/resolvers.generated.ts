@@ -15,6 +15,7 @@ import    { userByPhoneNumber as Query_userByPhoneNumber } from './user/resolver
 import    { users as Query_users } from './user/resolvers/Query/users';
 import    { addUserToGame as Mutation_addUserToGame } from './game/resolvers/Mutation/addUserToGame';
 import    { assignGridToGame as Mutation_assignGridToGame } from './grid/resolvers/Mutation/assignGridToGame';
+import    { bulkAddPlayers as Mutation_bulkAddPlayers } from './game/resolvers/Mutation/bulkAddPlayers';
 import    { createGame as Mutation_createGame } from './game/resolvers/Mutation/createGame';
 import    { createGrid as Mutation_createGrid } from './grid/resolvers/Mutation/createGrid';
 import    { createNotification as Mutation_createNotification } from './notification/resolvers/Mutation/createNotification';
@@ -31,17 +32,19 @@ import    { GamePlayer } from './game/resolvers/GamePlayer';
 import    { Grid } from './grid/resolvers/Grid';
 import    { Notification } from './notification/resolvers/Notification';
 import    { Square } from './grid/resolvers/Square';
+import    { TempPlayer } from './game/resolvers/TempPlayer';
 import    { User } from './user/resolvers/User';
 import    { DateTimeResolver,JSONResolver } from 'graphql-scalars';
     export const resolvers: Resolvers = {
       Query: { dbStatus: Query_dbStatus,game: Query_game,games: Query_games,grid: Query_grid,hello: Query_hello,me: Query_me,myGames: Query_myGames,notifications: Query_notifications,user: Query_user,userByEmail: Query_userByEmail,userByFirebaseId: Query_userByFirebaseId,userByPhoneNumber: Query_userByPhoneNumber,users: Query_users },
-      Mutation: { addUserToGame: Mutation_addUserToGame,assignGridToGame: Mutation_assignGridToGame,createGame: Mutation_createGame,createGrid: Mutation_createGrid,createNotification: Mutation_createNotification,createUser: Mutation_createUser,deleteGame: Mutation_deleteGame,deleteUser: Mutation_deleteUser,removeUserFromGame: Mutation_removeUserFromGame,updateGame: Mutation_updateGame,updateSquare: Mutation_updateSquare,updateUser: Mutation_updateUser },
+      Mutation: { addUserToGame: Mutation_addUserToGame,assignGridToGame: Mutation_assignGridToGame,bulkAddPlayers: Mutation_bulkAddPlayers,createGame: Mutation_createGame,createGrid: Mutation_createGrid,createNotification: Mutation_createNotification,createUser: Mutation_createUser,deleteGame: Mutation_deleteGame,deleteUser: Mutation_deleteUser,removeUserFromGame: Mutation_removeUserFromGame,updateGame: Mutation_updateGame,updateSquare: Mutation_updateSquare,updateUser: Mutation_updateUser },
       Subscription: { notificationAdded: Subscription_notificationAdded },
       Game: Game,
 GamePlayer: GamePlayer,
 Grid: Grid,
 Notification: Notification,
 Square: Square,
+TempPlayer: TempPlayer,
 User: User,
 DateTime: DateTimeResolver,
 JSON: JSONResolver

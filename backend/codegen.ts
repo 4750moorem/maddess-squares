@@ -19,6 +19,7 @@ const config: CodegenConfig = {
           Grid: '../generated/prisma/client#Grid as PrismaGrid',
           Square: '../generated/prisma/client#Square as PrismaSquare',
           Notification: '../generated/prisma/client#Notification as PrismaNotification',
+          TempPlayer: '../generated/prisma/client#TempPlayer as PrismaTempPlayer',
         },
       },
     }),

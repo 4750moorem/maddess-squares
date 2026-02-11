@@ -31,6 +31,11 @@ export type AssignGridToGameInput = {
   gridId: Scalars['ID']['input'];
 };
 
+export type BulkAddPlayersInput = {
+  gameId: Scalars['ID']['input'];
+  players: Array<PlayerInput>;
+};
+
 export type CreateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -50,7 +55,7 @@ export type CreateNotificationInput = {
 export type CreateUserInput = {
   displayName?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
-  firebaseUserId: Scalars['String']['input'];
+  firebaseUserId?: InputMaybe<Scalars['String']['input']>;
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -68,12 +73,18 @@ export type Game = {
 
 export type GamePlayer = {
   __typename?: 'GamePlayer';
+  displayName?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  fullName?: Maybe<Scalars['String']['output']>;
   game: Game;
   gameId: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   joinedAt: Scalars['DateTime']['output'];
-  user: User;
-  userId: Scalars['String']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  tempPlayer?: Maybe<TempPlayer>;
+  tempUserId?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['String']['output']>;
 };
 
 export enum GameUserRole {
@@ -95,6 +106,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addUserToGame?: Maybe<Game>;
   assignGridToGame?: Maybe<Game>;
+  bulkAddPlayers?: Maybe<Game>;
   createGame: Game;
   createGrid: Grid;
   createNotification: Notification;
@@ -115,6 +127,11 @@ export type MutationAddUserToGameArgs = {
 
 export type MutationAssignGridToGameArgs = {
   input: AssignGridToGameInput;
+};
+
+
+export type MutationBulkAddPlayersArgs = {
+  input: BulkAddPlayersInput;
 };
 
 
@@ -189,6 +206,13 @@ export enum NotificationAction {
   PlayerJoined = 'PLAYER_JOINED',
   SquareClaimed = 'SQUARE_CLAIMED'
 }
+
+export type PlayerInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type Query = {
   __typename?: 'Query';
@@ -269,6 +293,15 @@ export type SubscriptionNotificationAddedArgs = {
   userId: Scalars['String']['input'];
 };
 
+export type TempPlayer = {
+  __typename?: 'TempPlayer';
+  email?: Maybe<Scalars['String']['output']>;
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  lastName: Scalars['String']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+};
+
 export type UpdateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -289,7 +322,7 @@ export type User = {
   createdAt: Scalars['DateTime']['output'];
   displayName?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
-  firebaseUserId: Scalars['String']['output'];
+  firebaseUserId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   ownedGames: Array<Game>;
   phoneNumber?: Maybe<Scalars['String']['output']>;

@@ -33,6 +33,11 @@ export type AssignGridToGameInput = {
   gridId: Scalars['ID']['input'];
 };
 
+export type BulkAddPlayersInput = {
+  gameId: Scalars['ID']['input'];
+  players: Array<PlayerInput>;
+};
+
 export type CreateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -52,7 +57,7 @@ export type CreateNotificationInput = {
 export type CreateUserInput = {
   displayName?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
-  firebaseUserId: Scalars['String']['input'];
+  firebaseUserId?: InputMaybe<Scalars['String']['input']>;
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -70,12 +75,18 @@ export type Game = {
 
 export type GamePlayer = {
   __typename?: 'GamePlayer';
+  displayName?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  fullName?: Maybe<Scalars['String']['output']>;
   game: Game;
   gameId: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   joinedAt: Scalars['DateTime']['output'];
-  user: User;
-  userId: Scalars['String']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  tempPlayer?: Maybe<TempPlayer>;
+  tempUserId?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['String']['output']>;
 };
 
 export const GameUserRole = {
@@ -98,6 +109,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addUserToGame?: Maybe<Game>;
   assignGridToGame?: Maybe<Game>;
+  bulkAddPlayers?: Maybe<Game>;
   createGame: Game;
   createGrid: Grid;
   createNotification: Notification;
@@ -118,6 +130,11 @@ export type MutationAddUserToGameArgs = {
 
 export type MutationAssignGridToGameArgs = {
   input: AssignGridToGameInput;
+};
+
+
+export type MutationBulkAddPlayersArgs = {
+  input: BulkAddPlayersInput;
 };
 
 
@@ -194,6 +211,13 @@ export const NotificationAction = {
 } as const;
 
 export type NotificationAction = typeof NotificationAction[keyof typeof NotificationAction];
+export type PlayerInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   dbStatus: Scalars['String']['output'];
@@ -273,6 +297,15 @@ export type SubscriptionNotificationAddedArgs = {
   userId: Scalars['String']['input'];
 };
 
+export type TempPlayer = {
+  __typename?: 'TempPlayer';
+  email?: Maybe<Scalars['String']['output']>;
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  lastName: Scalars['String']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+};
+
 export type UpdateGameInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -293,7 +326,7 @@ export type User = {
   createdAt: Scalars['DateTime']['output'];
   displayName?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
-  firebaseUserId: Scalars['String']['output'];
+  firebaseUserId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   ownedGames: Array<Game>;
   phoneNumber?: Maybe<Scalars['String']['output']>;
@@ -330,12 +363,12 @@ export type AppStatusQuery = { __typename?: 'Query', hello: string, dbStatus: st
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, firebaseUserId: string, email?: string | null, displayName?: string | null } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, firebaseUserId?: string | null, email?: string | null, displayName?: string | null } | null };
 
 export type MyGamesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyGamesQuery = { __typename?: 'Query', myGames: Array<{ __typename?: 'Game', id: string, name: string, description?: string | null, createdAt: any, owners: Array<{ __typename?: 'User', id: string, email?: string | null, displayName?: string | null }>, players: Array<{ __typename?: 'GamePlayer', id: string, user: { __typename?: 'User', id: string, email?: string | null, displayName?: string | null } }>, grid?: { __typename?: 'Grid', id: string } | null }> };
+export type MyGamesQuery = { __typename?: 'Query', myGames: Array<{ __typename?: 'Game', id: string, name: string, description?: string | null, createdAt: any, owners: Array<{ __typename?: 'User', id: string, email?: string | null, displayName?: string | null }>, players: Array<{ __typename?: 'GamePlayer', id: string, displayName?: string | null, fullName?: string | null, email?: string | null, phoneNumber?: string | null, joinedAt: any, user?: { __typename?: 'User', id: string, email?: string | null, displayName?: string | null } | null }>, grid?: { __typename?: 'Grid', id: string } | null }> };
 
 export type GameGridQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -349,7 +382,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, firebaseUserId: string, email?: string | null, displayName?: string | null } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, firebaseUserId?: string | null, email?: string | null, displayName?: string | null } };
 
 export type CreateGameMutationVariables = Exact<{
   input: CreateGameInput;
@@ -377,6 +410,13 @@ export type UpdateSquareMutationVariables = Exact<{
 
 
 export type UpdateSquareMutation = { __typename?: 'Mutation', updateSquare?: { __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, player?: { __typename?: 'User', id: string, displayName?: string | null, email?: string | null } | null } | null };
+
+export type BulkAddPlayersMutationVariables = Exact<{
+  input: BulkAddPlayersInput;
+}>;
+
+
+export type BulkAddPlayersMutation = { __typename?: 'Mutation', bulkAddPlayers?: { __typename?: 'Game', id: string, name: string, players: Array<{ __typename?: 'GamePlayer', id: string, email?: string | null, phoneNumber?: string | null, fullName?: string | null, displayName?: string | null, joinedAt: any }> } | null };
 
 
 export const NotificationsDocument = gql`
@@ -612,6 +652,11 @@ export const MyGamesDocument = gql`
     }
     players {
       id
+      displayName
+      fullName
+      email
+      phoneNumber
+      joinedAt
       user {
         id
         email
@@ -900,3 +945,42 @@ export function useUpdateSquareMutation(baseOptions?: ApolloReactHooks.MutationH
         return ApolloReactHooks.useMutation<UpdateSquareMutation, UpdateSquareMutationVariables>(UpdateSquareDocument, options);
       }
 export type UpdateSquareMutationHookResult = ReturnType<typeof useUpdateSquareMutation>;
+export const BulkAddPlayersDocument = gql`
+    mutation BulkAddPlayers($input: BulkAddPlayersInput!) {
+  bulkAddPlayers(input: $input) {
+    id
+    name
+    players {
+      id
+      email
+      phoneNumber
+      fullName
+      displayName
+      joinedAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useBulkAddPlayersMutation__
+ *
+ * To run a mutation, you first call `useBulkAddPlayersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBulkAddPlayersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bulkAddPlayersMutation, { data, loading, error }] = useBulkAddPlayersMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useBulkAddPlayersMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<BulkAddPlayersMutation, BulkAddPlayersMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<BulkAddPlayersMutation, BulkAddPlayersMutationVariables>(BulkAddPlayersDocument, options);
+      }
+export type BulkAddPlayersMutationHookResult = ReturnType<typeof useBulkAddPlayersMutation>;

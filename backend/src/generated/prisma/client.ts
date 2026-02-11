@@ -55,6 +55,11 @@ export type User = Prisma.UserModel
  */
 export type Game = Prisma.GameModel
 /**
+ * Model TempPlayer
+ * 
+ */
+export type TempPlayer = Prisma.TempPlayerModel
+/**
  * Model GamePlayer
  * 
  */

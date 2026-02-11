@@ -29,6 +29,11 @@ query MyGames {
     }
     players {
       id
+      displayName
+      fullName
+      email
+      phoneNumber
+      joinedAt
       user {
         id
         email
@@ -123,6 +128,21 @@ mutation UpdateSquare($id: ID!, $input: UpdateSquareInput!) {
       id
       displayName
       email
+    }
+  }
+}
+
+mutation BulkAddPlayers($input: BulkAddPlayersInput!) {
+  bulkAddPlayers(input: $input) {
+    id
+    name
+    players {
+      id
+      email
+      phoneNumber
+      fullName
+      displayName
+      joinedAt
     }
   }
 }

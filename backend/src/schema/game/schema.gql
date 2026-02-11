@@ -14,13 +14,27 @@ type Game {
   grid: Grid
 }
 
+type TempPlayer {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String
+  phoneNumber: String
+}
+
 type GamePlayer {
   id: ID!
   gameId: String!
-  userId: String!
+  userId: String
+  tempUserId: String
   joinedAt: DateTime!
   game: Game!
-  user: User!
+  user: User
+  tempPlayer: TempPlayer
+  email: String
+  phoneNumber: String
+  fullName: String
+  displayName: String
 }
 
 input CreateGameInput {
@@ -52,10 +66,23 @@ extend type Query {
   myGames: [Game!]!
 }
 
+input PlayerInput {
+  firstName: String!
+  lastName: String!
+  email: String
+  phoneNumber: String
+}
+
+input BulkAddPlayersInput {
+  gameId: ID!
+  players: [PlayerInput!]!
+}
+
 extend type Mutation {
   createGame(input: CreateGameInput!): Game!
   updateGame(id: ID!, input: UpdateGameInput!): Game
   deleteGame(id: ID!): Boolean!
   addUserToGame(input: AddUserToGameInput!): Game
   removeUserFromGame(input: RemoveUserFromGameInput!): Game
+  bulkAddPlayers(input: BulkAddPlayersInput!): Game
 }

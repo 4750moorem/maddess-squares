@@ -161,7 +161,7 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type UserGroupByOutputType = {
   id: string
-  firebaseUserId: string
+  firebaseUserId: string | null
   email: string | null
   phoneNumber: string | null
   displayName: string | null
@@ -192,7 +192,7 @@ export type UserWhereInput = {
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
-  firebaseUserId?: Prisma.StringFilter<"User"> | string
+  firebaseUserId?: Prisma.StringNullableFilter<"User"> | string | null
   email?: Prisma.StringNullableFilter<"User"> | string | null
   phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
   displayName?: Prisma.StringNullableFilter<"User"> | string | null
@@ -208,7 +208,7 @@ export type UserWhereInput = {
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  firebaseUserId?: Prisma.SortOrder
+  firebaseUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -243,7 +243,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  firebaseUserId?: Prisma.SortOrder
+  firebaseUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -259,7 +259,7 @@ export type UserScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
-  firebaseUserId?: Prisma.StringWithAggregatesFilter<"User"> | string
+  firebaseUserId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phoneNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   displayName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -269,7 +269,7 @@ export type UserScalarWhereWithAggregatesInput = {
 
 export type UserCreateInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -285,7 +285,7 @@ export type UserCreateInput = {
 
 export type UserUncheckedCreateInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -301,7 +301,7 @@ export type UserUncheckedCreateInput = {
 
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -317,7 +317,7 @@ export type UserUpdateInput = {
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -333,7 +333,7 @@ export type UserUncheckedUpdateInput = {
 
 export type UserCreateManyInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -343,7 +343,7 @@ export type UserCreateManyInput = {
 
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -353,7 +353,7 @@ export type UserUpdateManyMutationInput = {
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -401,14 +401,14 @@ export type UserOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type UserScalarRelationFilter = {
-  is?: Prisma.UserWhereInput
-  isNot?: Prisma.UserWhereInput
-}
-
 export type UserNullableScalarRelationFilter = {
   is?: Prisma.UserWhereInput | null
   isNot?: Prisma.UserWhereInput | null
+}
+
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
 }
 
 export type NullableStringFieldUpdateOperationsInput = {
@@ -459,10 +459,12 @@ export type UserCreateNestedOneWithoutPlayerGamesInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutPlayerGamesNestedInput = {
+export type UserUpdateOneWithoutPlayerGamesNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutPlayerGamesInput, Prisma.UserUncheckedCreateWithoutPlayerGamesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlayerGamesInput
   upsert?: Prisma.UserUpsertWithoutPlayerGamesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPlayerGamesInput, Prisma.UserUpdateWithoutPlayerGamesInput>, Prisma.UserUncheckedUpdateWithoutPlayerGamesInput>
 }
@@ -529,7 +531,7 @@ export type UserUpdateOneWithoutTriggeredNotificationsNestedInput = {
 
 export type UserCreateWithoutOwnedGamesInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -544,7 +546,7 @@ export type UserCreateWithoutOwnedGamesInput = {
 
 export type UserUncheckedCreateWithoutOwnedGamesInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -583,7 +585,7 @@ export type UserScalarWhereInput = {
   OR?: Prisma.UserScalarWhereInput[]
   NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
-  firebaseUserId?: Prisma.StringFilter<"User"> | string
+  firebaseUserId?: Prisma.StringNullableFilter<"User"> | string | null
   email?: Prisma.StringNullableFilter<"User"> | string | null
   phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
   displayName?: Prisma.StringNullableFilter<"User"> | string | null
@@ -593,7 +595,7 @@ export type UserScalarWhereInput = {
 
 export type UserCreateWithoutPlayerGamesInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -608,7 +610,7 @@ export type UserCreateWithoutPlayerGamesInput = {
 
 export type UserUncheckedCreateWithoutPlayerGamesInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -639,7 +641,7 @@ export type UserUpdateToOneWithWhereWithoutPlayerGamesInput = {
 
 export type UserUpdateWithoutPlayerGamesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -654,7 +656,7 @@ export type UserUpdateWithoutPlayerGamesInput = {
 
 export type UserUncheckedUpdateWithoutPlayerGamesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -669,7 +671,7 @@ export type UserUncheckedUpdateWithoutPlayerGamesInput = {
 
 export type UserCreateWithoutCreatedGridsInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -684,7 +686,7 @@ export type UserCreateWithoutCreatedGridsInput = {
 
 export type UserUncheckedCreateWithoutCreatedGridsInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -715,7 +717,7 @@ export type UserUpdateToOneWithWhereWithoutCreatedGridsInput = {
 
 export type UserUpdateWithoutCreatedGridsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -730,7 +732,7 @@ export type UserUpdateWithoutCreatedGridsInput = {
 
 export type UserUncheckedUpdateWithoutCreatedGridsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -745,7 +747,7 @@ export type UserUncheckedUpdateWithoutCreatedGridsInput = {
 
 export type UserCreateWithoutSquaresInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -760,7 +762,7 @@ export type UserCreateWithoutSquaresInput = {
 
 export type UserUncheckedCreateWithoutSquaresInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -791,7 +793,7 @@ export type UserUpdateToOneWithWhereWithoutSquaresInput = {
 
 export type UserUpdateWithoutSquaresInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -806,7 +808,7 @@ export type UserUpdateWithoutSquaresInput = {
 
 export type UserUncheckedUpdateWithoutSquaresInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -821,7 +823,7 @@ export type UserUncheckedUpdateWithoutSquaresInput = {
 
 export type UserCreateWithoutNotificationsInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -836,7 +838,7 @@ export type UserCreateWithoutNotificationsInput = {
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -856,7 +858,7 @@ export type UserCreateOrConnectWithoutNotificationsInput = {
 
 export type UserCreateWithoutTriggeredNotificationsInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -871,7 +873,7 @@ export type UserCreateWithoutTriggeredNotificationsInput = {
 
 export type UserUncheckedCreateWithoutTriggeredNotificationsInput = {
   id?: string
-  firebaseUserId: string
+  firebaseUserId?: string | null
   email?: string | null
   phoneNumber?: string | null
   displayName?: string | null
@@ -902,7 +904,7 @@ export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
 
 export type UserUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -917,7 +919,7 @@ export type UserUpdateWithoutNotificationsInput = {
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -943,7 +945,7 @@ export type UserUpdateToOneWithWhereWithoutTriggeredNotificationsInput = {
 
 export type UserUpdateWithoutTriggeredNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -958,7 +960,7 @@ export type UserUpdateWithoutTriggeredNotificationsInput = {
 
 export type UserUncheckedUpdateWithoutTriggeredNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -973,7 +975,7 @@ export type UserUncheckedUpdateWithoutTriggeredNotificationsInput = {
 
 export type UserUpdateWithoutOwnedGamesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -988,7 +990,7 @@ export type UserUpdateWithoutOwnedGamesInput = {
 
 export type UserUncheckedUpdateWithoutOwnedGamesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1003,7 +1005,7 @@ export type UserUncheckedUpdateWithoutOwnedGamesInput = {
 
 export type UserUncheckedUpdateManyWithoutOwnedGamesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  firebaseUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1159,7 +1161,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    firebaseUserId: string
+    firebaseUserId: string | null
     email: string | null
     phoneNumber: string | null
     displayName: string | null
