@@ -193,6 +193,7 @@ export type GameWhereInput = {
   owners?: Prisma.UserListRelationFilter
   players?: Prisma.GamePlayerListRelationFilter
   grid?: Prisma.XOR<Prisma.GridNullableScalarRelationFilter, Prisma.GridWhereInput> | null
+  notifications?: Prisma.NotificationListRelationFilter
 }
 
 export type GameOrderByWithRelationInput = {
@@ -205,6 +206,7 @@ export type GameOrderByWithRelationInput = {
   owners?: Prisma.UserOrderByRelationAggregateInput
   players?: Prisma.GamePlayerOrderByRelationAggregateInput
   grid?: Prisma.GridOrderByWithRelationInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
 }
 
 export type GameWhereUniqueInput = Prisma.AtLeast<{
@@ -220,6 +222,7 @@ export type GameWhereUniqueInput = Prisma.AtLeast<{
   owners?: Prisma.UserListRelationFilter
   players?: Prisma.GamePlayerListRelationFilter
   grid?: Prisma.XOR<Prisma.GridNullableScalarRelationFilter, Prisma.GridWhereInput> | null
+  notifications?: Prisma.NotificationListRelationFilter
 }, "id" | "gridId">
 
 export type GameOrderByWithAggregationInput = {
@@ -255,6 +258,7 @@ export type GameCreateInput = {
   owners?: Prisma.UserCreateNestedManyWithoutOwnedGamesInput
   players?: Prisma.GamePlayerCreateNestedManyWithoutGameInput
   grid?: Prisma.GridCreateNestedOneWithoutGameInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutGameInput
 }
 
 export type GameUncheckedCreateInput = {
@@ -266,6 +270,7 @@ export type GameUncheckedCreateInput = {
   gridId?: string | null
   owners?: Prisma.UserUncheckedCreateNestedManyWithoutOwnedGamesInput
   players?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutGameInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutGameInput
 }
 
 export type GameUpdateInput = {
@@ -277,6 +282,7 @@ export type GameUpdateInput = {
   owners?: Prisma.UserUpdateManyWithoutOwnedGamesNestedInput
   players?: Prisma.GamePlayerUpdateManyWithoutGameNestedInput
   grid?: Prisma.GridUpdateOneWithoutGameNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutGameNestedInput
 }
 
 export type GameUncheckedUpdateInput = {
@@ -288,6 +294,7 @@ export type GameUncheckedUpdateInput = {
   gridId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   owners?: Prisma.UserUncheckedUpdateManyWithoutOwnedGamesNestedInput
   players?: Prisma.GamePlayerUncheckedUpdateManyWithoutGameNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutGameNestedInput
 }
 
 export type GameCreateManyInput = {
@@ -447,6 +454,22 @@ export type GameUncheckedUpdateOneWithoutGridNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.GameUpdateToOneWithWhereWithoutGridInput, Prisma.GameUpdateWithoutGridInput>, Prisma.GameUncheckedUpdateWithoutGridInput>
 }
 
+export type GameCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.GameCreateWithoutNotificationsInput, Prisma.GameUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.GameCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.GameWhereUniqueInput
+}
+
+export type GameUpdateOneWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.GameCreateWithoutNotificationsInput, Prisma.GameUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.GameCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.GameUpsertWithoutNotificationsInput
+  disconnect?: Prisma.GameWhereInput | boolean
+  delete?: Prisma.GameWhereInput | boolean
+  connect?: Prisma.GameWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GameUpdateToOneWithWhereWithoutNotificationsInput, Prisma.GameUpdateWithoutNotificationsInput>, Prisma.GameUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type GameCreateWithoutOwnersInput = {
   id?: string
   name: string
@@ -455,6 +478,7 @@ export type GameCreateWithoutOwnersInput = {
   updatedAt?: Date | string
   players?: Prisma.GamePlayerCreateNestedManyWithoutGameInput
   grid?: Prisma.GridCreateNestedOneWithoutGameInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutGameInput
 }
 
 export type GameUncheckedCreateWithoutOwnersInput = {
@@ -465,6 +489,7 @@ export type GameUncheckedCreateWithoutOwnersInput = {
   updatedAt?: Date | string
   gridId?: string | null
   players?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutGameInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutGameInput
 }
 
 export type GameCreateOrConnectWithoutOwnersInput = {
@@ -508,6 +533,7 @@ export type GameCreateWithoutPlayersInput = {
   updatedAt?: Date | string
   owners?: Prisma.UserCreateNestedManyWithoutOwnedGamesInput
   grid?: Prisma.GridCreateNestedOneWithoutGameInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutGameInput
 }
 
 export type GameUncheckedCreateWithoutPlayersInput = {
@@ -518,6 +544,7 @@ export type GameUncheckedCreateWithoutPlayersInput = {
   updatedAt?: Date | string
   gridId?: string | null
   owners?: Prisma.UserUncheckedCreateNestedManyWithoutOwnedGamesInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutGameInput
 }
 
 export type GameCreateOrConnectWithoutPlayersInput = {
@@ -544,6 +571,7 @@ export type GameUpdateWithoutPlayersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owners?: Prisma.UserUpdateManyWithoutOwnedGamesNestedInput
   grid?: Prisma.GridUpdateOneWithoutGameNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutGameNestedInput
 }
 
 export type GameUncheckedUpdateWithoutPlayersInput = {
@@ -554,6 +582,7 @@ export type GameUncheckedUpdateWithoutPlayersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gridId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   owners?: Prisma.UserUncheckedUpdateManyWithoutOwnedGamesNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutGameNestedInput
 }
 
 export type GameCreateWithoutGridInput = {
@@ -564,6 +593,7 @@ export type GameCreateWithoutGridInput = {
   updatedAt?: Date | string
   owners?: Prisma.UserCreateNestedManyWithoutOwnedGamesInput
   players?: Prisma.GamePlayerCreateNestedManyWithoutGameInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutGameInput
 }
 
 export type GameUncheckedCreateWithoutGridInput = {
@@ -574,6 +604,7 @@ export type GameUncheckedCreateWithoutGridInput = {
   updatedAt?: Date | string
   owners?: Prisma.UserUncheckedCreateNestedManyWithoutOwnedGamesInput
   players?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutGameInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutGameInput
 }
 
 export type GameCreateOrConnectWithoutGridInput = {
@@ -600,6 +631,7 @@ export type GameUpdateWithoutGridInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owners?: Prisma.UserUpdateManyWithoutOwnedGamesNestedInput
   players?: Prisma.GamePlayerUpdateManyWithoutGameNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutGameNestedInput
 }
 
 export type GameUncheckedUpdateWithoutGridInput = {
@@ -608,6 +640,67 @@ export type GameUncheckedUpdateWithoutGridInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owners?: Prisma.UserUncheckedUpdateManyWithoutOwnedGamesNestedInput
+  players?: Prisma.GamePlayerUncheckedUpdateManyWithoutGameNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutGameNestedInput
+}
+
+export type GameCreateWithoutNotificationsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owners?: Prisma.UserCreateNestedManyWithoutOwnedGamesInput
+  players?: Prisma.GamePlayerCreateNestedManyWithoutGameInput
+  grid?: Prisma.GridCreateNestedOneWithoutGameInput
+}
+
+export type GameUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gridId?: string | null
+  owners?: Prisma.UserUncheckedCreateNestedManyWithoutOwnedGamesInput
+  players?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutGameInput
+}
+
+export type GameCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.GameWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameCreateWithoutNotificationsInput, Prisma.GameUncheckedCreateWithoutNotificationsInput>
+}
+
+export type GameUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.GameUpdateWithoutNotificationsInput, Prisma.GameUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.GameCreateWithoutNotificationsInput, Prisma.GameUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.GameWhereInput
+}
+
+export type GameUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.GameWhereInput
+  data: Prisma.XOR<Prisma.GameUpdateWithoutNotificationsInput, Prisma.GameUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type GameUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owners?: Prisma.UserUpdateManyWithoutOwnedGamesNestedInput
+  players?: Prisma.GamePlayerUpdateManyWithoutGameNestedInput
+  grid?: Prisma.GridUpdateOneWithoutGameNestedInput
+}
+
+export type GameUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gridId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   owners?: Prisma.UserUncheckedUpdateManyWithoutOwnedGamesNestedInput
   players?: Prisma.GamePlayerUncheckedUpdateManyWithoutGameNestedInput
 }
@@ -620,6 +713,7 @@ export type GameUpdateWithoutOwnersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   players?: Prisma.GamePlayerUpdateManyWithoutGameNestedInput
   grid?: Prisma.GridUpdateOneWithoutGameNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutGameNestedInput
 }
 
 export type GameUncheckedUpdateWithoutOwnersInput = {
@@ -630,6 +724,7 @@ export type GameUncheckedUpdateWithoutOwnersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gridId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   players?: Prisma.GamePlayerUncheckedUpdateManyWithoutGameNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutGameNestedInput
 }
 
 export type GameUncheckedUpdateManyWithoutOwnersInput = {
@@ -649,11 +744,13 @@ export type GameUncheckedUpdateManyWithoutOwnersInput = {
 export type GameCountOutputType = {
   owners: number
   players: number
+  notifications: number
 }
 
 export type GameCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owners?: boolean | GameCountOutputTypeCountOwnersArgs
   players?: boolean | GameCountOutputTypeCountPlayersArgs
+  notifications?: boolean | GameCountOutputTypeCountNotificationsArgs
 }
 
 /**
@@ -680,6 +777,13 @@ export type GameCountOutputTypeCountPlayersArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.GamePlayerWhereInput
 }
 
+/**
+ * GameCountOutputType without action
+ */
+export type GameCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
 
 export type GameSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -691,6 +795,7 @@ export type GameSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   owners?: boolean | Prisma.Game$ownersArgs<ExtArgs>
   players?: boolean | Prisma.Game$playersArgs<ExtArgs>
   grid?: boolean | Prisma.Game$gridArgs<ExtArgs>
+  notifications?: boolean | Prisma.Game$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.GameCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["game"]>
 
@@ -728,6 +833,7 @@ export type GameInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   owners?: boolean | Prisma.Game$ownersArgs<ExtArgs>
   players?: boolean | Prisma.Game$playersArgs<ExtArgs>
   grid?: boolean | Prisma.Game$gridArgs<ExtArgs>
+  notifications?: boolean | Prisma.Game$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.GameCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type GameIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -743,6 +849,7 @@ export type $GamePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     owners: Prisma.$UserPayload<ExtArgs>[]
     players: Prisma.$GamePlayerPayload<ExtArgs>[]
     grid: Prisma.$GridPayload<ExtArgs> | null
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1148,6 +1255,7 @@ export interface Prisma__GameClient<T, Null = never, ExtArgs extends runtime.Typ
   owners<T extends Prisma.Game$ownersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Game$ownersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   players<T extends Prisma.Game$playersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Game$playersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GamePlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   grid<T extends Prisma.Game$gridArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Game$gridArgs<ExtArgs>>): Prisma.Prisma__GridClient<runtime.Types.Result.GetResult<Prisma.$GridPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  notifications<T extends Prisma.Game$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Game$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1643,6 +1751,30 @@ export type Game$gridArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
    */
   include?: Prisma.GridInclude<ExtArgs> | null
   where?: Prisma.GridWhereInput
+}
+
+/**
+ * Game.notifications
+ */
+export type Game$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

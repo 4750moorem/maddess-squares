@@ -47,3 +47,8 @@ export type Grid = Prisma.GridModel
  * 
  */
 export type Square = Prisma.SquareModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

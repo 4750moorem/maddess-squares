@@ -7,6 +7,7 @@ import    { grid as Query_grid } from './grid/resolvers/Query/grid';
 import    { hello as Query_hello } from './user/resolvers/Query/hello';
 import    { me as Query_me } from './user/resolvers/Query/me';
 import    { myGames as Query_myGames } from './game/resolvers/Query/myGames';
+import    { notifications as Query_notifications } from './notification/resolvers/Query/notifications';
 import    { user as Query_user } from './user/resolvers/Query/user';
 import    { userByEmail as Query_userByEmail } from './user/resolvers/Query/userByEmail';
 import    { userByFirebaseId as Query_userByFirebaseId } from './user/resolvers/Query/userByFirebaseId';
@@ -16,6 +17,7 @@ import    { addUserToGame as Mutation_addUserToGame } from './game/resolvers/Mut
 import    { assignGridToGame as Mutation_assignGridToGame } from './grid/resolvers/Mutation/assignGridToGame';
 import    { createGame as Mutation_createGame } from './game/resolvers/Mutation/createGame';
 import    { createGrid as Mutation_createGrid } from './grid/resolvers/Mutation/createGrid';
+import    { createNotification as Mutation_createNotification } from './notification/resolvers/Mutation/createNotification';
 import    { createUser as Mutation_createUser } from './user/resolvers/Mutation/createUser';
 import    { deleteGame as Mutation_deleteGame } from './game/resolvers/Mutation/deleteGame';
 import    { deleteUser as Mutation_deleteUser } from './user/resolvers/Mutation/deleteUser';
@@ -23,20 +25,24 @@ import    { removeUserFromGame as Mutation_removeUserFromGame } from './game/res
 import    { updateGame as Mutation_updateGame } from './game/resolvers/Mutation/updateGame';
 import    { updateSquare as Mutation_updateSquare } from './grid/resolvers/Mutation/updateSquare';
 import    { updateUser as Mutation_updateUser } from './user/resolvers/Mutation/updateUser';
+import    { notificationAdded as Subscription_notificationAdded } from './notification/resolvers/Subscription/notificationAdded';
 import    { Game } from './game/resolvers/Game';
 import    { GamePlayer } from './game/resolvers/GamePlayer';
 import    { Grid } from './grid/resolvers/Grid';
+import    { Notification } from './notification/resolvers/Notification';
 import    { Square } from './grid/resolvers/Square';
 import    { User } from './user/resolvers/User';
-import    { DateTimeResolver } from 'graphql-scalars';
+import    { DateTimeResolver,JSONResolver } from 'graphql-scalars';
     export const resolvers: Resolvers = {
-      Query: { dbStatus: Query_dbStatus,game: Query_game,games: Query_games,grid: Query_grid,hello: Query_hello,me: Query_me,myGames: Query_myGames,user: Query_user,userByEmail: Query_userByEmail,userByFirebaseId: Query_userByFirebaseId,userByPhoneNumber: Query_userByPhoneNumber,users: Query_users },
-      Mutation: { addUserToGame: Mutation_addUserToGame,assignGridToGame: Mutation_assignGridToGame,createGame: Mutation_createGame,createGrid: Mutation_createGrid,createUser: Mutation_createUser,deleteGame: Mutation_deleteGame,deleteUser: Mutation_deleteUser,removeUserFromGame: Mutation_removeUserFromGame,updateGame: Mutation_updateGame,updateSquare: Mutation_updateSquare,updateUser: Mutation_updateUser },
-      
+      Query: { dbStatus: Query_dbStatus,game: Query_game,games: Query_games,grid: Query_grid,hello: Query_hello,me: Query_me,myGames: Query_myGames,notifications: Query_notifications,user: Query_user,userByEmail: Query_userByEmail,userByFirebaseId: Query_userByFirebaseId,userByPhoneNumber: Query_userByPhoneNumber,users: Query_users },
+      Mutation: { addUserToGame: Mutation_addUserToGame,assignGridToGame: Mutation_assignGridToGame,createGame: Mutation_createGame,createGrid: Mutation_createGrid,createNotification: Mutation_createNotification,createUser: Mutation_createUser,deleteGame: Mutation_deleteGame,deleteUser: Mutation_deleteUser,removeUserFromGame: Mutation_removeUserFromGame,updateGame: Mutation_updateGame,updateSquare: Mutation_updateSquare,updateUser: Mutation_updateUser },
+      Subscription: { notificationAdded: Subscription_notificationAdded },
       Game: Game,
 GamePlayer: GamePlayer,
 Grid: Grid,
+Notification: Notification,
 Square: Square,
 User: User,
-DateTime: DateTimeResolver
+DateTime: DateTimeResolver,
+JSON: JSONResolver
     }
