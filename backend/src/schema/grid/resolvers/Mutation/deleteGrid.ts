@@ -1,7 +1,7 @@
 import type { MutationResolvers } from './../../../types.generated'
 import { GraphQLError } from 'graphql'
 
-export const updateGame: NonNullable<MutationResolvers['updateGame']> = async (
+export const deleteGrid: NonNullable<MutationResolvers['deleteGrid']> = async (
   _parent,
   args,
   context,
@@ -12,11 +12,9 @@ export const updateGame: NonNullable<MutationResolvers['updateGame']> = async (
     })
   }
 
-  return context.prisma.game.update({
+  await context.prisma.grid.delete({
     where: { id: args.id },
-    data: {
-      name: args.input.name ?? undefined,
-      description: args.input.description,
-    },
   })
+
+  return true
 }

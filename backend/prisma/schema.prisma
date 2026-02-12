@@ -14,49 +14,49 @@ model HealthCheck {
 
 model User {
   id             String   @id @default(cuid())
-  firebaseUserId String   @unique
+  firebaseUserId String?  @unique
   email          String?  @unique
   phoneNumber    String?  @unique
   displayName    String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  ownedGames            Game[]         @relation("GameOwners")
-  playerGames           GamePlayer[]
-  createdGrids          Grid[]         @relation("GridCreator")
-  squares               Square[]       @relation("SquarePlayer")
-  notifications         Notification[] @relation("UserNotifications")
+  ownedGrids             Grid[]         @relation("GridOwners")
+  playerGames            GamePlayer[]
+  createdGrids           Grid[]         @relation("GridCreator")
+  notifications          Notification[] @relation("UserNotifications")
   triggeredNotifications Notification[] @relation("TriggeredNotifications")
 }
 
-model Game {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  gridId      String?  @unique
+model TempPlayer {
+  id        String       @id @default(cuid())
+  firstName String
+  lastName  String
+  createdAt DateTime     @default(now())
 
-  owners        User[]         @relation("GameOwners")
-  players       GamePlayer[]
-  grid          Grid?          @relation("GameGrid", fields: [gridId], references: [id])
-  notifications Notification[] @relation("GameNotifications")
+  gamePlayers GamePlayer[]
 }
 
 model GamePlayer {
-  id        String   @id @default(cuid())
-  gameId    String
-  userId    String
-  joinedAt  DateTime @default(now())
+  id         String   @id @default(cuid())
+  gridId     String
+  userId     String?
+  tempUserId String?
+  joinedAt   DateTime @default(now())
 
-  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  grid       Grid        @relation(fields: [gridId], references: [id], onDelete: Cascade)
+  user       User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tempPlayer TempPlayer? @relation(fields: [tempUserId], references: [id], onDelete: Cascade)
+  squares    Square[]    @relation("SquareGamePlayer")
 
-  @@unique([gameId, userId])
+  @@unique([gridId, userId])
+  @@unique([gridId, tempUserId])
 }
 
 model Grid {
   id          String   @id @default(cuid())
+  name        String
+  description String?
   creatorId   String
   creator     User     @relation("GridCreator", fields: [creatorId], references: [id])
   rowOrder    Int[]
@@ -64,19 +64,22 @@ model Grid {
   squares     Square[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  game        Game?    @relation("GameGrid")
+
+  owners        User[]         @relation("GridOwners")
+  players       GamePlayer[]
+  notifications Notification[] @relation("GridNotifications")
 }
 
 model Square {
-  id          String  @id @default(cuid())
-  gridId      String
-  grid        Grid    @relation(fields: [gridId], references: [id])
-  rowIndex    Int
-  columnIndex Int
-  rowValue    Int
-  columnValue Int
-  playerId    String?
-  player      User?   @relation("SquarePlayer", fields: [playerId], references: [id])
+  id           String      @id @default(cuid())
+  gridId       String
+  grid         Grid        @relation(fields: [gridId], references: [id])
+  rowIndex     Int
+  columnIndex  Int
+  rowValue     Int
+  columnValue  Int
+  gamePlayerId String?
+  gamePlayer   GamePlayer? @relation("SquareGamePlayer", fields: [gamePlayerId], references: [id])
 
   @@unique([gridId, rowIndex, columnIndex])
 }
@@ -100,8 +103,8 @@ model Notification {
   title             String
   description       String
   metadata          Json?
-  gameId            String?
-  game              Game?              @relation("GameNotifications", fields: [gameId], references: [id], onDelete: SetNull)
+  gridId            String?
+  grid              Grid?              @relation("GridNotifications", fields: [gridId], references: [id], onDelete: SetNull)
   triggeredByUserId String?
   triggeredByUser   User?              @relation("TriggeredNotifications", fields: [triggeredByUserId], references: [id], onDelete: SetNull)
   createdAt         DateTime           @default(now())

@@ -2,18 +2,18 @@ scalar DateTime
 
 type User {
   id: ID!
-  firebaseUserId: String!
+  firebaseUserId: String
   email: String
   phoneNumber: String
   displayName: String
   createdAt: DateTime!
   updatedAt: DateTime!
-  ownedGames: [Game!]!
+  ownedGrids: [Grid!]!
   playerGames: [GamePlayer!]!
 }
 
 input CreateUserInput {
-  firebaseUserId: String!
+  firebaseUserId: String
   email: String
   phoneNumber: String
   displayName: String

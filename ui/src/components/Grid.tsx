@@ -3,13 +3,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import type { GameGridQuery } from '@/graphql/generated'
+import type { MyGridsQuery } from '@/graphql/generated'
 
-export type SquareType = NonNullable<
-  NonNullable<NonNullable<GameGridQuery['game']>['grid']>['squares']
->[number]
+export type SquareType = MyGridsQuery['myGrids'][number]['squares'][number]
 
-export type GridType = NonNullable<NonNullable<GameGridQuery['game']>['grid']>
+export type GridType = MyGridsQuery['myGrids'][number]
 
 function getInitials(displayName?: string | null, email?: string | null): string {
   if (displayName) {
@@ -27,21 +25,16 @@ function getInitials(displayName?: string | null, email?: string | null): string
 
 function GridSquare({
   square,
-  currentUserId,
   onSquareClick,
 }: {
   square: SquareType
-  currentUserId?: string
   onSquareClick: (square: SquareType) => void
-}) {
-  const isOwner = square.player?.id === currentUserId
-  const playerName = square.player?.displayName || square.player?.email || null
-  const initials = square.player ? getInitials(square.player.displayName, square.player.email) : null
+}){
+  const playerName = square.gamePlayer?.displayName || square.gamePlayer?.email || null
+  const initials = square.gamePlayer ? getInitials(square.gamePlayer.displayName, square.gamePlayer.email) : null
 
   const handleClick = () => {
-    if (isOwner) {
-      onSquareClick(square)
-    }
+    onSquareClick(square)
   }
 
   return (
@@ -51,11 +44,9 @@ function GridSquare({
           type="button"
           onClick={handleClick}
           className={`flex h-10 w-10 items-center justify-center border-r border-b border-border font-mono text-xs transition-colors ${
-            isOwner
-              ? 'cursor-pointer bg-primary/15 hover:bg-primary/25'
-              : square.player
-                ? 'cursor-default bg-muted/40'
-                : 'cursor-default bg-card'
+            square.gamePlayer
+              ? 'cursor-pointer bg-muted/40 hover:bg-muted/60'
+              : 'cursor-default bg-card'
           }`}
         >
           {initials && (
@@ -76,13 +67,11 @@ function GridSquare({
 
 export function Grid({
   grid,
-  currentUserId,
   onSquareClick,
 }: {
   grid: GridType
-  currentUserId?: string
   onSquareClick: (square: SquareType) => void
-}) {
+}){
   const squaresByPosition = new Map<string, SquareType>()
   for (const square of grid.squares) {
     squaresByPosition.set(`${square.rowIndex}-${square.columnIndex}`, square)
@@ -119,7 +108,6 @@ export function Grid({
                 <GridSquare
                   key={square.id}
                   square={square}
-                  currentUserId={currentUserId}
                   onSquareClick={onSquareClick}
                 />
               )

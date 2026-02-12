@@ -28,10 +28,10 @@ export type HealthCheck = Prisma.HealthCheckModel
  */
 export type User = Prisma.UserModel
 /**
- * Model Game
+ * Model TempPlayer
  * 
  */
-export type Game = Prisma.GameModel
+export type TempPlayer = Prisma.TempPlayerModel
 /**
  * Model GamePlayer
  * 

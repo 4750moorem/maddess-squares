@@ -1,7 +1,7 @@
 import type { QueryResolvers } from './../../../types.generated'
 import { GraphQLError } from 'graphql'
 
-export const myGames: NonNullable<QueryResolvers['myGames']> = async (
+export const myGrids: NonNullable<QueryResolvers['myGrids']> = async (
   _parent,
   _args,
   context,
@@ -15,9 +15,9 @@ export const myGames: NonNullable<QueryResolvers['myGames']> = async (
   const user = await context.prisma.user.findUnique({
     where: { firebaseUserId: context.user.uid },
     include: {
-      ownedGames: true,
+      ownedGrids: true,
       playerGames: {
-        include: { game: true },
+        include: { grid: true },
       },
     },
   })
@@ -26,13 +26,13 @@ export const myGames: NonNullable<QueryResolvers['myGames']> = async (
     return []
   }
 
-  const ownedGames = user.ownedGames
-  const playerGames = user.playerGames.map((pg) => pg.game)
+  const ownedGrids = user.ownedGrids
+  const playerGrids = user.playerGames.map((pg) => pg.grid)
 
-  const allGames = [...ownedGames, ...playerGames]
-  const uniqueGames = allGames.filter(
-    (game, index, self) => self.findIndex((g) => g.id === game.id) === index,
+  const allGrids = [...ownedGrids, ...playerGrids]
+  const uniqueGrids = allGrids.filter(
+    (grid, index, self) => self.findIndex((g) => g.id === grid.id) === index,
   )
 
-  return uniqueGames
+  return uniqueGrids
 }

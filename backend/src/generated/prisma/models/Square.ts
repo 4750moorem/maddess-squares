@@ -47,7 +47,7 @@ export type SquareMinAggregateOutputType = {
   columnIndex: number | null
   rowValue: number | null
   columnValue: number | null
-  playerId: string | null
+  gamePlayerId: string | null
 }
 
 export type SquareMaxAggregateOutputType = {
@@ -57,7 +57,7 @@ export type SquareMaxAggregateOutputType = {
   columnIndex: number | null
   rowValue: number | null
   columnValue: number | null
-  playerId: string | null
+  gamePlayerId: string | null
 }
 
 export type SquareCountAggregateOutputType = {
@@ -67,7 +67,7 @@ export type SquareCountAggregateOutputType = {
   columnIndex: number
   rowValue: number
   columnValue: number
-  playerId: number
+  gamePlayerId: number
   _all: number
 }
 
@@ -93,7 +93,7 @@ export type SquareMinAggregateInputType = {
   columnIndex?: true
   rowValue?: true
   columnValue?: true
-  playerId?: true
+  gamePlayerId?: true
 }
 
 export type SquareMaxAggregateInputType = {
@@ -103,7 +103,7 @@ export type SquareMaxAggregateInputType = {
   columnIndex?: true
   rowValue?: true
   columnValue?: true
-  playerId?: true
+  gamePlayerId?: true
 }
 
 export type SquareCountAggregateInputType = {
@@ -113,7 +113,7 @@ export type SquareCountAggregateInputType = {
   columnIndex?: true
   rowValue?: true
   columnValue?: true
-  playerId?: true
+  gamePlayerId?: true
   _all?: true
 }
 
@@ -210,7 +210,7 @@ export type SquareGroupByOutputType = {
   columnIndex: number
   rowValue: number
   columnValue: number
-  playerId: string | null
+  gamePlayerId: string | null
   _count: SquareCountAggregateOutputType | null
   _avg: SquareAvgAggregateOutputType | null
   _sum: SquareSumAggregateOutputType | null
@@ -243,9 +243,9 @@ export type SquareWhereInput = {
   columnIndex?: Prisma.IntFilter<"Square"> | number
   rowValue?: Prisma.IntFilter<"Square"> | number
   columnValue?: Prisma.IntFilter<"Square"> | number
-  playerId?: Prisma.StringNullableFilter<"Square"> | string | null
+  gamePlayerId?: Prisma.StringNullableFilter<"Square"> | string | null
   grid?: Prisma.XOR<Prisma.GridScalarRelationFilter, Prisma.GridWhereInput>
-  player?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  gamePlayer?: Prisma.XOR<Prisma.GamePlayerNullableScalarRelationFilter, Prisma.GamePlayerWhereInput> | null
 }
 
 export type SquareOrderByWithRelationInput = {
@@ -255,9 +255,9 @@ export type SquareOrderByWithRelationInput = {
   columnIndex?: Prisma.SortOrder
   rowValue?: Prisma.SortOrder
   columnValue?: Prisma.SortOrder
-  playerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  gamePlayerId?: Prisma.SortOrderInput | Prisma.SortOrder
   grid?: Prisma.GridOrderByWithRelationInput
-  player?: Prisma.UserOrderByWithRelationInput
+  gamePlayer?: Prisma.GamePlayerOrderByWithRelationInput
 }
 
 export type SquareWhereUniqueInput = Prisma.AtLeast<{
@@ -271,9 +271,9 @@ export type SquareWhereUniqueInput = Prisma.AtLeast<{
   columnIndex?: Prisma.IntFilter<"Square"> | number
   rowValue?: Prisma.IntFilter<"Square"> | number
   columnValue?: Prisma.IntFilter<"Square"> | number
-  playerId?: Prisma.StringNullableFilter<"Square"> | string | null
+  gamePlayerId?: Prisma.StringNullableFilter<"Square"> | string | null
   grid?: Prisma.XOR<Prisma.GridScalarRelationFilter, Prisma.GridWhereInput>
-  player?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  gamePlayer?: Prisma.XOR<Prisma.GamePlayerNullableScalarRelationFilter, Prisma.GamePlayerWhereInput> | null
 }, "id" | "gridId_rowIndex_columnIndex">
 
 export type SquareOrderByWithAggregationInput = {
@@ -283,7 +283,7 @@ export type SquareOrderByWithAggregationInput = {
   columnIndex?: Prisma.SortOrder
   rowValue?: Prisma.SortOrder
   columnValue?: Prisma.SortOrder
-  playerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  gamePlayerId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SquareCountOrderByAggregateInput
   _avg?: Prisma.SquareAvgOrderByAggregateInput
   _max?: Prisma.SquareMaxOrderByAggregateInput
@@ -301,7 +301,7 @@ export type SquareScalarWhereWithAggregatesInput = {
   columnIndex?: Prisma.IntWithAggregatesFilter<"Square"> | number
   rowValue?: Prisma.IntWithAggregatesFilter<"Square"> | number
   columnValue?: Prisma.IntWithAggregatesFilter<"Square"> | number
-  playerId?: Prisma.StringNullableWithAggregatesFilter<"Square"> | string | null
+  gamePlayerId?: Prisma.StringNullableWithAggregatesFilter<"Square"> | string | null
 }
 
 export type SquareCreateInput = {
@@ -311,7 +311,7 @@ export type SquareCreateInput = {
   rowValue: number
   columnValue: number
   grid: Prisma.GridCreateNestedOneWithoutSquaresInput
-  player?: Prisma.UserCreateNestedOneWithoutSquaresInput
+  gamePlayer?: Prisma.GamePlayerCreateNestedOneWithoutSquaresInput
 }
 
 export type SquareUncheckedCreateInput = {
@@ -321,7 +321,7 @@ export type SquareUncheckedCreateInput = {
   columnIndex: number
   rowValue: number
   columnValue: number
-  playerId?: string | null
+  gamePlayerId?: string | null
 }
 
 export type SquareUpdateInput = {
@@ -331,7 +331,7 @@ export type SquareUpdateInput = {
   rowValue?: Prisma.IntFieldUpdateOperationsInput | number
   columnValue?: Prisma.IntFieldUpdateOperationsInput | number
   grid?: Prisma.GridUpdateOneRequiredWithoutSquaresNestedInput
-  player?: Prisma.UserUpdateOneWithoutSquaresNestedInput
+  gamePlayer?: Prisma.GamePlayerUpdateOneWithoutSquaresNestedInput
 }
 
 export type SquareUncheckedUpdateInput = {
@@ -341,7 +341,7 @@ export type SquareUncheckedUpdateInput = {
   columnIndex?: Prisma.IntFieldUpdateOperationsInput | number
   rowValue?: Prisma.IntFieldUpdateOperationsInput | number
   columnValue?: Prisma.IntFieldUpdateOperationsInput | number
-  playerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gamePlayerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SquareCreateManyInput = {
@@ -351,7 +351,7 @@ export type SquareCreateManyInput = {
   columnIndex: number
   rowValue: number
   columnValue: number
-  playerId?: string | null
+  gamePlayerId?: string | null
 }
 
 export type SquareUpdateManyMutationInput = {
@@ -369,7 +369,7 @@ export type SquareUncheckedUpdateManyInput = {
   columnIndex?: Prisma.IntFieldUpdateOperationsInput | number
   rowValue?: Prisma.IntFieldUpdateOperationsInput | number
   columnValue?: Prisma.IntFieldUpdateOperationsInput | number
-  playerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gamePlayerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SquareListRelationFilter = {
@@ -395,7 +395,7 @@ export type SquareCountOrderByAggregateInput = {
   columnIndex?: Prisma.SortOrder
   rowValue?: Prisma.SortOrder
   columnValue?: Prisma.SortOrder
-  playerId?: Prisma.SortOrder
+  gamePlayerId?: Prisma.SortOrder
 }
 
 export type SquareAvgOrderByAggregateInput = {
@@ -412,7 +412,7 @@ export type SquareMaxOrderByAggregateInput = {
   columnIndex?: Prisma.SortOrder
   rowValue?: Prisma.SortOrder
   columnValue?: Prisma.SortOrder
-  playerId?: Prisma.SortOrder
+  gamePlayerId?: Prisma.SortOrder
 }
 
 export type SquareMinOrderByAggregateInput = {
@@ -422,7 +422,7 @@ export type SquareMinOrderByAggregateInput = {
   columnIndex?: Prisma.SortOrder
   rowValue?: Prisma.SortOrder
   columnValue?: Prisma.SortOrder
-  playerId?: Prisma.SortOrder
+  gamePlayerId?: Prisma.SortOrder
 }
 
 export type SquareSumOrderByAggregateInput = {
@@ -432,45 +432,45 @@ export type SquareSumOrderByAggregateInput = {
   columnValue?: Prisma.SortOrder
 }
 
-export type SquareCreateNestedManyWithoutPlayerInput = {
-  create?: Prisma.XOR<Prisma.SquareCreateWithoutPlayerInput, Prisma.SquareUncheckedCreateWithoutPlayerInput> | Prisma.SquareCreateWithoutPlayerInput[] | Prisma.SquareUncheckedCreateWithoutPlayerInput[]
-  connectOrCreate?: Prisma.SquareCreateOrConnectWithoutPlayerInput | Prisma.SquareCreateOrConnectWithoutPlayerInput[]
-  createMany?: Prisma.SquareCreateManyPlayerInputEnvelope
+export type SquareCreateNestedManyWithoutGamePlayerInput = {
+  create?: Prisma.XOR<Prisma.SquareCreateWithoutGamePlayerInput, Prisma.SquareUncheckedCreateWithoutGamePlayerInput> | Prisma.SquareCreateWithoutGamePlayerInput[] | Prisma.SquareUncheckedCreateWithoutGamePlayerInput[]
+  connectOrCreate?: Prisma.SquareCreateOrConnectWithoutGamePlayerInput | Prisma.SquareCreateOrConnectWithoutGamePlayerInput[]
+  createMany?: Prisma.SquareCreateManyGamePlayerInputEnvelope
   connect?: Prisma.SquareWhereUniqueInput | Prisma.SquareWhereUniqueInput[]
 }
 
-export type SquareUncheckedCreateNestedManyWithoutPlayerInput = {
-  create?: Prisma.XOR<Prisma.SquareCreateWithoutPlayerInput, Prisma.SquareUncheckedCreateWithoutPlayerInput> | Prisma.SquareCreateWithoutPlayerInput[] | Prisma.SquareUncheckedCreateWithoutPlayerInput[]
-  connectOrCreate?: Prisma.SquareCreateOrConnectWithoutPlayerInput | Prisma.SquareCreateOrConnectWithoutPlayerInput[]
-  createMany?: Prisma.SquareCreateManyPlayerInputEnvelope
+export type SquareUncheckedCreateNestedManyWithoutGamePlayerInput = {
+  create?: Prisma.XOR<Prisma.SquareCreateWithoutGamePlayerInput, Prisma.SquareUncheckedCreateWithoutGamePlayerInput> | Prisma.SquareCreateWithoutGamePlayerInput[] | Prisma.SquareUncheckedCreateWithoutGamePlayerInput[]
+  connectOrCreate?: Prisma.SquareCreateOrConnectWithoutGamePlayerInput | Prisma.SquareCreateOrConnectWithoutGamePlayerInput[]
+  createMany?: Prisma.SquareCreateManyGamePlayerInputEnvelope
   connect?: Prisma.SquareWhereUniqueInput | Prisma.SquareWhereUniqueInput[]
 }
 
-export type SquareUpdateManyWithoutPlayerNestedInput = {
-  create?: Prisma.XOR<Prisma.SquareCreateWithoutPlayerInput, Prisma.SquareUncheckedCreateWithoutPlayerInput> | Prisma.SquareCreateWithoutPlayerInput[] | Prisma.SquareUncheckedCreateWithoutPlayerInput[]
-  connectOrCreate?: Prisma.SquareCreateOrConnectWithoutPlayerInput | Prisma.SquareCreateOrConnectWithoutPlayerInput[]
-  upsert?: Prisma.SquareUpsertWithWhereUniqueWithoutPlayerInput | Prisma.SquareUpsertWithWhereUniqueWithoutPlayerInput[]
-  createMany?: Prisma.SquareCreateManyPlayerInputEnvelope
+export type SquareUpdateManyWithoutGamePlayerNestedInput = {
+  create?: Prisma.XOR<Prisma.SquareCreateWithoutGamePlayerInput, Prisma.SquareUncheckedCreateWithoutGamePlayerInput> | Prisma.SquareCreateWithoutGamePlayerInput[] | Prisma.SquareUncheckedCreateWithoutGamePlayerInput[]
+  connectOrCreate?: Prisma.SquareCreateOrConnectWithoutGamePlayerInput | Prisma.SquareCreateOrConnectWithoutGamePlayerInput[]
+  upsert?: Prisma.SquareUpsertWithWhereUniqueWithoutGamePlayerInput | Prisma.SquareUpsertWithWhereUniqueWithoutGamePlayerInput[]
+  createMany?: Prisma.SquareCreateManyGamePlayerInputEnvelope
   set?: Prisma.SquareWhereUniqueInput | Prisma.SquareWhereUniqueInput[]
   disconnect?: Prisma.SquareWhereUniqueInput | Prisma.SquareWhereUniqueInput[]
   delete?: Prisma.SquareWhereUniqueInput | Prisma.SquareWhereUniqueInput[]
   connect?: Prisma.SquareWhereUniqueInput | Prisma.SquareWhereUniqueInput[]
-  update?: Prisma.SquareUpdateWithWhereUniqueWithoutPlayerInput | Prisma.SquareUpdateWithWhereUniqueWithoutPlayerInput[]
-  updateMany?: Prisma.SquareUpdateManyWithWhereWithoutPlayerInput | Prisma.SquareUpdateManyWithWhereWithoutPlayerInput[]
+  update?: Prisma.SquareUpdateWithWhereUniqueWithoutGamePlayerInput | Prisma.SquareUpdateWithWhereUniqueWithoutGamePlayerInput[]
+  updateMany?: Prisma.SquareUpdateManyWithWhereWithoutGamePlayerInput | Prisma.SquareUpdateManyWithWhereWithoutGamePlayerInput[]
   deleteMany?: Prisma.SquareScalarWhereInput | Prisma.SquareScalarWhereInput[]
 }
 
-export type SquareUncheckedUpdateManyWithoutPlayerNestedInput = {
-  create?: Prisma.XOR<Prisma.SquareCreateWithoutPlayerInput, Prisma.SquareUncheckedCreateWithoutPlayerInput> | Prisma.SquareCreateWithoutPlayerInput[] | Prisma.SquareUncheckedCreateWithoutPlayerInput[]
-  connectOrCreate?: Prisma.SquareCreateOrConnectWithoutPlayerInput | Prisma.SquareCreateOrConnectWithoutPlayerInput[]
-  upsert?: Prisma.SquareUpsertWithWhereUniqueWithoutPlayerInput | Prisma.SquareUpsertWithWhereUniqueWithoutPlayerInput[]
-  createMany?: Prisma.SquareCreateManyPlayerInputEnvelope
+export type SquareUncheckedUpdateManyWithoutGamePlayerNestedInput = {
+  create?: Prisma.XOR<Prisma.SquareCreateWithoutGamePlayerInput, Prisma.SquareUncheckedCreateWithoutGamePlayerInput> | Prisma.SquareCreateWithoutGamePlayerInput[] | Prisma.SquareUncheckedCreateWithoutGamePlayerInput[]
+  connectOrCreate?: Prisma.SquareCreateOrConnectWithoutGamePlayerInput | Prisma.SquareCreateOrConnectWithoutGamePlayerInput[]
+  upsert?: Prisma.SquareUpsertWithWhereUniqueWithoutGamePlayerInput | Prisma.SquareUpsertWithWhereUniqueWithoutGamePlayerInput[]
+  createMany?: Prisma.SquareCreateManyGamePlayerInputEnvelope
   set?: Prisma.SquareWhereUniqueInput | Prisma.SquareWhereUniqueInput[]
   disconnect?: Prisma.SquareWhereUniqueInput | Prisma.SquareWhereUniqueInput[]
   delete?: Prisma.SquareWhereUniqueInput | Prisma.SquareWhereUniqueInput[]
   connect?: Prisma.SquareWhereUniqueInput | Prisma.SquareWhereUniqueInput[]
-  update?: Prisma.SquareUpdateWithWhereUniqueWithoutPlayerInput | Prisma.SquareUpdateWithWhereUniqueWithoutPlayerInput[]
-  updateMany?: Prisma.SquareUpdateManyWithWhereWithoutPlayerInput | Prisma.SquareUpdateManyWithWhereWithoutPlayerInput[]
+  update?: Prisma.SquareUpdateWithWhereUniqueWithoutGamePlayerInput | Prisma.SquareUpdateWithWhereUniqueWithoutGamePlayerInput[]
+  updateMany?: Prisma.SquareUpdateManyWithWhereWithoutGamePlayerInput | Prisma.SquareUpdateManyWithWhereWithoutGamePlayerInput[]
   deleteMany?: Prisma.SquareScalarWhereInput | Prisma.SquareScalarWhereInput[]
 }
 
@@ -524,7 +524,7 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type SquareCreateWithoutPlayerInput = {
+export type SquareCreateWithoutGamePlayerInput = {
   id?: string
   rowIndex: number
   columnIndex: number
@@ -533,7 +533,7 @@ export type SquareCreateWithoutPlayerInput = {
   grid: Prisma.GridCreateNestedOneWithoutSquaresInput
 }
 
-export type SquareUncheckedCreateWithoutPlayerInput = {
+export type SquareUncheckedCreateWithoutGamePlayerInput = {
   id?: string
   gridId: string
   rowIndex: number
@@ -542,30 +542,30 @@ export type SquareUncheckedCreateWithoutPlayerInput = {
   columnValue: number
 }
 
-export type SquareCreateOrConnectWithoutPlayerInput = {
+export type SquareCreateOrConnectWithoutGamePlayerInput = {
   where: Prisma.SquareWhereUniqueInput
-  create: Prisma.XOR<Prisma.SquareCreateWithoutPlayerInput, Prisma.SquareUncheckedCreateWithoutPlayerInput>
+  create: Prisma.XOR<Prisma.SquareCreateWithoutGamePlayerInput, Prisma.SquareUncheckedCreateWithoutGamePlayerInput>
 }
 
-export type SquareCreateManyPlayerInputEnvelope = {
-  data: Prisma.SquareCreateManyPlayerInput | Prisma.SquareCreateManyPlayerInput[]
+export type SquareCreateManyGamePlayerInputEnvelope = {
+  data: Prisma.SquareCreateManyGamePlayerInput | Prisma.SquareCreateManyGamePlayerInput[]
   skipDuplicates?: boolean
 }
 
-export type SquareUpsertWithWhereUniqueWithoutPlayerInput = {
+export type SquareUpsertWithWhereUniqueWithoutGamePlayerInput = {
   where: Prisma.SquareWhereUniqueInput
-  update: Prisma.XOR<Prisma.SquareUpdateWithoutPlayerInput, Prisma.SquareUncheckedUpdateWithoutPlayerInput>
-  create: Prisma.XOR<Prisma.SquareCreateWithoutPlayerInput, Prisma.SquareUncheckedCreateWithoutPlayerInput>
+  update: Prisma.XOR<Prisma.SquareUpdateWithoutGamePlayerInput, Prisma.SquareUncheckedUpdateWithoutGamePlayerInput>
+  create: Prisma.XOR<Prisma.SquareCreateWithoutGamePlayerInput, Prisma.SquareUncheckedCreateWithoutGamePlayerInput>
 }
 
-export type SquareUpdateWithWhereUniqueWithoutPlayerInput = {
+export type SquareUpdateWithWhereUniqueWithoutGamePlayerInput = {
   where: Prisma.SquareWhereUniqueInput
-  data: Prisma.XOR<Prisma.SquareUpdateWithoutPlayerInput, Prisma.SquareUncheckedUpdateWithoutPlayerInput>
+  data: Prisma.XOR<Prisma.SquareUpdateWithoutGamePlayerInput, Prisma.SquareUncheckedUpdateWithoutGamePlayerInput>
 }
 
-export type SquareUpdateManyWithWhereWithoutPlayerInput = {
+export type SquareUpdateManyWithWhereWithoutGamePlayerInput = {
   where: Prisma.SquareScalarWhereInput
-  data: Prisma.XOR<Prisma.SquareUpdateManyMutationInput, Prisma.SquareUncheckedUpdateManyWithoutPlayerInput>
+  data: Prisma.XOR<Prisma.SquareUpdateManyMutationInput, Prisma.SquareUncheckedUpdateManyWithoutGamePlayerInput>
 }
 
 export type SquareScalarWhereInput = {
@@ -578,7 +578,7 @@ export type SquareScalarWhereInput = {
   columnIndex?: Prisma.IntFilter<"Square"> | number
   rowValue?: Prisma.IntFilter<"Square"> | number
   columnValue?: Prisma.IntFilter<"Square"> | number
-  playerId?: Prisma.StringNullableFilter<"Square"> | string | null
+  gamePlayerId?: Prisma.StringNullableFilter<"Square"> | string | null
 }
 
 export type SquareCreateWithoutGridInput = {
@@ -587,7 +587,7 @@ export type SquareCreateWithoutGridInput = {
   columnIndex: number
   rowValue: number
   columnValue: number
-  player?: Prisma.UserCreateNestedOneWithoutSquaresInput
+  gamePlayer?: Prisma.GamePlayerCreateNestedOneWithoutSquaresInput
 }
 
 export type SquareUncheckedCreateWithoutGridInput = {
@@ -596,7 +596,7 @@ export type SquareUncheckedCreateWithoutGridInput = {
   columnIndex: number
   rowValue: number
   columnValue: number
-  playerId?: string | null
+  gamePlayerId?: string | null
 }
 
 export type SquareCreateOrConnectWithoutGridInput = {
@@ -625,7 +625,7 @@ export type SquareUpdateManyWithWhereWithoutGridInput = {
   data: Prisma.XOR<Prisma.SquareUpdateManyMutationInput, Prisma.SquareUncheckedUpdateManyWithoutGridInput>
 }
 
-export type SquareCreateManyPlayerInput = {
+export type SquareCreateManyGamePlayerInput = {
   id?: string
   gridId: string
   rowIndex: number
@@ -634,7 +634,7 @@ export type SquareCreateManyPlayerInput = {
   columnValue: number
 }
 
-export type SquareUpdateWithoutPlayerInput = {
+export type SquareUpdateWithoutGamePlayerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rowIndex?: Prisma.IntFieldUpdateOperationsInput | number
   columnIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -643,7 +643,7 @@ export type SquareUpdateWithoutPlayerInput = {
   grid?: Prisma.GridUpdateOneRequiredWithoutSquaresNestedInput
 }
 
-export type SquareUncheckedUpdateWithoutPlayerInput = {
+export type SquareUncheckedUpdateWithoutGamePlayerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gridId?: Prisma.StringFieldUpdateOperationsInput | string
   rowIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -652,7 +652,7 @@ export type SquareUncheckedUpdateWithoutPlayerInput = {
   columnValue?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type SquareUncheckedUpdateManyWithoutPlayerInput = {
+export type SquareUncheckedUpdateManyWithoutGamePlayerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gridId?: Prisma.StringFieldUpdateOperationsInput | string
   rowIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -667,7 +667,7 @@ export type SquareCreateManyGridInput = {
   columnIndex: number
   rowValue: number
   columnValue: number
-  playerId?: string | null
+  gamePlayerId?: string | null
 }
 
 export type SquareUpdateWithoutGridInput = {
@@ -676,7 +676,7 @@ export type SquareUpdateWithoutGridInput = {
   columnIndex?: Prisma.IntFieldUpdateOperationsInput | number
   rowValue?: Prisma.IntFieldUpdateOperationsInput | number
   columnValue?: Prisma.IntFieldUpdateOperationsInput | number
-  player?: Prisma.UserUpdateOneWithoutSquaresNestedInput
+  gamePlayer?: Prisma.GamePlayerUpdateOneWithoutSquaresNestedInput
 }
 
 export type SquareUncheckedUpdateWithoutGridInput = {
@@ -685,7 +685,7 @@ export type SquareUncheckedUpdateWithoutGridInput = {
   columnIndex?: Prisma.IntFieldUpdateOperationsInput | number
   rowValue?: Prisma.IntFieldUpdateOperationsInput | number
   columnValue?: Prisma.IntFieldUpdateOperationsInput | number
-  playerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gamePlayerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SquareUncheckedUpdateManyWithoutGridInput = {
@@ -694,7 +694,7 @@ export type SquareUncheckedUpdateManyWithoutGridInput = {
   columnIndex?: Prisma.IntFieldUpdateOperationsInput | number
   rowValue?: Prisma.IntFieldUpdateOperationsInput | number
   columnValue?: Prisma.IntFieldUpdateOperationsInput | number
-  playerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gamePlayerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -706,9 +706,9 @@ export type SquareSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   columnIndex?: boolean
   rowValue?: boolean
   columnValue?: boolean
-  playerId?: boolean
+  gamePlayerId?: boolean
   grid?: boolean | Prisma.GridDefaultArgs<ExtArgs>
-  player?: boolean | Prisma.Square$playerArgs<ExtArgs>
+  gamePlayer?: boolean | Prisma.Square$gamePlayerArgs<ExtArgs>
 }, ExtArgs["result"]["square"]>
 
 export type SquareSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -718,9 +718,9 @@ export type SquareSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   columnIndex?: boolean
   rowValue?: boolean
   columnValue?: boolean
-  playerId?: boolean
+  gamePlayerId?: boolean
   grid?: boolean | Prisma.GridDefaultArgs<ExtArgs>
-  player?: boolean | Prisma.Square$playerArgs<ExtArgs>
+  gamePlayer?: boolean | Prisma.Square$gamePlayerArgs<ExtArgs>
 }, ExtArgs["result"]["square"]>
 
 export type SquareSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -730,9 +730,9 @@ export type SquareSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   columnIndex?: boolean
   rowValue?: boolean
   columnValue?: boolean
-  playerId?: boolean
+  gamePlayerId?: boolean
   grid?: boolean | Prisma.GridDefaultArgs<ExtArgs>
-  player?: boolean | Prisma.Square$playerArgs<ExtArgs>
+  gamePlayer?: boolean | Prisma.Square$gamePlayerArgs<ExtArgs>
 }, ExtArgs["result"]["square"]>
 
 export type SquareSelectScalar = {
@@ -742,28 +742,28 @@ export type SquareSelectScalar = {
   columnIndex?: boolean
   rowValue?: boolean
   columnValue?: boolean
-  playerId?: boolean
+  gamePlayerId?: boolean
 }
 
-export type SquareOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "gridId" | "rowIndex" | "columnIndex" | "rowValue" | "columnValue" | "playerId", ExtArgs["result"]["square"]>
+export type SquareOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "gridId" | "rowIndex" | "columnIndex" | "rowValue" | "columnValue" | "gamePlayerId", ExtArgs["result"]["square"]>
 export type SquareInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   grid?: boolean | Prisma.GridDefaultArgs<ExtArgs>
-  player?: boolean | Prisma.Square$playerArgs<ExtArgs>
+  gamePlayer?: boolean | Prisma.Square$gamePlayerArgs<ExtArgs>
 }
 export type SquareIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   grid?: boolean | Prisma.GridDefaultArgs<ExtArgs>
-  player?: boolean | Prisma.Square$playerArgs<ExtArgs>
+  gamePlayer?: boolean | Prisma.Square$gamePlayerArgs<ExtArgs>
 }
 export type SquareIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   grid?: boolean | Prisma.GridDefaultArgs<ExtArgs>
-  player?: boolean | Prisma.Square$playerArgs<ExtArgs>
+  gamePlayer?: boolean | Prisma.Square$gamePlayerArgs<ExtArgs>
 }
 
 export type $SquarePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Square"
   objects: {
     grid: Prisma.$GridPayload<ExtArgs>
-    player: Prisma.$UserPayload<ExtArgs> | null
+    gamePlayer: Prisma.$GamePlayerPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -772,7 +772,7 @@ export type $SquarePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     columnIndex: number
     rowValue: number
     columnValue: number
-    playerId: string | null
+    gamePlayerId: string | null
   }, ExtArgs["result"]["square"]>
   composites: {}
 }
@@ -1168,7 +1168,7 @@ readonly fields: SquareFieldRefs;
 export interface Prisma__SquareClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   grid<T extends Prisma.GridDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GridDefaultArgs<ExtArgs>>): Prisma.Prisma__GridClient<runtime.Types.Result.GetResult<Prisma.$GridPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  player<T extends Prisma.Square$playerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Square$playerArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  gamePlayer<T extends Prisma.Square$gamePlayerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Square$gamePlayerArgs<ExtArgs>>): Prisma.Prisma__GamePlayerClient<runtime.Types.Result.GetResult<Prisma.$GamePlayerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1204,7 +1204,7 @@ export interface SquareFieldRefs {
   readonly columnIndex: Prisma.FieldRef<"Square", 'Int'>
   readonly rowValue: Prisma.FieldRef<"Square", 'Int'>
   readonly columnValue: Prisma.FieldRef<"Square", 'Int'>
-  readonly playerId: Prisma.FieldRef<"Square", 'String'>
+  readonly gamePlayerId: Prisma.FieldRef<"Square", 'String'>
 }
     
 
@@ -1601,22 +1601,22 @@ export type SquareDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Square.player
+ * Square.gamePlayer
  */
-export type Square$playerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Square$gamePlayerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the User
+   * Select specific fields to fetch from the GamePlayer
    */
-  select?: Prisma.UserSelect<ExtArgs> | null
+  select?: Prisma.GamePlayerSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the User
+   * Omit specific fields from the GamePlayer
    */
-  omit?: Prisma.UserOmit<ExtArgs> | null
+  omit?: Prisma.GamePlayerOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
+  include?: Prisma.GamePlayerInclude<ExtArgs> | null
+  where?: Prisma.GamePlayerWhereInput
 }
 
 /**

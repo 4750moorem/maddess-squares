@@ -16,8 +16,8 @@ query Me {
   }
 }
 
-query MyGames {
-  myGames {
+query MyGrids {
+  myGrids {
     id
     name
     description
@@ -29,36 +29,45 @@ query MyGames {
     }
     players {
       id
-      user {
-        id
-        email
-        displayName
-      }
+      displayName
+      fullName
+      email
+      phoneNumber
+      joinedAt
     }
-    grid {
+    rowOrder
+    columnOrder
+    squares {
       id
+      rowIndex
+      columnIndex
+      rowValue
+      columnValue
+      gamePlayer {
+        id
+        displayName
+        email
+      }
     }
   }
 }
 
-query GameGrid($id: ID!) {
-  game(id: $id) {
+query GridDetail($id: ID!) {
+  grid(id: $id) {
     id
-    grid {
+    name
+    rowOrder
+    columnOrder
+    squares {
       id
-      rowOrder
-      columnOrder
-      squares {
+      rowIndex
+      columnIndex
+      rowValue
+      columnValue
+      gamePlayer {
         id
-        rowIndex
-        columnIndex
-        rowValue
-        columnValue
-        player {
-          id
-          displayName
-          email
-        }
+        displayName
+        email
       }
     }
   }
@@ -73,8 +82,8 @@ mutation CreateUser($input: CreateUserInput!) {
   }
 }
 
-mutation CreateGame($input: CreateGameInput!) {
-  createGame(input: $input) {
+mutation CreateGrid($input: CreateGridInput!) {
+  createGrid(input: $input) {
     id
     name
     description
@@ -83,31 +92,14 @@ mutation CreateGame($input: CreateGameInput!) {
       id
       email
     }
-  }
-}
-
-mutation CreateGrid {
-  createGrid {
-    id
     rowOrder
     columnOrder
     squares {
       id
       rowIndex
       columnIndex
-      player {
-        id
-        displayName
-      }
-    }
-  }
-}
-
-mutation AssignGridToGame($input: AssignGridToGameInput!) {
-  assignGridToGame(input: $input) {
-    id
-    grid {
-      id
+      rowValue
+      columnValue
     }
   }
 }
@@ -119,10 +111,25 @@ mutation UpdateSquare($id: ID!, $input: UpdateSquareInput!) {
     columnIndex
     rowValue
     columnValue
-    player {
+    gamePlayer {
       id
       displayName
       email
+    }
+  }
+}
+
+mutation BulkAddPlayers($input: BulkAddPlayersInput!) {
+  bulkAddPlayers(input: $input) {
+    id
+    name
+    players {
+      id
+      email
+      phoneNumber
+      fullName
+      displayName
+      joinedAt
     }
   }
 }

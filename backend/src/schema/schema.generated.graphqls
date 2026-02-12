@@ -1,16 +1,9 @@
-input AddUserToGameInput {
-  email: String
-  gameId: ID!
-  phoneNumber: String
-  role: GameUserRole!
-}
-
-input AssignGridToGameInput {
-  gameId: ID!
+input BulkAddPlayersInput {
   gridId: ID!
+  players: [PlayerInput!]!
 }
 
-input CreateGameInput {
+input CreateGridInput {
   description: String
   name: String!
 }
@@ -18,7 +11,7 @@ input CreateGameInput {
 input CreateNotificationInput {
   actionType: NotificationAction!
   description: String!
-  gameId: String
+  gridId: String
   iconType: String!
   metadata: JSON
   title: String!
@@ -29,59 +22,46 @@ input CreateNotificationInput {
 input CreateUserInput {
   displayName: String
   email: String
-  firebaseUserId: String!
+  firebaseUserId: String
   phoneNumber: String
 }
 
 scalar DateTime
 
-type Game {
-  createdAt: DateTime!
-  description: String
-  grid: Grid
-  id: ID!
-  name: String!
-  owners: [User!]!
-  players: [GamePlayer!]!
-  updatedAt: DateTime!
-}
-
 type GamePlayer {
-  game: Game!
-  gameId: String!
+  displayName: String
+  email: String
+  fullName: String
+  gridId: String!
   id: ID!
   joinedAt: DateTime!
-  user: User!
-  userId: String!
-}
-
-enum GameUserRole {
-  OWNER
-  PLAYER
+  phoneNumber: String
 }
 
 type Grid {
   columnOrder: [Int!]!
   createdAt: DateTime!
   creator: User!
+  description: String
   id: ID!
+  name: String!
+  owners: [User!]!
+  players: [GamePlayer!]!
   rowOrder: [Int!]!
   squares: [Square!]!
+  updatedAt: DateTime!
 }
 
 scalar JSON
 
 type Mutation {
-  addUserToGame(input: AddUserToGameInput!): Game
-  assignGridToGame(input: AssignGridToGameInput!): Game
-  createGame(input: CreateGameInput!): Game!
-  createGrid: Grid!
+  bulkAddPlayers(input: BulkAddPlayersInput!): Grid
+  createGrid(input: CreateGridInput!): Grid!
   createNotification(input: CreateNotificationInput!): Notification!
   createUser(input: CreateUserInput!): User!
-  deleteGame(id: ID!): Boolean!
+  deleteGrid(id: ID!): Boolean!
   deleteUser(id: ID!): Boolean!
-  removeUserFromGame(input: RemoveUserFromGameInput!): Game
-  updateGame(id: ID!, input: UpdateGameInput!): Game
+  updateGrid(id: ID!, input: UpdateGridInput!): Grid
   updateSquare(id: ID!, input: UpdateSquareInput!): Square
   updateUser(id: ID!, input: UpdateUserInput!): User
 }
@@ -90,7 +70,7 @@ type Notification {
   actionType: NotificationAction!
   createdAt: DateTime!
   description: String!
-  gameId: String
+  gridId: String
   iconType: String!
   id: ID!
   metadata: JSON
@@ -110,14 +90,19 @@ enum NotificationAction {
   SQUARE_CLAIMED
 }
 
+input PlayerInput {
+  email: String
+  firstName: String!
+  lastName: String!
+  phoneNumber: String
+}
+
 type Query {
   dbStatus: String!
-  game(id: ID!): Game
-  games: [Game!]!
   grid(id: ID!): Grid
   hello: String!
   me: User
-  myGames: [Game!]!
+  myGrids: [Grid!]!
   notifications(userId: String): [Notification!]!
   user(id: ID!): User
   userByEmail(email: String!): User
@@ -126,18 +111,12 @@ type Query {
   users: [User!]!
 }
 
-input RemoveUserFromGameInput {
-  gameId: ID!
-  role: GameUserRole!
-  userId: ID!
-}
-
 type Square {
   columnIndex: Int!
   columnValue: Int!
+  gamePlayer: GamePlayer
   gridId: ID!
   id: ID!
-  player: User
   rowIndex: Int!
   rowValue: Int!
 }
@@ -146,7 +125,7 @@ type Subscription {
   notificationAdded(userId: String!): Notification!
 }
 
-input UpdateGameInput {
+input UpdateGridInput {
   description: String
   name: String
 }
@@ -165,9 +144,9 @@ type User {
   createdAt: DateTime!
   displayName: String
   email: String
-  firebaseUserId: String!
+  firebaseUserId: String
   id: ID!
-  ownedGames: [Game!]!
+  ownedGrids: [Grid!]!
   phoneNumber: String
   playerGames: [GamePlayer!]!
   updatedAt: DateTime!

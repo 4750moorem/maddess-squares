@@ -7,7 +7,7 @@ query Notifications($userId: String) {
     title
     description
     metadata
-    gameId
+    gridId
     triggeredByUserId
     createdAt
     read
@@ -23,7 +23,7 @@ mutation CreateNotification($input: CreateNotificationInput!) {
     title
     description
     metadata
-    gameId
+    gridId
     triggeredByUserId
     createdAt
     read
@@ -39,7 +39,7 @@ subscription NotificationAdded($userId: String!) {
     title
     description
     metadata
-    gameId
+    gridId
     triggeredByUserId
     createdAt
     read
