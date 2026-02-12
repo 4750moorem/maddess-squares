@@ -2,12 +2,12 @@
   "name": "maddess-squares",
   "private": true,
   "workspaces": [
-    "UI",
+    "ui",
     "backend",
     "infra"
   ],
   "scripts": {
-    "dev:ui": "bun --cwd UI dev",
+    "dev:ui": "bun --cwd ui dev",
     "dev:api": "bun --cwd backend dev",
     "lint": "echo \"No root lint yet\""
   }
