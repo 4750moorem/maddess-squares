@@ -28,8 +28,6 @@ export type TempPlayerMinAggregateOutputType = {
   id: string | null
   firstName: string | null
   lastName: string | null
-  email: string | null
-  phoneNumber: string | null
   createdAt: Date | null
 }
 
@@ -37,8 +35,6 @@ export type TempPlayerMaxAggregateOutputType = {
   id: string | null
   firstName: string | null
   lastName: string | null
-  email: string | null
-  phoneNumber: string | null
   createdAt: Date | null
 }
 
@@ -46,8 +42,6 @@ export type TempPlayerCountAggregateOutputType = {
   id: number
   firstName: number
   lastName: number
-  email: number
-  phoneNumber: number
   createdAt: number
   _all: number
 }
@@ -57,8 +51,6 @@ export type TempPlayerMinAggregateInputType = {
   id?: true
   firstName?: true
   lastName?: true
-  email?: true
-  phoneNumber?: true
   createdAt?: true
 }
 
@@ -66,8 +58,6 @@ export type TempPlayerMaxAggregateInputType = {
   id?: true
   firstName?: true
   lastName?: true
-  email?: true
-  phoneNumber?: true
   createdAt?: true
 }
 
@@ -75,8 +65,6 @@ export type TempPlayerCountAggregateInputType = {
   id?: true
   firstName?: true
   lastName?: true
-  email?: true
-  phoneNumber?: true
   createdAt?: true
   _all?: true
 }
@@ -157,8 +145,6 @@ export type TempPlayerGroupByOutputType = {
   id: string
   firstName: string
   lastName: string
-  email: string | null
-  phoneNumber: string | null
   createdAt: Date
   _count: TempPlayerCountAggregateOutputType | null
   _min: TempPlayerMinAggregateOutputType | null
@@ -187,8 +173,6 @@ export type TempPlayerWhereInput = {
   id?: Prisma.StringFilter<"TempPlayer"> | string
   firstName?: Prisma.StringFilter<"TempPlayer"> | string
   lastName?: Prisma.StringFilter<"TempPlayer"> | string
-  email?: Prisma.StringNullableFilter<"TempPlayer"> | string | null
-  phoneNumber?: Prisma.StringNullableFilter<"TempPlayer"> | string | null
   createdAt?: Prisma.DateTimeFilter<"TempPlayer"> | Date | string
   gamePlayers?: Prisma.GamePlayerListRelationFilter
 }
@@ -197,8 +181,6 @@ export type TempPlayerOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
-  phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   gamePlayers?: Prisma.GamePlayerOrderByRelationAggregateInput
 }
@@ -210,8 +192,6 @@ export type TempPlayerWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.TempPlayerWhereInput | Prisma.TempPlayerWhereInput[]
   firstName?: Prisma.StringFilter<"TempPlayer"> | string
   lastName?: Prisma.StringFilter<"TempPlayer"> | string
-  email?: Prisma.StringNullableFilter<"TempPlayer"> | string | null
-  phoneNumber?: Prisma.StringNullableFilter<"TempPlayer"> | string | null
   createdAt?: Prisma.DateTimeFilter<"TempPlayer"> | Date | string
   gamePlayers?: Prisma.GamePlayerListRelationFilter
 }, "id">
@@ -220,8 +200,6 @@ export type TempPlayerOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
-  phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TempPlayerCountOrderByAggregateInput
   _max?: Prisma.TempPlayerMaxOrderByAggregateInput
@@ -235,8 +213,6 @@ export type TempPlayerScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"TempPlayer"> | string
   firstName?: Prisma.StringWithAggregatesFilter<"TempPlayer"> | string
   lastName?: Prisma.StringWithAggregatesFilter<"TempPlayer"> | string
-  email?: Prisma.StringNullableWithAggregatesFilter<"TempPlayer"> | string | null
-  phoneNumber?: Prisma.StringNullableWithAggregatesFilter<"TempPlayer"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TempPlayer"> | Date | string
 }
 
@@ -244,8 +220,6 @@ export type TempPlayerCreateInput = {
   id?: string
   firstName: string
   lastName: string
-  email?: string | null
-  phoneNumber?: string | null
   createdAt?: Date | string
   gamePlayers?: Prisma.GamePlayerCreateNestedManyWithoutTempPlayerInput
 }
@@ -254,8 +228,6 @@ export type TempPlayerUncheckedCreateInput = {
   id?: string
   firstName: string
   lastName: string
-  email?: string | null
-  phoneNumber?: string | null
   createdAt?: Date | string
   gamePlayers?: Prisma.GamePlayerUncheckedCreateNestedManyWithoutTempPlayerInput
 }
@@ -264,8 +236,6 @@ export type TempPlayerUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gamePlayers?: Prisma.GamePlayerUpdateManyWithoutTempPlayerNestedInput
 }
@@ -274,8 +244,6 @@ export type TempPlayerUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gamePlayers?: Prisma.GamePlayerUncheckedUpdateManyWithoutTempPlayerNestedInput
 }
@@ -284,8 +252,6 @@ export type TempPlayerCreateManyInput = {
   id?: string
   firstName: string
   lastName: string
-  email?: string | null
-  phoneNumber?: string | null
   createdAt?: Date | string
 }
 
@@ -293,8 +259,6 @@ export type TempPlayerUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -302,8 +266,6 @@ export type TempPlayerUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -311,8 +273,6 @@ export type TempPlayerCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
-  email?: Prisma.SortOrder
-  phoneNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -320,8 +280,6 @@ export type TempPlayerMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
-  email?: Prisma.SortOrder
-  phoneNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -329,8 +287,6 @@ export type TempPlayerMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
-  email?: Prisma.SortOrder
-  phoneNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -359,8 +315,6 @@ export type TempPlayerCreateWithoutGamePlayersInput = {
   id?: string
   firstName: string
   lastName: string
-  email?: string | null
-  phoneNumber?: string | null
   createdAt?: Date | string
 }
 
@@ -368,8 +322,6 @@ export type TempPlayerUncheckedCreateWithoutGamePlayersInput = {
   id?: string
   firstName: string
   lastName: string
-  email?: string | null
-  phoneNumber?: string | null
   createdAt?: Date | string
 }
 
@@ -393,8 +345,6 @@ export type TempPlayerUpdateWithoutGamePlayersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -402,8 +352,6 @@ export type TempPlayerUncheckedUpdateWithoutGamePlayersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -442,8 +390,6 @@ export type TempPlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   id?: boolean
   firstName?: boolean
   lastName?: boolean
-  email?: boolean
-  phoneNumber?: boolean
   createdAt?: boolean
   gamePlayers?: boolean | Prisma.TempPlayer$gamePlayersArgs<ExtArgs>
   _count?: boolean | Prisma.TempPlayerCountOutputTypeDefaultArgs<ExtArgs>
@@ -453,8 +399,6 @@ export type TempPlayerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   id?: boolean
   firstName?: boolean
   lastName?: boolean
-  email?: boolean
-  phoneNumber?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["tempPlayer"]>
 
@@ -462,8 +406,6 @@ export type TempPlayerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   id?: boolean
   firstName?: boolean
   lastName?: boolean
-  email?: boolean
-  phoneNumber?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["tempPlayer"]>
 
@@ -471,12 +413,10 @@ export type TempPlayerSelectScalar = {
   id?: boolean
   firstName?: boolean
   lastName?: boolean
-  email?: boolean
-  phoneNumber?: boolean
   createdAt?: boolean
 }
 
-export type TempPlayerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phoneNumber" | "createdAt", ExtArgs["result"]["tempPlayer"]>
+export type TempPlayerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "createdAt", ExtArgs["result"]["tempPlayer"]>
 export type TempPlayerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   gamePlayers?: boolean | Prisma.TempPlayer$gamePlayersArgs<ExtArgs>
   _count?: boolean | Prisma.TempPlayerCountOutputTypeDefaultArgs<ExtArgs>
@@ -493,8 +433,6 @@ export type $TempPlayerPayload<ExtArgs extends runtime.Types.Extensions.Internal
     id: string
     firstName: string
     lastName: string
-    email: string | null
-    phoneNumber: string | null
     createdAt: Date
   }, ExtArgs["result"]["tempPlayer"]>
   composites: {}
@@ -923,8 +861,6 @@ export interface TempPlayerFieldRefs {
   readonly id: Prisma.FieldRef<"TempPlayer", 'String'>
   readonly firstName: Prisma.FieldRef<"TempPlayer", 'String'>
   readonly lastName: Prisma.FieldRef<"TempPlayer", 'String'>
-  readonly email: Prisma.FieldRef<"TempPlayer", 'String'>
-  readonly phoneNumber: Prisma.FieldRef<"TempPlayer", 'String'>
   readonly createdAt: Prisma.FieldRef<"TempPlayer", 'DateTime'>
 }
     

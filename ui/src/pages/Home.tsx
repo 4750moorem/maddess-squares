@@ -14,82 +14,54 @@ import {
   type SquareType,
 } from '@/components/Grid'
 import {
-  useMyGamesQuery,
+  useMyGridsQuery,
   useMeQuery,
-  useCreateGameMutation,
-  useGameGridQuery,
   useCreateGridMutation,
-  useAssignGridToGameMutation,
   useBulkAddPlayersMutation,
-  MyGamesDocument,
-  type MyGamesQuery,
+  MyGridsDocument,
+  type MyGridsQuery,
 } from '@/graphql/generated'
 
 
 function Home() {
   const { user, signOut } = useAuth()
   const { data: meData } = useMeQuery()
-  const { data: gamesData, loading: gamesLoading } = useMyGamesQuery()
-  const [createGame, { loading: createGameLoading }] = useCreateGameMutation()
+  const { data: gridsData, loading: gridsLoading } = useMyGridsQuery()
   const [createGrid, { loading: createGridLoading }] = useCreateGridMutation()
-  const [assignGridToGame, { loading: assignGridLoading }] = useAssignGridToGameMutation()
-  const [showCreateForm, setShowCreateForm] = useState(false)
-  const [gameName, setGameName] = useState('')
-  const [gameDescription, setGameDescription] = useState('')
-  const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
+  const [bulkAddPlayers, { loading: addingPlayers }] = useBulkAddPlayersMutation()
+  const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [gridName, setGridName] = useState('')
+  const [gridDescription, setGridDescription] = useState('')
+  const [selectedGridId, setSelectedGridId] = useState<string | null>(null)
   const [selectedSquare, setSelectedSquare] = useState<SquareType | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [showAddPlayers, setShowAddPlayers] = useState(false)
+  const [isSquareModalOpen, setIsSquareModalOpen] = useState(false)
+  const [showAddPlayersDialog, setShowAddPlayersDialog] = useState(false)
   const [players, setPlayers] = useState([
     { firstName: '', lastName: '', email: '', phoneNumber: '' },
   ])
-  const [bulkAddPlayers, { loading: addingPlayers }] = useBulkAddPlayersMutation()
 
-  const { data: gridData, loading: gridLoading } = useGameGridQuery({
-    variables: { id: selectedGameId ?? '' },
-    skip: !selectedGameId,
-  })
-
-  const handleCreateGame = async (e: React.FormEvent) => {
+  const handleCreateGrid = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!gameName.trim()) return
+    if (!gridName.trim()) return
 
-    await createGame({
+    await createGrid({
       variables: {
         input: {
-          name: gameName.trim(),
-          description: gameDescription.trim() || undefined,
+          name: gridName.trim(),
+          description: gridDescription.trim() || undefined,
         },
       },
-      refetchQueries: [{ query: MyGamesDocument }],
+      refetchQueries: [{ query: MyGridsDocument }],
     })
 
-    setGameName('')
-    setGameDescription('')
-    setShowCreateForm(false)
-  }
-
-  const handleCreateAndAssignGrid = async () => {
-    if (!selectedGameId) return
-
-    const result = await createGrid()
-    const newGridId = result.data?.createGrid?.id
-    if (newGridId) {
-      await assignGridToGame({
-        variables: {
-          input: {
-            gridId: newGridId,
-            gameId: selectedGameId,
-          },
-        },
-        refetchQueries: [{ query: MyGamesDocument }],
-      })
-    }
+    setGridName('')
+    setGridDescription('')
+    setShowCreateDialog(false)
   }
 
   const handleSquareClick = (square: SquareType) => {
     setSelectedSquare(square)
-    setIsModalOpen(true)
+    setIsSquareModalOpen(true)
   }
 
   const addPlayerRow = () => {
@@ -108,7 +80,7 @@ function Home() {
 
   const handleBulkAdd = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!selectedGameId) return
+    if (!selectedGridId) return
 
     const validPlayers = players.filter((p) => p.firstName.trim() && p.lastName.trim())
     if (validPlayers.length === 0) return
@@ -116,37 +88,32 @@ function Home() {
     await bulkAddPlayers({
       variables: {
         input: {
-          gameId: selectedGameId,
+          gridId: selectedGridId,
           players: validPlayers,
         },
       },
-      refetchQueries: [{ query: MyGamesDocument }],
+      refetchQueries: [{ query: MyGridsDocument }],
     })
 
     setPlayers([{ firstName: '', lastName: '', email: '', phoneNumber: '' }])
-    setShowAddPlayers(false)
+    setShowAddPlayersDialog(false)
   }
 
-  const getUserRole = (game: MyGamesQuery['myGames'][number]) => {
+  const getUserRole = (grid: MyGridsQuery['myGrids'][number]) => {
     const currentUserId = meData?.me?.id
     if (!currentUserId) return 'Unknown'
 
-    const isOwner = game.owners.some(
+    const isOwner = grid.owners.some(
       (owner: { id: string }) => owner.id === currentUserId,
     )
     if (isOwner) return 'Owner'
 
-    const isPlayer = game.players.some(
-      (player) => player.user?.id === currentUserId,
-    )
-    if (isPlayer) return 'Player'
-
-    return 'Unknown'
+    return 'Player'
   }
 
-  const selectedGame = gamesData?.myGames.find((g) => g.id === selectedGameId)
-  const isGameOwner = selectedGame
-    ? selectedGame.owners.some((owner) => owner.id === meData?.me?.id)
+  const selectedGrid = gridsData?.myGrids.find((g) => g.id === selectedGridId)
+  const isGridOwner = selectedGrid
+    ? selectedGrid.owners.some((owner) => owner.id === meData?.me?.id)
     : false
 
   return (
@@ -160,23 +127,23 @@ function Home() {
                   <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
                     March Madness Squares
                   </p>
-                  <h1 className="text-3xl font-semibold">My Games</h1>
+                  <h1 className="text-3xl font-semibold">My Grids</h1>
                 </div>
                 <div className="flex items-center gap-3">
                   <select
-                    value={selectedGameId ?? ''}
-                    onChange={(e) => setSelectedGameId(e.target.value || null)}
+                    value={selectedGridId ?? ''}
+                    onChange={(e) => setSelectedGridId(e.target.value || null)}
                     className="rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   >
-                    <option value="">Select a game</option>
-                    {gamesData?.myGames.map((game) => (
-                      <option key={game.id} value={game.id}>
-                        {game.name} ({getUserRole(game)})
+                    <option value="">Select a grid</option>
+                    {gridsData?.myGrids.map((grid) => (
+                      <option key={grid.id} value={grid.id}>
+                        {grid.name} ({getUserRole(grid)})
                       </option>
                     ))}
                   </select>
-                  <Button size="sm" onClick={() => setShowCreateForm(!showCreateForm)}>
-                    {showCreateForm ? 'Cancel' : 'Create Game'}
+                  <Button size="sm" onClick={() => setShowCreateDialog(true)}>
+                    New Grid
                   </Button>
                 </div>
               </div>
@@ -190,179 +157,166 @@ function Home() {
               </div>
             </div>
 
-            {showCreateForm && (
-              <div className="retro-card p-6">
-                <h2 className="mb-4 text-lg font-bold">Create New Game</h2>
-                <form onSubmit={handleCreateGame} className="space-y-4">
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="gameName"
-                      className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-                    >
-                      Game Name
-                    </label>
-                    <input
-                      id="gameName"
-                      type="text"
-                      value={gameName}
-                      onChange={(e) => setGameName(e.target.value)}
-                      required
-                      className="retro-input w-full"
-                      placeholder="Enter game name"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="gameDescription"
-                      className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-                    >
-                      Description (optional)
-                    </label>
-                    <input
-                      id="gameDescription"
-                      type="text"
-                      value={gameDescription}
-                      onChange={(e) => setGameDescription(e.target.value)}
-                      className="retro-input w-full"
-                      placeholder="Enter description"
-                    />
-                  </div>
-                  <Button type="submit" disabled={createGameLoading}>
-                    {createGameLoading ? 'Creating...' : 'Create Game'}
-                  </Button>
-                </form>
-              </div>
-            )}
-
-            {selectedGameId && (
+            {selectedGrid && (
               <div>
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-lg font-medium">
-                    Grid for {selectedGame?.name}
+                    {selectedGrid.name}
                   </h2>
                   <div className="flex items-center gap-2">
-                    {isGameOwner && !gridData?.game?.grid && (
+                    {isGridOwner && (
                       <Button
-                        onClick={handleCreateAndAssignGrid}
-                        disabled={createGridLoading || assignGridLoading}
-                        size="sm"
-                      >
-                        {createGridLoading || assignGridLoading
-                          ? 'Creating...'
-                          : 'Create Grid'}
-                      </Button>
-                    )}
-                    {isGameOwner && gridData?.game?.grid && (
-                      <Button
-                        onClick={() => setShowAddPlayers(!showAddPlayers)}
+                        onClick={() => setShowAddPlayersDialog(true)}
                         size="sm"
                         variant="outline"
                       >
-                        {showAddPlayers ? 'Cancel' : 'Add Players'}
+                        Add Players
                       </Button>
                     )}
                   </div>
                 </div>
 
-                {showAddPlayers && (
-                  <div className="retro-card p-6">
-                    <h3 className="mb-4 text-lg font-bold">Add Players</h3>
-                    <form onSubmit={handleBulkAdd} className="space-y-4">
-                      {players.map((player, idx) => (
-                        <div key={idx} className="relative space-y-2 rounded border border-border p-4">
-                          {players.length > 1 && (
-                            <button
-                              type="button"
-                              onClick={() => removePlayerRow(idx)}
-                              className="absolute top-2 right-2 text-muted-foreground hover:text-foreground"
-                            >
-                              X
-                            </button>
-                          )}
-                          <div className="grid grid-cols-2 gap-2">
-                            <input
-                              type="text"
-                              value={player.firstName}
-                              onChange={(e) => updatePlayer(idx, 'firstName', e.target.value)}
-                              className="retro-input"
-                              placeholder="First Name *"
-                              required
-                            />
-                            <input
-                              type="text"
-                              value={player.lastName}
-                              onChange={(e) => updatePlayer(idx, 'lastName', e.target.value)}
-                              className="retro-input"
-                              placeholder="Last Name *"
-                              required
-                            />
-                          </div>
-                          <input
-                            type="email"
-                            value={player.email}
-                            onChange={(e) => updatePlayer(idx, 'email', e.target.value)}
-                            className="retro-input w-full"
-                            placeholder="Email (optional)"
-                          />
-                          <input
-                            type="tel"
-                            value={player.phoneNumber}
-                            onChange={(e) => updatePlayer(idx, 'phoneNumber', e.target.value)}
-                            className="retro-input w-full"
-                            placeholder="Phone Number (optional)"
-                          />
-                        </div>
-                      ))}
-                      <p className="text-xs text-muted-foreground">
-                        * Required fields. If email or phone number is provided, an invite will be sent.
-                      </p>
-                      <div className="flex gap-2">
-                        <Button type="button" onClick={addPlayerRow} variant="outline">
-                          Add Another Player
-                        </Button>
-                        <Button type="submit" disabled={addingPlayers}>
-                          {addingPlayers ? 'Adding...' : 'Add Players'}
-                        </Button>
-                      </div>
-                    </form>
-                  </div>
-                )}
-
-                {gridLoading ? (
-                  <div className="text-center text-muted-foreground">
-                    Loading grid...
-                  </div>
-                ) : gridData?.game?.grid ? (
-                  <div className="flex justify-center">
-                    <Grid
-                      grid={gridData.game.grid}
-                      currentUserId={meData?.me?.id}
-                      onSquareClick={handleSquareClick}
-                    />
-                  </div>
-                ) : (
-                  <div className="text-center text-muted-foreground">
-                    No grid assigned to this game yet.
-                    {isGameOwner && ' Click "Create Grid" to create one.'}
-                  </div>
-                )}
+                <div className="flex justify-center">
+                  <Grid
+                    grid={selectedGrid}
+                    onSquareClick={handleSquareClick}
+                  />
+                </div>
               </div>
             )}
 
-            {!selectedGameId && (
+            {!selectedGridId && (
               <div className="py-12 text-center text-muted-foreground">
-                {gamesLoading
-                  ? 'Loading games...'
-                  : !gamesData?.myGames?.length
-                    ? 'No games yet. Create your first game!'
-                    : 'Select a game from the dropdown above.'}
+                {gridsLoading
+                  ? 'Loading grids...'
+                  : !gridsData?.myGrids?.length
+                    ? 'No grids yet. Create your first grid!'
+                    : 'Select a grid from the dropdown above.'}
               </div>
             )}
           </div>
         </div>
       </div>
 
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create New Grid</DialogTitle>
+            <DialogDescription>
+              Create a new squares grid for your pool.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleCreateGrid} className="space-y-4">
+            <div className="space-y-2">
+              <label
+                htmlFor="gridName"
+                className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+              >
+                Grid Name
+              </label>
+              <input
+                id="gridName"
+                type="text"
+                value={gridName}
+                onChange={(e) => setGridName(e.target.value)}
+                required
+                className="retro-input w-full"
+                placeholder="Enter grid name"
+              />
+            </div>
+            <div className="space-y-2">
+              <label
+                htmlFor="gridDescription"
+                className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+              >
+                Description (optional)
+              </label>
+              <input
+                id="gridDescription"
+                type="text"
+                value={gridDescription}
+                onChange={(e) => setGridDescription(e.target.value)}
+                className="retro-input w-full"
+                placeholder="Enter description"
+              />
+            </div>
+            <Button type="submit" disabled={createGridLoading}>
+              {createGridLoading ? 'Creating...' : 'Create Grid'}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showAddPlayersDialog} onOpenChange={setShowAddPlayersDialog}>
+        <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Add Players</DialogTitle>
+            <DialogDescription>
+              Add players to {selectedGrid?.name}. If email or phone is provided, they will be added as a real user.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleBulkAdd} className="space-y-4">
+            {players.map((player, idx) => (
+              <div key={idx} className="relative space-y-2 rounded border border-border p-4">
+                {players.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removePlayerRow(idx)}
+                    className="absolute top-2 right-2 text-muted-foreground hover:text-foreground"
+                  >
+                    X
+                  </button>
+                )}
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    value={player.firstName}
+                    onChange={(e) => updatePlayer(idx, 'firstName', e.target.value)}
+                    className="retro-input"
+                    placeholder="First Name *"
+                    required
+                  />
+                  <input
+                    type="text"
+                    value={player.lastName}
+                    onChange={(e) => updatePlayer(idx, 'lastName', e.target.value)}
+                    className="retro-input"
+                    placeholder="Last Name *"
+                    required
+                  />
+                </div>
+                <input
+                  type="email"
+                  value={player.email}
+                  onChange={(e) => updatePlayer(idx, 'email', e.target.value)}
+                  className="retro-input w-full"
+                  placeholder="Email (optional - creates real user)"
+                />
+                <input
+                  type="tel"
+                  value={player.phoneNumber}
+                  onChange={(e) => updatePlayer(idx, 'phoneNumber', e.target.value)}
+                  className="retro-input w-full"
+                  placeholder="Phone (optional - creates real user)"
+                />
+              </div>
+            ))}
+            <p className="text-xs text-muted-foreground">
+              * Name only = placeholder player. Email or phone = real user account.
+            </p>
+            <div className="flex gap-2">
+              <Button type="button" onClick={addPlayerRow} variant="outline">
+                Add Another
+              </Button>
+              <Button type="submit" disabled={addingPlayers}>
+                {addingPlayers ? 'Adding...' : 'Add Players'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isSquareModalOpen} onOpenChange={setIsSquareModalOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Square Details</DialogTitle>
@@ -373,8 +327,8 @@ function Home() {
                   {selectedSquare.columnValue}
                   <br />
                   Owner:{' '}
-                  {selectedSquare.player?.displayName ||
-                    selectedSquare.player?.email ||
+                  {selectedSquare.gamePlayer?.displayName ||
+                    selectedSquare.gamePlayer?.email ||
                     'Unclaimed'}
                 </>
               )}

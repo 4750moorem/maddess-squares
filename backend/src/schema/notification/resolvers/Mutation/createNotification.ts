@@ -21,7 +21,7 @@ export const createNotification: NonNullable<MutationResolvers['createNotificati
       title: args.input.title,
       description: args.input.description,
       metadata: args.input.metadata ?? undefined,
-      gameId: args.input.gameId ?? undefined,
+      gridId: args.input.gridId ?? undefined,
       triggeredByUserId: args.input.triggeredByUserId ?? undefined,
       read: false,
     },

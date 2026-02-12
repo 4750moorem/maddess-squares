@@ -9,16 +9,6 @@ export const updateSquare: NonNullable<MutationResolvers['updateSquare']> =
       })
     }
 
-    const user = await context.prisma.user.findUnique({
-      where: { firebaseUserId: context.user.uid },
-    })
-
-    if (!user) {
-      throw new GraphQLError('User not found', {
-        extensions: { code: 'NOT_FOUND' },
-      })
-    }
-
     const square = await context.prisma.square.findUnique({
       where: { id: args.id },
     })
@@ -26,12 +16,6 @@ export const updateSquare: NonNullable<MutationResolvers['updateSquare']> =
     if (!square) {
       throw new GraphQLError('Square not found', {
         extensions: { code: 'NOT_FOUND' },
-      })
-    }
-
-    if (square.playerId !== user.id) {
-      throw new GraphQLError('You can only update squares you own', {
-        extensions: { code: 'FORBIDDEN' },
       })
     }
 

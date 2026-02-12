@@ -12,7 +12,7 @@ export const bulkAddPlayers: NonNullable<MutationResolvers['bulkAddPlayers']> = 
     })
   }
 
-  const { gameId, players } = args.input
+  const { gridId, players } = args.input
 
   const currentUser = await context.prisma.user.findUnique({
     where: { firebaseUserId: context.user.uid },
@@ -24,19 +24,19 @@ export const bulkAddPlayers: NonNullable<MutationResolvers['bulkAddPlayers']> = 
     })
   }
 
-  const game = await context.prisma.game.findUnique({
-    where: { id: gameId },
+  const grid = await context.prisma.grid.findUnique({
+    where: { id: gridId },
     include: { owners: true },
   })
 
-  if (!game) {
-    throw new GraphQLError('Game not found', {
+  if (!grid) {
+    throw new GraphQLError('Grid not found', {
       extensions: { code: 'NOT_FOUND' },
     })
   }
 
-  if (!game.owners.some((owner) => owner.id === currentUser.id)) {
-    throw new GraphQLError('Not authorized to add players to this game', {
+  if (!grid.owners.some((owner) => owner.id === currentUser.id)) {
+    throw new GraphQLError('Not authorized to add players to this grid', {
       extensions: { code: 'FORBIDDEN' },
     })
   }
@@ -62,12 +62,12 @@ export const bulkAddPlayers: NonNullable<MutationResolvers['bulkAddPlayers']> = 
       }
 
       const existingPlayer = await context.prisma.gamePlayer.findFirst({
-        where: { gameId, userId: user.id },
+        where: { gridId, userId: user.id },
       })
 
       if (!existingPlayer) {
         await context.prisma.gamePlayer.create({
-          data: { gameId, userId: user.id },
+          data: { gridId, userId: user.id },
         })
       }
     } else {
@@ -80,14 +80,14 @@ export const bulkAddPlayers: NonNullable<MutationResolvers['bulkAddPlayers']> = 
 
       await context.prisma.gamePlayer.create({
         data: {
-          gameId,
+          gridId,
           tempUserId: tempPlayer.id,
         },
       })
     }
   }
 
-  return context.prisma.game.findUnique({
-    where: { id: gameId },
+  return context.prisma.grid.findUnique({
+    where: { id: gridId },
   })
 }

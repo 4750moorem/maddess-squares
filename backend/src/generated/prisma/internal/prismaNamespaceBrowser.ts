@@ -53,7 +53,6 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   HealthCheck: 'HealthCheck',
   User: 'User',
-  Game: 'Game',
   TempPlayer: 'TempPlayer',
   GamePlayer: 'GamePlayer',
   Grid: 'Grid',
@@ -98,24 +97,10 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const GameScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  description: 'description',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  gridId: 'gridId'
-} as const
-
-export type GameScalarFieldEnum = (typeof GameScalarFieldEnum)[keyof typeof GameScalarFieldEnum]
-
-
 export const TempPlayerScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
   lastName: 'lastName',
-  email: 'email',
-  phoneNumber: 'phoneNumber',
   createdAt: 'createdAt'
 } as const
 
@@ -124,7 +109,7 @@ export type TempPlayerScalarFieldEnum = (typeof TempPlayerScalarFieldEnum)[keyof
 
 export const GamePlayerScalarFieldEnum = {
   id: 'id',
-  gameId: 'gameId',
+  gridId: 'gridId',
   userId: 'userId',
   tempUserId: 'tempUserId',
   joinedAt: 'joinedAt'
@@ -135,6 +120,8 @@ export type GamePlayerScalarFieldEnum = (typeof GamePlayerScalarFieldEnum)[keyof
 
 export const GridScalarFieldEnum = {
   id: 'id',
+  name: 'name',
+  description: 'description',
   creatorId: 'creatorId',
   rowOrder: 'rowOrder',
   columnOrder: 'columnOrder',
@@ -152,7 +139,6 @@ export const SquareScalarFieldEnum = {
   columnIndex: 'columnIndex',
   rowValue: 'rowValue',
   columnValue: 'columnValue',
-  playerId: 'playerId',
   gamePlayerId: 'gamePlayerId'
 } as const
 
@@ -167,7 +153,7 @@ export const NotificationScalarFieldEnum = {
   title: 'title',
   description: 'description',
   metadata: 'metadata',
-  gameId: 'gameId',
+  gridId: 'gridId',
   triggeredByUserId: 'triggeredByUserId',
   createdAt: 'createdAt',
   read: 'read'

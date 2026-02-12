@@ -21,24 +21,12 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
-export type AddUserToGameInput = {
-  email?: InputMaybe<Scalars['String']['input']>;
-  gameId: Scalars['ID']['input'];
-  phoneNumber?: InputMaybe<Scalars['String']['input']>;
-  role: GameUserRole;
-};
-
-export type AssignGridToGameInput = {
-  gameId: Scalars['ID']['input'];
-  gridId: Scalars['ID']['input'];
-};
-
 export type BulkAddPlayersInput = {
-  gameId: Scalars['ID']['input'];
+  gridId: Scalars['ID']['input'];
   players: Array<PlayerInput>;
 };
 
-export type CreateGameInput = {
+export type CreateGridInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
 };
@@ -46,7 +34,7 @@ export type CreateGameInput = {
 export type CreateNotificationInput = {
   actionType: NotificationAction;
   description: Scalars['String']['input'];
-  gameId?: InputMaybe<Scalars['String']['input']>;
+  gridId?: InputMaybe<Scalars['String']['input']>;
   iconType: Scalars['String']['input'];
   metadata?: InputMaybe<Scalars['JSON']['input']>;
   title: Scalars['String']['input'];
@@ -61,75 +49,43 @@ export type CreateUserInput = {
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type Game = {
-  __typename?: 'Game';
-  createdAt: Scalars['DateTime']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  grid?: Maybe<Grid>;
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  owners: Array<User>;
-  players: Array<GamePlayer>;
-  updatedAt: Scalars['DateTime']['output'];
-};
-
 export type GamePlayer = {
   __typename?: 'GamePlayer';
   displayName?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   fullName?: Maybe<Scalars['String']['output']>;
-  game: Game;
-  gameId: Scalars['String']['output'];
+  gridId: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   joinedAt: Scalars['DateTime']['output'];
   phoneNumber?: Maybe<Scalars['String']['output']>;
-  tempPlayer?: Maybe<TempPlayer>;
-  tempUserId?: Maybe<Scalars['String']['output']>;
-  user?: Maybe<User>;
-  userId?: Maybe<Scalars['String']['output']>;
 };
 
-export const GameUserRole = {
-  Owner: 'OWNER',
-  Player: 'PLAYER'
-} as const;
-
-export type GameUserRole = typeof GameUserRole[keyof typeof GameUserRole];
 export type Grid = {
   __typename?: 'Grid';
   columnOrder: Array<Scalars['Int']['output']>;
   createdAt: Scalars['DateTime']['output'];
   creator: User;
+  description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  owners: Array<User>;
+  players: Array<GamePlayer>;
   rowOrder: Array<Scalars['Int']['output']>;
   squares: Array<Square>;
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addUserToGame?: Maybe<Game>;
-  assignGridToGame?: Maybe<Game>;
-  bulkAddPlayers?: Maybe<Game>;
-  createGame: Game;
+  bulkAddPlayers?: Maybe<Grid>;
   createGrid: Grid;
   createNotification: Notification;
   createUser: User;
-  deleteGame: Scalars['Boolean']['output'];
+  deleteGrid: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
-  removeUserFromGame?: Maybe<Game>;
-  updateGame?: Maybe<Game>;
+  updateGrid?: Maybe<Grid>;
   updateSquare?: Maybe<Square>;
   updateUser?: Maybe<User>;
-};
-
-
-export type MutationAddUserToGameArgs = {
-  input: AddUserToGameInput;
-};
-
-
-export type MutationAssignGridToGameArgs = {
-  input: AssignGridToGameInput;
 };
 
 
@@ -138,8 +94,8 @@ export type MutationBulkAddPlayersArgs = {
 };
 
 
-export type MutationCreateGameArgs = {
-  input: CreateGameInput;
+export type MutationCreateGridArgs = {
+  input: CreateGridInput;
 };
 
 
@@ -153,7 +109,7 @@ export type MutationCreateUserArgs = {
 };
 
 
-export type MutationDeleteGameArgs = {
+export type MutationDeleteGridArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -163,14 +119,9 @@ export type MutationDeleteUserArgs = {
 };
 
 
-export type MutationRemoveUserFromGameArgs = {
-  input: RemoveUserFromGameInput;
-};
-
-
-export type MutationUpdateGameArgs = {
+export type MutationUpdateGridArgs = {
   id: Scalars['ID']['input'];
-  input: UpdateGameInput;
+  input: UpdateGridInput;
 };
 
 
@@ -190,7 +141,7 @@ export type Notification = {
   actionType: NotificationAction;
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
-  gameId?: Maybe<Scalars['String']['output']>;
+  gridId?: Maybe<Scalars['String']['output']>;
   iconType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   metadata?: Maybe<Scalars['JSON']['output']>;
@@ -221,23 +172,16 @@ export type PlayerInput = {
 export type Query = {
   __typename?: 'Query';
   dbStatus: Scalars['String']['output'];
-  game?: Maybe<Game>;
-  games: Array<Game>;
   grid?: Maybe<Grid>;
   hello: Scalars['String']['output'];
   me?: Maybe<User>;
-  myGames: Array<Game>;
+  myGrids: Array<Grid>;
   notifications: Array<Notification>;
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
   userByFirebaseId?: Maybe<User>;
   userByPhoneNumber?: Maybe<User>;
   users: Array<User>;
-};
-
-
-export type QueryGameArgs = {
-  id: Scalars['ID']['input'];
 };
 
 
@@ -270,19 +214,13 @@ export type QueryUserByPhoneNumberArgs = {
   phoneNumber: Scalars['String']['input'];
 };
 
-export type RemoveUserFromGameInput = {
-  gameId: Scalars['ID']['input'];
-  role: GameUserRole;
-  userId: Scalars['ID']['input'];
-};
-
 export type Square = {
   __typename?: 'Square';
   columnIndex: Scalars['Int']['output'];
   columnValue: Scalars['Int']['output'];
+  gamePlayer?: Maybe<GamePlayer>;
   gridId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
-  player?: Maybe<User>;
   rowIndex: Scalars['Int']['output'];
   rowValue: Scalars['Int']['output'];
 };
@@ -297,16 +235,7 @@ export type SubscriptionNotificationAddedArgs = {
   userId: Scalars['String']['input'];
 };
 
-export type TempPlayer = {
-  __typename?: 'TempPlayer';
-  email?: Maybe<Scalars['String']['output']>;
-  firstName: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  lastName: Scalars['String']['output'];
-  phoneNumber?: Maybe<Scalars['String']['output']>;
-};
-
-export type UpdateGameInput = {
+export type UpdateGridInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
 };
@@ -328,7 +257,7 @@ export type User = {
   email?: Maybe<Scalars['String']['output']>;
   firebaseUserId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  ownedGames: Array<Game>;
+  ownedGrids: Array<Grid>;
   phoneNumber?: Maybe<Scalars['String']['output']>;
   playerGames: Array<GamePlayer>;
   updatedAt: Scalars['DateTime']['output'];
@@ -339,21 +268,21 @@ export type NotificationsQueryVariables = Exact<{
 }>;
 
 
-export type NotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gameId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean }> };
+export type NotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gridId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean }> };
 
 export type CreateNotificationMutationVariables = Exact<{
   input: CreateNotificationInput;
 }>;
 
 
-export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification: { __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gameId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean } };
+export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification: { __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gridId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean } };
 
 export type NotificationAddedSubscriptionVariables = Exact<{
   userId: Scalars['String']['input'];
 }>;
 
 
-export type NotificationAddedSubscription = { __typename?: 'Subscription', notificationAdded: { __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gameId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean } };
+export type NotificationAddedSubscription = { __typename?: 'Subscription', notificationAdded: { __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gridId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean } };
 
 export type AppStatusQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -365,17 +294,17 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, firebaseUserId?: string | null, email?: string | null, displayName?: string | null } | null };
 
-export type MyGamesQueryVariables = Exact<{ [key: string]: never; }>;
+export type MyGridsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyGamesQuery = { __typename?: 'Query', myGames: Array<{ __typename?: 'Game', id: string, name: string, description?: string | null, createdAt: any, owners: Array<{ __typename?: 'User', id: string, email?: string | null, displayName?: string | null }>, players: Array<{ __typename?: 'GamePlayer', id: string, displayName?: string | null, fullName?: string | null, email?: string | null, phoneNumber?: string | null, joinedAt: any, user?: { __typename?: 'User', id: string, email?: string | null, displayName?: string | null } | null }>, grid?: { __typename?: 'Grid', id: string } | null }> };
+export type MyGridsQuery = { __typename?: 'Query', myGrids: Array<{ __typename?: 'Grid', id: string, name: string, description?: string | null, createdAt: any, rowOrder: Array<number>, columnOrder: Array<number>, owners: Array<{ __typename?: 'User', id: string, email?: string | null, displayName?: string | null }>, players: Array<{ __typename?: 'GamePlayer', id: string, displayName?: string | null, fullName?: string | null, email?: string | null, phoneNumber?: string | null, joinedAt: any }>, squares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, gamePlayer?: { __typename?: 'GamePlayer', id: string, displayName?: string | null, email?: string | null } | null }> }> };
 
-export type GameGridQueryVariables = Exact<{
+export type GridDetailQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GameGridQuery = { __typename?: 'Query', game?: { __typename?: 'Game', id: string, grid?: { __typename?: 'Grid', id: string, rowOrder: Array<number>, columnOrder: Array<number>, squares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, player?: { __typename?: 'User', id: string, displayName?: string | null, email?: string | null } | null }> } | null } | null };
+export type GridDetailQuery = { __typename?: 'Query', grid?: { __typename?: 'Grid', id: string, name: string, rowOrder: Array<number>, columnOrder: Array<number>, squares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, gamePlayer?: { __typename?: 'GamePlayer', id: string, displayName?: string | null, email?: string | null } | null }> } | null };
 
 export type CreateUserMutationVariables = Exact<{
   input: CreateUserInput;
@@ -384,24 +313,12 @@ export type CreateUserMutationVariables = Exact<{
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, firebaseUserId?: string | null, email?: string | null, displayName?: string | null } };
 
-export type CreateGameMutationVariables = Exact<{
-  input: CreateGameInput;
+export type CreateGridMutationVariables = Exact<{
+  input: CreateGridInput;
 }>;
 
 
-export type CreateGameMutation = { __typename?: 'Mutation', createGame: { __typename?: 'Game', id: string, name: string, description?: string | null, createdAt: any, owners: Array<{ __typename?: 'User', id: string, email?: string | null }> } };
-
-export type CreateGridMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type CreateGridMutation = { __typename?: 'Mutation', createGrid: { __typename?: 'Grid', id: string, rowOrder: Array<number>, columnOrder: Array<number>, squares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, player?: { __typename?: 'User', id: string, displayName?: string | null } | null }> } };
-
-export type AssignGridToGameMutationVariables = Exact<{
-  input: AssignGridToGameInput;
-}>;
-
-
-export type AssignGridToGameMutation = { __typename?: 'Mutation', assignGridToGame?: { __typename?: 'Game', id: string, grid?: { __typename?: 'Grid', id: string } | null } | null };
+export type CreateGridMutation = { __typename?: 'Mutation', createGrid: { __typename?: 'Grid', id: string, name: string, description?: string | null, createdAt: any, rowOrder: Array<number>, columnOrder: Array<number>, owners: Array<{ __typename?: 'User', id: string, email?: string | null }>, squares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number }> } };
 
 export type UpdateSquareMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -409,14 +326,14 @@ export type UpdateSquareMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSquareMutation = { __typename?: 'Mutation', updateSquare?: { __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, player?: { __typename?: 'User', id: string, displayName?: string | null, email?: string | null } | null } | null };
+export type UpdateSquareMutation = { __typename?: 'Mutation', updateSquare?: { __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, gamePlayer?: { __typename?: 'GamePlayer', id: string, displayName?: string | null, email?: string | null } | null } | null };
 
 export type BulkAddPlayersMutationVariables = Exact<{
   input: BulkAddPlayersInput;
 }>;
 
 
-export type BulkAddPlayersMutation = { __typename?: 'Mutation', bulkAddPlayers?: { __typename?: 'Game', id: string, name: string, players: Array<{ __typename?: 'GamePlayer', id: string, email?: string | null, phoneNumber?: string | null, fullName?: string | null, displayName?: string | null, joinedAt: any }> } | null };
+export type BulkAddPlayersMutation = { __typename?: 'Mutation', bulkAddPlayers?: { __typename?: 'Grid', id: string, name: string, players: Array<{ __typename?: 'GamePlayer', id: string, email?: string | null, phoneNumber?: string | null, fullName?: string | null, displayName?: string | null, joinedAt: any }> } | null };
 
 
 export const NotificationsDocument = gql`
@@ -429,7 +346,7 @@ export const NotificationsDocument = gql`
     title
     description
     metadata
-    gameId
+    gridId
     triggeredByUserId
     createdAt
     read
@@ -481,7 +398,7 @@ export const CreateNotificationDocument = gql`
     title
     description
     metadata
-    gameId
+    gridId
     triggeredByUserId
     createdAt
     read
@@ -521,7 +438,7 @@ export const NotificationAddedDocument = gql`
     title
     description
     metadata
-    gameId
+    gridId
     triggeredByUserId
     createdAt
     read
@@ -638,9 +555,9 @@ export function useMeSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | Ap
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
-export const MyGamesDocument = gql`
-    query MyGames {
-  myGames {
+export const MyGridsDocument = gql`
+    query MyGrids {
+  myGrids {
     id
     name
     description
@@ -657,71 +574,75 @@ export const MyGamesDocument = gql`
       email
       phoneNumber
       joinedAt
-      user {
-        id
-        email
-        displayName
-      }
     }
-    grid {
+    rowOrder
+    columnOrder
+    squares {
       id
+      rowIndex
+      columnIndex
+      rowValue
+      columnValue
+      gamePlayer {
+        id
+        displayName
+        email
+      }
     }
   }
 }
     `;
 
 /**
- * __useMyGamesQuery__
+ * __useMyGridsQuery__
  *
- * To run a query within a React component, call `useMyGamesQuery` and pass it any options that fit your needs.
- * When your component renders, `useMyGamesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMyGridsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyGridsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMyGamesQuery({
+ * const { data, loading, error } = useMyGridsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useMyGamesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyGamesQuery, MyGamesQueryVariables>) {
+export function useMyGridsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyGridsQuery, MyGridsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<MyGamesQuery, MyGamesQueryVariables>(MyGamesDocument, options);
+        return ApolloReactHooks.useQuery<MyGridsQuery, MyGridsQueryVariables>(MyGridsDocument, options);
       }
-export function useMyGamesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyGamesQuery, MyGamesQueryVariables>) {
+export function useMyGridsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyGridsQuery, MyGridsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<MyGamesQuery, MyGamesQueryVariables>(MyGamesDocument, options);
+          return ApolloReactHooks.useLazyQuery<MyGridsQuery, MyGridsQueryVariables>(MyGridsDocument, options);
         }
 // @ts-ignore
-export function useMyGamesSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<MyGamesQuery, MyGamesQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<MyGamesQuery, MyGamesQueryVariables>;
-export function useMyGamesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MyGamesQuery, MyGamesQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<MyGamesQuery | undefined, MyGamesQueryVariables>;
-export function useMyGamesSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MyGamesQuery, MyGamesQueryVariables>) {
+export function useMyGridsSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<MyGridsQuery, MyGridsQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<MyGridsQuery, MyGridsQueryVariables>;
+export function useMyGridsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MyGridsQuery, MyGridsQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<MyGridsQuery | undefined, MyGridsQueryVariables>;
+export function useMyGridsSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<MyGridsQuery, MyGridsQueryVariables>) {
           const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<MyGamesQuery, MyGamesQueryVariables>(MyGamesDocument, options);
+          return ApolloReactHooks.useSuspenseQuery<MyGridsQuery, MyGridsQueryVariables>(MyGridsDocument, options);
         }
-export type MyGamesQueryHookResult = ReturnType<typeof useMyGamesQuery>;
-export type MyGamesLazyQueryHookResult = ReturnType<typeof useMyGamesLazyQuery>;
-export type MyGamesSuspenseQueryHookResult = ReturnType<typeof useMyGamesSuspenseQuery>;
-export const GameGridDocument = gql`
-    query GameGrid($id: ID!) {
-  game(id: $id) {
+export type MyGridsQueryHookResult = ReturnType<typeof useMyGridsQuery>;
+export type MyGridsLazyQueryHookResult = ReturnType<typeof useMyGridsLazyQuery>;
+export type MyGridsSuspenseQueryHookResult = ReturnType<typeof useMyGridsSuspenseQuery>;
+export const GridDetailDocument = gql`
+    query GridDetail($id: ID!) {
+  grid(id: $id) {
     id
-    grid {
+    name
+    rowOrder
+    columnOrder
+    squares {
       id
-      rowOrder
-      columnOrder
-      squares {
+      rowIndex
+      columnIndex
+      rowValue
+      columnValue
+      gamePlayer {
         id
-        rowIndex
-        columnIndex
-        rowValue
-        columnValue
-        player {
-          id
-          displayName
-          email
-        }
+        displayName
+        email
       }
     }
   }
@@ -729,39 +650,39 @@ export const GameGridDocument = gql`
     `;
 
 /**
- * __useGameGridQuery__
+ * __useGridDetailQuery__
  *
- * To run a query within a React component, call `useGameGridQuery` and pass it any options that fit your needs.
- * When your component renders, `useGameGridQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGridDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGridDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGameGridQuery({
+ * const { data, loading, error } = useGridDetailQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGameGridQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GameGridQuery, GameGridQueryVariables> & ({ variables: GameGridQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGridDetailQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GridDetailQuery, GridDetailQueryVariables> & ({ variables: GridDetailQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GameGridQuery, GameGridQueryVariables>(GameGridDocument, options);
+        return ApolloReactHooks.useQuery<GridDetailQuery, GridDetailQueryVariables>(GridDetailDocument, options);
       }
-export function useGameGridLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GameGridQuery, GameGridQueryVariables>) {
+export function useGridDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GridDetailQuery, GridDetailQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GameGridQuery, GameGridQueryVariables>(GameGridDocument, options);
+          return ApolloReactHooks.useLazyQuery<GridDetailQuery, GridDetailQueryVariables>(GridDetailDocument, options);
         }
 // @ts-ignore
-export function useGameGridSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<GameGridQuery, GameGridQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<GameGridQuery, GameGridQueryVariables>;
-export function useGameGridSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GameGridQuery, GameGridQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<GameGridQuery | undefined, GameGridQueryVariables>;
-export function useGameGridSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GameGridQuery, GameGridQueryVariables>) {
+export function useGridDetailSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<GridDetailQuery, GridDetailQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<GridDetailQuery, GridDetailQueryVariables>;
+export function useGridDetailSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GridDetailQuery, GridDetailQueryVariables>): ApolloReactHooks.UseSuspenseQueryResult<GridDetailQuery | undefined, GridDetailQueryVariables>;
+export function useGridDetailSuspenseQuery(baseOptions?: ApolloReactHooks.SkipToken | ApolloReactHooks.SuspenseQueryHookOptions<GridDetailQuery, GridDetailQueryVariables>) {
           const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GameGridQuery, GameGridQueryVariables>(GameGridDocument, options);
+          return ApolloReactHooks.useSuspenseQuery<GridDetailQuery, GridDetailQueryVariables>(GridDetailDocument, options);
         }
-export type GameGridQueryHookResult = ReturnType<typeof useGameGridQuery>;
-export type GameGridLazyQueryHookResult = ReturnType<typeof useGameGridLazyQuery>;
-export type GameGridSuspenseQueryHookResult = ReturnType<typeof useGameGridSuspenseQuery>;
+export type GridDetailQueryHookResult = ReturnType<typeof useGridDetailQuery>;
+export type GridDetailLazyQueryHookResult = ReturnType<typeof useGridDetailLazyQuery>;
+export type GridDetailSuspenseQueryHookResult = ReturnType<typeof useGridDetailSuspenseQuery>;
 export const CreateUserDocument = gql`
     mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {
@@ -795,9 +716,9 @@ export function useCreateUserMutation(baseOptions?: ApolloReactHooks.MutationHoo
         return ApolloReactHooks.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, options);
       }
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
-export const CreateGameDocument = gql`
-    mutation CreateGame($input: CreateGameInput!) {
-  createGame(input: $input) {
+export const CreateGridDocument = gql`
+    mutation CreateGrid($input: CreateGridInput!) {
+  createGrid(input: $input) {
     id
     name
     description
@@ -806,46 +727,14 @@ export const CreateGameDocument = gql`
       id
       email
     }
-  }
-}
-    `;
-
-/**
- * __useCreateGameMutation__
- *
- * To run a mutation, you first call `useCreateGameMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateGameMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createGameMutation, { data, loading, error }] = useCreateGameMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateGameMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateGameMutation, CreateGameMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useMutation<CreateGameMutation, CreateGameMutationVariables>(CreateGameDocument, options);
-      }
-export type CreateGameMutationHookResult = ReturnType<typeof useCreateGameMutation>;
-export const CreateGridDocument = gql`
-    mutation CreateGrid {
-  createGrid {
-    id
     rowOrder
     columnOrder
     squares {
       id
       rowIndex
       columnIndex
-      player {
-        id
-        displayName
-      }
+      rowValue
+      columnValue
     }
   }
 }
@@ -864,6 +753,7 @@ export const CreateGridDocument = gql`
  * @example
  * const [createGridMutation, { data, loading, error }] = useCreateGridMutation({
  *   variables: {
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -872,39 +762,6 @@ export function useCreateGridMutation(baseOptions?: ApolloReactHooks.MutationHoo
         return ApolloReactHooks.useMutation<CreateGridMutation, CreateGridMutationVariables>(CreateGridDocument, options);
       }
 export type CreateGridMutationHookResult = ReturnType<typeof useCreateGridMutation>;
-export const AssignGridToGameDocument = gql`
-    mutation AssignGridToGame($input: AssignGridToGameInput!) {
-  assignGridToGame(input: $input) {
-    id
-    grid {
-      id
-    }
-  }
-}
-    `;
-
-/**
- * __useAssignGridToGameMutation__
- *
- * To run a mutation, you first call `useAssignGridToGameMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAssignGridToGameMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [assignGridToGameMutation, { data, loading, error }] = useAssignGridToGameMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useAssignGridToGameMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AssignGridToGameMutation, AssignGridToGameMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useMutation<AssignGridToGameMutation, AssignGridToGameMutationVariables>(AssignGridToGameDocument, options);
-      }
-export type AssignGridToGameMutationHookResult = ReturnType<typeof useAssignGridToGameMutation>;
 export const UpdateSquareDocument = gql`
     mutation UpdateSquare($id: ID!, $input: UpdateSquareInput!) {
   updateSquare(id: $id, input: $input) {
@@ -913,7 +770,7 @@ export const UpdateSquareDocument = gql`
     columnIndex
     rowValue
     columnValue
-    player {
+    gamePlayer {
       id
       displayName
       email

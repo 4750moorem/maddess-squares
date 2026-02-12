@@ -1,10 +1,15 @@
 type Grid {
   id: ID!
+  name: String!
+  description: String
   rowOrder: [Int!]!
   columnOrder: [Int!]!
   squares: [Square!]!
+  owners: [User!]!
+  players: [GamePlayer!]!
   creator: User!
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Square {
@@ -14,24 +19,54 @@ type Square {
   columnIndex: Int!
   rowValue: Int!
   columnValue: Int!
-  player: User
+  gamePlayer: GamePlayer
+}
+
+type GamePlayer {
+  id: ID!
+  gridId: String!
+  joinedAt: DateTime!
+  email: String
+  phoneNumber: String
+  fullName: String
+  displayName: String
+}
+
+input CreateGridInput {
+  name: String!
+  description: String
+}
+
+input UpdateGridInput {
+  name: String
+  description: String
+}
+
+input PlayerInput {
+  firstName: String!
+  lastName: String!
+  email: String
+  phoneNumber: String
+}
+
+input BulkAddPlayersInput {
+  gridId: ID!
+  players: [PlayerInput!]!
 }
 
 extend type Query {
   grid(id: ID!): Grid
+  myGrids: [Grid!]!
+}
+
+extend type Mutation {
+  createGrid(input: CreateGridInput!): Grid!
+  updateGrid(id: ID!, input: UpdateGridInput!): Grid
+  deleteGrid(id: ID!): Boolean!
+  updateSquare(id: ID!, input: UpdateSquareInput!): Square
+  bulkAddPlayers(input: BulkAddPlayersInput!): Grid
 }
 
 input UpdateSquareInput {
   value: String
-}
-
-input AssignGridToGameInput {
-  gridId: ID!
-  gameId: ID!
-}
-
-extend type Mutation {
-  createGrid: Grid!
-  updateSquare(id: ID!, input: UpdateSquareInput!): Square
-  assignGridToGame(input: AssignGridToGameInput!): Game
 }

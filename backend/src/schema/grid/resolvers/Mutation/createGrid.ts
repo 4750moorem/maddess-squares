@@ -14,7 +14,7 @@ function shuffleArray(array: number[]): number[] {
 
 export const createGrid: NonNullable<MutationResolvers['createGrid']> = async (
   _parent,
-  _args,
+  args,
   context,
 ) => {
   if (!context.user) {
@@ -38,7 +38,12 @@ export const createGrid: NonNullable<MutationResolvers['createGrid']> = async (
 
   return context.prisma.grid.create({
     data: {
+      name: args.input.name,
+      description: args.input.description,
       creatorId: user.id,
+      owners: {
+        connect: { id: user.id },
+      },
       rowOrder,
       columnOrder,
       squares: {

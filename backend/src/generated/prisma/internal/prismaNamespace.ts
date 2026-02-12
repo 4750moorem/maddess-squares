@@ -386,7 +386,6 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   HealthCheck: 'HealthCheck',
   User: 'User',
-  Game: 'Game',
   TempPlayer: 'TempPlayer',
   GamePlayer: 'GamePlayer',
   Grid: 'Grid',
@@ -407,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "healthCheck" | "user" | "game" | "tempPlayer" | "gamePlayer" | "grid" | "square" | "notification"
+    modelProps: "healthCheck" | "user" | "tempPlayer" | "gamePlayer" | "grid" | "square" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -556,80 +555,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
-        }
-      }
-    }
-    Game: {
-      payload: Prisma.$GamePayload<ExtArgs>
-      fields: Prisma.GameFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.GameFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.GameFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
-        }
-        findFirst: {
-          args: Prisma.GameFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.GameFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
-        }
-        findMany: {
-          args: Prisma.GameFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>[]
-        }
-        create: {
-          args: Prisma.GameCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
-        }
-        createMany: {
-          args: Prisma.GameCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.GameCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>[]
-        }
-        delete: {
-          args: Prisma.GameDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
-        }
-        update: {
-          args: Prisma.GameUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
-        }
-        deleteMany: {
-          args: Prisma.GameDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.GameUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.GameUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>[]
-        }
-        upsert: {
-          args: Prisma.GameUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GamePayload>
-        }
-        aggregate: {
-          args: Prisma.GameAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateGame>
-        }
-        groupBy: {
-          args: Prisma.GameGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.GameGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.GameCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.GameCountAggregateOutputType> | number
         }
       }
     }
@@ -1063,24 +988,10 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const GameScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  description: 'description',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  gridId: 'gridId'
-} as const
-
-export type GameScalarFieldEnum = (typeof GameScalarFieldEnum)[keyof typeof GameScalarFieldEnum]
-
-
 export const TempPlayerScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
   lastName: 'lastName',
-  email: 'email',
-  phoneNumber: 'phoneNumber',
   createdAt: 'createdAt'
 } as const
 
@@ -1089,7 +1000,7 @@ export type TempPlayerScalarFieldEnum = (typeof TempPlayerScalarFieldEnum)[keyof
 
 export const GamePlayerScalarFieldEnum = {
   id: 'id',
-  gameId: 'gameId',
+  gridId: 'gridId',
   userId: 'userId',
   tempUserId: 'tempUserId',
   joinedAt: 'joinedAt'
@@ -1100,6 +1011,8 @@ export type GamePlayerScalarFieldEnum = (typeof GamePlayerScalarFieldEnum)[keyof
 
 export const GridScalarFieldEnum = {
   id: 'id',
+  name: 'name',
+  description: 'description',
   creatorId: 'creatorId',
   rowOrder: 'rowOrder',
   columnOrder: 'columnOrder',
@@ -1117,7 +1030,6 @@ export const SquareScalarFieldEnum = {
   columnIndex: 'columnIndex',
   rowValue: 'rowValue',
   columnValue: 'columnValue',
-  playerId: 'playerId',
   gamePlayerId: 'gamePlayerId'
 } as const
 
@@ -1132,7 +1044,7 @@ export const NotificationScalarFieldEnum = {
   title: 'title',
   description: 'description',
   metadata: 'metadata',
-  gameId: 'gameId',
+  gridId: 'gridId',
   triggeredByUserId: 'triggeredByUserId',
   createdAt: 'createdAt',
   read: 'read'
@@ -1375,7 +1287,6 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   healthCheck?: Prisma.HealthCheckOmit
   user?: Prisma.UserOmit
-  game?: Prisma.GameOmit
   tempPlayer?: Prisma.TempPlayerOmit
   gamePlayer?: Prisma.GamePlayerOmit
   grid?: Prisma.GridOmit
