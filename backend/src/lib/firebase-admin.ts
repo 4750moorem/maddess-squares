@@ -8,7 +8,17 @@ function getFirebaseAdmin(): App {
 
   const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT
   if (serviceAccountJson) {
-    const serviceAccount = JSON.parse(serviceAccountJson) as {
+    const parsed: unknown = JSON.parse(serviceAccountJson)
+    if (
+      typeof parsed !== 'object' ||
+      parsed === null ||
+      !('projectId' in parsed) ||
+      !('clientEmail' in parsed) ||
+      !('privateKey' in parsed)
+    ) {
+      throw new Error('Invalid Firebase service account config')
+    }
+    const serviceAccount = parsed as {
       projectId: string
       clientEmail: string
       privateKey: string

@@ -51,8 +51,8 @@ const sseLink = new ApolloLink((operation) => {
         extensions: operation.extensions,
       },
       {
-        next: (data) => observer.next(data as FetchResult),
-        error: (err) => observer.error(err instanceof Error ? err : new Error(String(err))),
+        next: (data: FetchResult) => observer.next(data),
+        error: (err: unknown) => observer.error(err instanceof Error ? err : new Error(String(err))),
         complete: () => observer.complete(),
       },
     )

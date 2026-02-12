@@ -9,6 +9,9 @@ const config: CodegenConfig = {
       resolverGeneration: 'recommended',
       resolverTypesPath: './types.generated.ts',
       typeDefsFilePath: './typeDefs.generated.ts',
+      scalarsOverrides: {
+        DateTime: { type: 'Date | string' },
+      },
       typesPluginsConfig: {
         contextType: './context#GraphQLContext',
         useTypeImports: true,

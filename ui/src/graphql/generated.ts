@@ -17,8 +17,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  DateTime: { input: any; output: any; }
-  JSON: { input: any; output: any; }
+  DateTime: { input: string; output: string; }
+  JSON: { input: Record<string, unknown>; output: Record<string, unknown>; }
 };
 
 export type BulkAddPlayersInput = {
@@ -269,21 +269,21 @@ export type NotificationsQueryVariables = Exact<{
 }>;
 
 
-export type NotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gridId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean }> };
+export type NotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: Record<string, unknown> | null, gridId?: string | null, triggeredByUserId?: string | null, createdAt: string, read: boolean }> };
 
 export type CreateNotificationMutationVariables = Exact<{
   input: CreateNotificationInput;
 }>;
 
 
-export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification: { __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gridId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean } };
+export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification: { __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: Record<string, unknown> | null, gridId?: string | null, triggeredByUserId?: string | null, createdAt: string, read: boolean } };
 
 export type NotificationAddedSubscriptionVariables = Exact<{
   userId: Scalars['String']['input'];
 }>;
 
 
-export type NotificationAddedSubscription = { __typename?: 'Subscription', notificationAdded: { __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: any | null, gridId?: string | null, triggeredByUserId?: string | null, createdAt: any, read: boolean } };
+export type NotificationAddedSubscription = { __typename?: 'Subscription', notificationAdded: { __typename?: 'Notification', id: string, userId: string, actionType: NotificationAction, iconType: string, title: string, description: string, metadata?: Record<string, unknown> | null, gridId?: string | null, triggeredByUserId?: string | null, createdAt: string, read: boolean } };
 
 export type AppStatusQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -298,7 +298,7 @@ export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: st
 export type MyGridsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyGridsQuery = { __typename?: 'Query', myGrids: Array<{ __typename?: 'Grid', id: string, name: string, description?: string | null, createdAt: any, rowOrder: Array<number>, columnOrder: Array<number>, owners: Array<{ __typename?: 'User', id: string, email?: string | null, displayName?: string | null }>, players: Array<{ __typename?: 'GamePlayer', id: string, displayName?: string | null, fullName?: string | null, email?: string | null, phoneNumber?: string | null, joinedAt: any }>, squares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, gamePlayer?: { __typename?: 'GamePlayer', id: string, displayName?: string | null, email?: string | null } | null }> }> };
+export type MyGridsQuery = { __typename?: 'Query', myGrids: Array<{ __typename?: 'Grid', id: string, name: string, description?: string | null, createdAt: string, rowOrder: Array<number>, columnOrder: Array<number>, owners: Array<{ __typename?: 'User', id: string, email?: string | null, displayName?: string | null }>, players: Array<{ __typename?: 'GamePlayer', id: string, displayName?: string | null, fullName?: string | null, email?: string | null, phoneNumber?: string | null, joinedAt: string }>, squares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, gamePlayer?: { __typename?: 'GamePlayer', id: string, displayName?: string | null, email?: string | null } | null }> }> };
 
 export type GridDetailQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -319,7 +319,7 @@ export type CreateGridMutationVariables = Exact<{
 }>;
 
 
-export type CreateGridMutation = { __typename?: 'Mutation', createGrid: { __typename?: 'Grid', id: string, name: string, description?: string | null, createdAt: any, rowOrder: Array<number>, columnOrder: Array<number>, owners: Array<{ __typename?: 'User', id: string, email?: string | null }>, squares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number }> } };
+export type CreateGridMutation = { __typename?: 'Mutation', createGrid: { __typename?: 'Grid', id: string, name: string, description?: string | null, createdAt: string, rowOrder: Array<number>, columnOrder: Array<number>, owners: Array<{ __typename?: 'User', id: string, email?: string | null }>, squares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number }> } };
 
 export type UpdateSquareMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -334,7 +334,7 @@ export type BulkAddPlayersMutationVariables = Exact<{
 }>;
 
 
-export type BulkAddPlayersMutation = { __typename?: 'Mutation', bulkAddPlayers?: { __typename?: 'Grid', id: string, name: string, players: Array<{ __typename?: 'GamePlayer', id: string, email?: string | null, phoneNumber?: string | null, fullName?: string | null, displayName?: string | null, joinedAt: any }> } | null };
+export type BulkAddPlayersMutation = { __typename?: 'Mutation', bulkAddPlayers?: { __typename?: 'Grid', id: string, name: string, players: Array<{ __typename?: 'GamePlayer', id: string, email?: string | null, phoneNumber?: string | null, fullName?: string | null, displayName?: string | null, joinedAt: string }> } | null };
 
 
 export const NotificationsDocument = gql`

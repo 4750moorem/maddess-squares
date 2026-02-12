@@ -154,7 +154,7 @@ function Home() {
     if (!currentUserId) return 'Unknown'
 
     const isOwner = grid.owners.some(
-      (owner: { id: string }) => owner.id === currentUserId,
+      (owner) => owner.id === currentUserId,
     )
     if (isOwner) return 'Owner'
 

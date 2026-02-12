@@ -5,9 +5,12 @@ function shuffleArray(array: number[]): number[] {
   const shuffled = [...array]
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-    const temp = shuffled[i] as number
-    shuffled[i] = shuffled[j] as number
-    shuffled[j] = temp
+    const a = shuffled[i]
+    const b = shuffled[j]
+    if (a !== undefined && b !== undefined) {
+      shuffled[i] = b
+      shuffled[j] = a
+    }
   }
   return shuffled
 }
@@ -51,8 +54,8 @@ export const createGrid: NonNullable<MutationResolvers['createGrid']> = async (
           Array.from({ length: 10 }, (_, columnIndex) => ({
             rowIndex,
             columnIndex,
-            rowValue: rowOrder[rowIndex] as number,
-            columnValue: columnOrder[columnIndex] as number,
+            rowValue: rowOrder[rowIndex] ?? 0,
+            columnValue: columnOrder[columnIndex] ?? 0,
           })),
         ).flat(),
       },
