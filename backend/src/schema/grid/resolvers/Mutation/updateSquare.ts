@@ -19,7 +19,7 @@ export const updateSquare: NonNullable<MutationResolvers['updateSquare']> =
       })
     }
 
-    const data: Record<string, unknown> = {}
+    const data: { gamePlayerId?: string | null } = {}
 
     if (args.input.gamePlayerId !== undefined) {
       if (args.input.gamePlayerId === null) {

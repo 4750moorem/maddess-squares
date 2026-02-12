@@ -19,6 +19,10 @@ const config: CodegenConfig = {
         withMutationFn: false,
         withResultType: false,
         withMutationOptionsType: false,
+        scalars: {
+          DateTime: 'string',
+          JSON: 'Record<string, unknown>',
+        },
       },
     },
   },

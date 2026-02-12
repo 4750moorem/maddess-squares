@@ -28,7 +28,13 @@ export function subscribe<T>(event: string): AsyncIterable<T> {
       return {
         next(): Promise<IteratorResult<T>> {
           if (queue.length > 0) {
-            return Promise.resolve({ value: queue.shift()!, done: false })
+            const item = queue.shift()
+            if (item !== undefined) {
+              return Promise.resolve({ value: item, done: false })
+            }
+            return new Promise<IteratorResult<T>>((r) => {
+              resolve = r
+            })
           }
           return new Promise<IteratorResult<T>>((r) => {
             resolve = r
@@ -36,7 +42,7 @@ export function subscribe<T>(event: string): AsyncIterable<T> {
         },
         return(): Promise<IteratorResult<T>> {
           emitter.off(event, listener)
-          return Promise.resolve({ value: undefined as unknown as T, done: true })
+          return Promise.resolve({ value: undefined, done: true } as IteratorResult<T>)
         },
         throw(error: Error): Promise<IteratorResult<T>> {
           emitter.off(event, listener)

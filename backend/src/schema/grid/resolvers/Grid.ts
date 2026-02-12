@@ -1,4 +1,5 @@
 import type { GridResolvers } from './../../types.generated'
+import { GraphQLError } from 'graphql'
 
 export const Grid: GridResolvers = {
   squares: async (parent, _args, context) => {
@@ -11,7 +12,8 @@ export const Grid: GridResolvers = {
       where: { id: String(parent.id) },
       include: { creator: true },
     })
-    return grid!.creator
+    if (!grid) throw new GraphQLError('Grid not found', { extensions: { code: 'NOT_FOUND' } })
+    return grid.creator
   },
   owners: async (parent, _args, context) => {
     const grid = await context.prisma.grid.findUnique({
