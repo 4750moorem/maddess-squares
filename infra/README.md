@@ -1,4 +1,4 @@
 # Infra
 
-Placeholder for infrastructure work. This directory will host CI pipelines and
-infrastructure-as-code as the project evolves.
+Placeholder for infrastructure work. No CI/CD pipelines or infrastructure-as-code
+are configured yet.

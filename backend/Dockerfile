@@ -2,7 +2,7 @@ FROM oven/bun:1.3.8
 
 WORKDIR /app
 
-COPY package.json bun.lockb tsconfig.json prisma.config.ts ./
+COPY package.json bun.lock tsconfig.json prisma.config.ts ./
 COPY prisma ./prisma
 
 RUN bun install
