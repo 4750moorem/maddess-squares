@@ -131,6 +131,7 @@ input UpdateGridInput {
 }
 
 input UpdateSquareInput {
+  gamePlayerId: ID
   value: String
 }
 
