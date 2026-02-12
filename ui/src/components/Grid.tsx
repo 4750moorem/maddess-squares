@@ -116,9 +116,11 @@ function GridSquare({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <button
-          type="button"
+        <div
+          role="button"
+          tabIndex={0}
           onClick={handleClick}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick() }}
           className={`relative flex h-10 w-10 items-center justify-center border-r border-b border-border font-mono text-xs transition-colors ${
             square.gamePlayer
               ? 'cursor-pointer bg-muted/40 hover:bg-muted/60'
@@ -136,7 +138,7 @@ function GridSquare({
               squareId={square.id}
             />
           )}
-        </button>
+        </div>
       </TooltipTrigger>
       {playerName && (
         <TooltipContent>

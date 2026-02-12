@@ -86,25 +86,29 @@ function Home() {
     if (!selectedGridId || !selectedSquare) return
     if (!newPlayer.firstName.trim() || !newPlayer.lastName.trim()) return
 
-    const result = await bulkAddPlayers({
-      variables: {
-        input: {
-          gridId: selectedGridId,
-          players: [newPlayer],
+    try {
+      const result = await bulkAddPlayers({
+        variables: {
+          input: {
+            gridId: selectedGridId,
+            players: [newPlayer],
+          },
         },
-      },
-      refetchQueries: [{ query: MyGridsDocument }],
-    })
+        refetchQueries: [{ query: MyGridsDocument }],
+      })
 
-    const addedPlayers = result.data?.bulkAddPlayers?.players
-    if (addedPlayers && addedPlayers.length > 0) {
-      const newest = addedPlayers[addedPlayers.length - 1]
-      if (newest) {
-        await updateSquare({
-          variables: { id: selectedSquare.id, input: { gamePlayerId: newest.id } },
-          refetchQueries: [{ query: MyGridsDocument }],
-        })
+      const addedPlayers = result.data?.bulkAddPlayers?.players
+      if (addedPlayers && addedPlayers.length > 0) {
+        const newest = addedPlayers[addedPlayers.length - 1]
+        if (newest) {
+          await updateSquare({
+            variables: { id: selectedSquare.id, input: { gamePlayerId: newest.id } },
+            refetchQueries: [{ query: MyGridsDocument }],
+          })
+        }
       }
+    } catch (err) {
+      console.error('handleAddAndAssign error:', err)
     }
 
     setIsSquareModalOpen(false)
