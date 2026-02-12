@@ -18,6 +18,7 @@ import {
   useMeQuery,
   useCreateGridMutation,
   useBulkAddPlayersMutation,
+  useUpdateSquareMutation,
   MyGridsDocument,
   type MyGridsQuery,
 } from '@/graphql/generated'
@@ -29,6 +30,7 @@ function Home() {
   const { data: gridsData, loading: gridsLoading } = useMyGridsQuery()
   const [createGrid, { loading: createGridLoading }] = useCreateGridMutation()
   const [bulkAddPlayers, { loading: addingPlayers }] = useBulkAddPlayersMutation()
+  const [updateSquare, { loading: assigningPlayer }] = useUpdateSquareMutation()
   const [showCreateDialog, setShowCreateDialog] = useState(false)
   const [gridName, setGridName] = useState('')
   const [gridDescription, setGridDescription] = useState('')
@@ -36,6 +38,9 @@ function Home() {
   const [selectedSquare, setSelectedSquare] = useState<SquareType | null>(null)
   const [isSquareModalOpen, setIsSquareModalOpen] = useState(false)
   const [showAddPlayersDialog, setShowAddPlayersDialog] = useState(false)
+  const [selectedPlayerId, setSelectedPlayerId] = useState<string>('')
+  const [showNewPlayerForm, setShowNewPlayerForm] = useState(false)
+  const [newPlayer, setNewPlayer] = useState({ firstName: '', lastName: '', email: '', phoneNumber: '' })
   const [players, setPlayers] = useState([
     { firstName: '', lastName: '', email: '', phoneNumber: '' },
   ])
@@ -61,7 +66,48 @@ function Home() {
 
   const handleSquareClick = (square: SquareType) => {
     setSelectedSquare(square)
+    setSelectedPlayerId('')
+    setShowNewPlayerForm(false)
+    setNewPlayer({ firstName: '', lastName: '', email: '', phoneNumber: '' })
     setIsSquareModalOpen(true)
+  }
+
+  const handleAssignPlayer = async () => {
+    if (!selectedSquare || !selectedPlayerId) return
+    await updateSquare({
+      variables: { id: selectedSquare.id, input: { gamePlayerId: selectedPlayerId } },
+      refetchQueries: [{ query: MyGridsDocument }],
+    })
+    setIsSquareModalOpen(false)
+  }
+
+  const handleAddAndAssign = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!selectedGridId || !selectedSquare) return
+    if (!newPlayer.firstName.trim() || !newPlayer.lastName.trim()) return
+
+    const result = await bulkAddPlayers({
+      variables: {
+        input: {
+          gridId: selectedGridId,
+          players: [newPlayer],
+        },
+      },
+      refetchQueries: [{ query: MyGridsDocument }],
+    })
+
+    const addedPlayers = result.data?.bulkAddPlayers?.players
+    if (addedPlayers && addedPlayers.length > 0) {
+      const newest = addedPlayers[addedPlayers.length - 1]
+      if (newest) {
+        await updateSquare({
+          variables: { id: selectedSquare.id, input: { gamePlayerId: newest.id } },
+          refetchQueries: [{ query: MyGridsDocument }],
+        })
+      }
+    }
+
+    setIsSquareModalOpen(false)
   }
 
   const addPlayerRow = () => {
@@ -319,17 +365,22 @@ function Home() {
       <Dialog open={isSquareModalOpen} onOpenChange={setIsSquareModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Square Details</DialogTitle>
+            <DialogTitle>
+              {selectedSquare?.gamePlayer ? 'Square Details' : 'Assign Player'}
+            </DialogTitle>
             <DialogDescription>
               {selectedSquare && (
                 <>
                   Position: Row {selectedSquare.rowValue}, Column{' '}
                   {selectedSquare.columnValue}
-                  <br />
-                  Owner:{' '}
-                  {selectedSquare.gamePlayer?.displayName ||
-                    selectedSquare.gamePlayer?.email ||
-                    'Unclaimed'}
+                  {selectedSquare.gamePlayer && (
+                    <>
+                      <br />
+                      Owner:{' '}
+                      {selectedSquare.gamePlayer.displayName ||
+                        selectedSquare.gamePlayer.email}
+                    </>
+                  )}
                 </>
               )}
             </DialogDescription>
@@ -346,6 +397,89 @@ function Home() {
               </span>
               .
             </p>
+
+            {selectedSquare && !selectedSquare.gamePlayer && selectedGrid && (
+              <div className="space-y-4 border-t border-border pt-4">
+                <div className="space-y-2">
+                  <label
+                    htmlFor="assignPlayer"
+                    className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                  >
+                    Select a Player
+                  </label>
+                  <select
+                    id="assignPlayer"
+                    value={selectedPlayerId}
+                    onChange={(e) => setSelectedPlayerId(e.target.value)}
+                    className="retro-input w-full"
+                  >
+                    <option value="">Choose a player...</option>
+                    {selectedGrid.players.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.displayName || p.email || 'Unknown'}
+                      </option>
+                    ))}
+                  </select>
+                  <Button
+                    onClick={handleAssignPlayer}
+                    disabled={!selectedPlayerId || assigningPlayer}
+                    className="w-full"
+                  >
+                    {assigningPlayer ? 'Assigning...' : 'Assign Player'}
+                  </Button>
+                </div>
+
+                <div className="border-t border-border pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPlayerForm(!showNewPlayerForm)}
+                    className="text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground"
+                  >
+                    {showNewPlayerForm ? 'Hide' : 'Add New Player'}
+                  </button>
+
+                  {showNewPlayerForm && (
+                    <form onSubmit={handleAddAndAssign} className="mt-3 space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        <input
+                          type="text"
+                          value={newPlayer.firstName}
+                          onChange={(e) => setNewPlayer({ ...newPlayer, firstName: e.target.value })}
+                          className="retro-input"
+                          placeholder="First Name *"
+                          required
+                        />
+                        <input
+                          type="text"
+                          value={newPlayer.lastName}
+                          onChange={(e) => setNewPlayer({ ...newPlayer, lastName: e.target.value })}
+                          className="retro-input"
+                          placeholder="Last Name *"
+                          required
+                        />
+                      </div>
+                      <input
+                        type="email"
+                        value={newPlayer.email}
+                        onChange={(e) => setNewPlayer({ ...newPlayer, email: e.target.value })}
+                        className="retro-input w-full"
+                        placeholder="Email (optional)"
+                      />
+                      <input
+                        type="tel"
+                        value={newPlayer.phoneNumber}
+                        onChange={(e) => setNewPlayer({ ...newPlayer, phoneNumber: e.target.value })}
+                        className="retro-input w-full"
+                        placeholder="Phone (optional)"
+                      />
+                      <Button type="submit" disabled={assigningPlayer || addingPlayers} className="w-full">
+                        {assigningPlayer || addingPlayers ? 'Adding...' : 'Add & Assign'}
+                      </Button>
+                    </form>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>

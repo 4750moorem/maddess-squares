@@ -241,6 +241,7 @@ export type UpdateGridInput = {
 };
 
 export type UpdateSquareInput = {
+  gamePlayerId?: InputMaybe<Scalars['ID']['input']>;
   value?: InputMaybe<Scalars['String']['input']>;
 };
 
