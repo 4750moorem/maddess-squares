@@ -59,12 +59,18 @@ extend type Query {
   myGrids: [Grid!]!
 }
 
+input BulkAssignSquaresInput {
+  squareIds: [ID!]!
+  gamePlayerId: ID!
+}
+
 extend type Mutation {
   createGrid(input: CreateGridInput!): Grid!
   updateGrid(id: ID!, input: UpdateGridInput!): Grid
   deleteGrid(id: ID!): Boolean!
   updateSquare(id: ID!, input: UpdateSquareInput!): Square
   bulkAddPlayers(input: BulkAddPlayersInput!): Grid
+  bulkAssignSquares(input: BulkAssignSquaresInput!): [Square!]!
 }
 
 input UpdateSquareInput {

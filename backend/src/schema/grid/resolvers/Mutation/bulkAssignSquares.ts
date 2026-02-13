@@ -14,18 +14,12 @@ export const bulkAssignSquares: NonNullable<MutationResolvers['bulkAssignSquares
 
   const { squareIds, gamePlayerId } = args.input
 
-  const gamePlayer = await context.prisma.gamePlayer.findUnique({
-    where: { id: gamePlayerId },
-  })
-
-  if (!gamePlayer) {
-    throw new GraphQLError('Game player not found', {
-      extensions: { code: 'NOT_FOUND' },
-    })
+  if (squareIds.length === 0) {
+    return []
   }
 
   const squares = await context.prisma.square.findMany({
-    where: { id: { in: [...squareIds] } },
+    where: { id: { in: squareIds } },
   })
 
   if (squares.length !== squareIds.length) {
@@ -41,19 +35,29 @@ export const bulkAssignSquares: NonNullable<MutationResolvers['bulkAssignSquares
     })
   }
 
-  const gridId = squares[0]!.gridId
-  if (gamePlayer.gridId !== gridId) {
+  const gamePlayer = await context.prisma.gamePlayer.findUnique({
+    where: { id: gamePlayerId },
+  })
+
+  if (!gamePlayer) {
+    throw new GraphQLError('Game player not found', {
+      extensions: { code: 'NOT_FOUND' },
+    })
+  }
+
+  const squareGridId = squares[0]!.gridId
+  if (gamePlayer.gridId !== squareGridId) {
     throw new GraphQLError('Game player does not belong to this grid', {
       extensions: { code: 'BAD_REQUEST' },
     })
   }
 
-  await context.prisma.square.updateMany({
-    where: { id: { in: [...squareIds] } },
-    data: { gamePlayerId },
-  })
-
-  return context.prisma.square.findMany({
-    where: { id: { in: [...squareIds] } },
-  })
+  return context.prisma.$transaction(
+    squareIds.map((id) =>
+      context.prisma.square.update({
+        where: { id },
+        data: { gamePlayerId },
+      }),
+    ),
+  )
 }
