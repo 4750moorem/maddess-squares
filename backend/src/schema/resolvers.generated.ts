@@ -12,6 +12,7 @@ import    { userByFirebaseId as Query_userByFirebaseId } from './user/resolvers/
 import    { userByPhoneNumber as Query_userByPhoneNumber } from './user/resolvers/Query/userByPhoneNumber';
 import    { users as Query_users } from './user/resolvers/Query/users';
 import    { bulkAddPlayers as Mutation_bulkAddPlayers } from './grid/resolvers/Mutation/bulkAddPlayers';
+import    { bulkAssignSquares as Mutation_bulkAssignSquares } from './grid/resolvers/Mutation/bulkAssignSquares';
 import    { createGrid as Mutation_createGrid } from './grid/resolvers/Mutation/createGrid';
 import    { createNotification as Mutation_createNotification } from './notification/resolvers/Mutation/createNotification';
 import    { createUser as Mutation_createUser } from './user/resolvers/Mutation/createUser';
@@ -29,7 +30,7 @@ import    { User } from './user/resolvers/User';
 import    { DateTimeResolver,JSONResolver } from 'graphql-scalars';
     export const resolvers: Resolvers = {
       Query: { dbStatus: Query_dbStatus,grid: Query_grid,hello: Query_hello,me: Query_me,myGrids: Query_myGrids,notifications: Query_notifications,user: Query_user,userByEmail: Query_userByEmail,userByFirebaseId: Query_userByFirebaseId,userByPhoneNumber: Query_userByPhoneNumber,users: Query_users },
-      Mutation: { bulkAddPlayers: Mutation_bulkAddPlayers,createGrid: Mutation_createGrid,createNotification: Mutation_createNotification,createUser: Mutation_createUser,deleteGrid: Mutation_deleteGrid,deleteUser: Mutation_deleteUser,updateGrid: Mutation_updateGrid,updateSquare: Mutation_updateSquare,updateUser: Mutation_updateUser },
+      Mutation: { bulkAddPlayers: Mutation_bulkAddPlayers,bulkAssignSquares: Mutation_bulkAssignSquares,createGrid: Mutation_createGrid,createNotification: Mutation_createNotification,createUser: Mutation_createUser,deleteGrid: Mutation_deleteGrid,deleteUser: Mutation_deleteUser,updateGrid: Mutation_updateGrid,updateSquare: Mutation_updateSquare,updateUser: Mutation_updateUser },
       Subscription: { notificationAdded: Subscription_notificationAdded },
       GamePlayer: GamePlayer,
 Grid: Grid,

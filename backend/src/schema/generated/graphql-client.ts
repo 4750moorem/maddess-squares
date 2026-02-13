@@ -24,6 +24,11 @@ export type BulkAddPlayersInput = {
   players: Array<PlayerInput>;
 };
 
+export type BulkAssignSquaresInput = {
+  gamePlayerId: Scalars['ID']['input'];
+  squareIds: Array<Scalars['ID']['input']>;
+};
+
 export type CreateGridInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -76,6 +81,7 @@ export type Grid = {
 export type Mutation = {
   __typename?: 'Mutation';
   bulkAddPlayers?: Maybe<Grid>;
+  bulkAssignSquares: Array<Square>;
   createGrid: Grid;
   createNotification: Notification;
   createUser: User;
@@ -89,6 +95,11 @@ export type Mutation = {
 
 export type MutationBulkAddPlayersArgs = {
   input: BulkAddPlayersInput;
+};
+
+
+export type MutationBulkAssignSquaresArgs = {
+  input: BulkAssignSquaresInput;
 };
 
 
