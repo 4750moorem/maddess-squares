@@ -3,6 +3,11 @@ input BulkAddPlayersInput {
   players: [PlayerInput!]!
 }
 
+input BulkAssignSquaresInput {
+  gamePlayerId: ID!
+  squareIds: [ID!]!
+}
+
 input CreateGridInput {
   description: String
   name: String!
@@ -56,6 +61,7 @@ scalar JSON
 
 type Mutation {
   bulkAddPlayers(input: BulkAddPlayersInput!): Grid
+  bulkAssignSquares(input: BulkAssignSquaresInput!): [Square!]!
   createGrid(input: CreateGridInput!): Grid!
   createNotification(input: CreateNotificationInput!): Notification!
   createUser(input: CreateUserInput!): User!

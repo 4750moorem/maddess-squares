@@ -101,15 +101,23 @@ function GridSquare({
   square,
   players,
   onSquareClick,
+  isSelected,
+  onShiftClick,
 }: {
   square: SquareType
   players: PlayerType[]
   onSquareClick: (square: SquareType) => void
+  isSelected: boolean
+  onShiftClick: (square: SquareType) => void
 }){
   const playerName = square.gamePlayer?.displayName || square.gamePlayer?.email || null
   const initials = square.gamePlayer ? getInitials(square.gamePlayer.displayName, square.gamePlayer.email) : null
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (e.shiftKey) {
+      onShiftClick(square)
+      return
+    }
     onSquareClick(square)
   }
 
@@ -120,11 +128,13 @@ function GridSquare({
           role="button"
           tabIndex={0}
           onClick={handleClick}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick() }}
-          className={`relative flex items-center justify-center border border-border font-mono text-xs transition-colors ${
-            square.gamePlayer
-              ? 'cursor-pointer bg-muted/40 hover:bg-muted/60'
-              : 'cursor-pointer bg-card hover:bg-muted/20'
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onSquareClick(square) }}
+          className={`relative flex items-center justify-center border font-mono text-xs transition-colors ${
+            isSelected
+              ? 'cursor-pointer border-2 border-primary bg-primary/20'
+              : square.gamePlayer
+                ? 'cursor-pointer border-border bg-muted/40 hover:bg-muted/60'
+                : 'cursor-pointer border-border bg-card hover:bg-muted/20'
           }`}
         >
           {initials && (
@@ -152,9 +162,13 @@ function GridSquare({
 export function Grid({
   grid,
   onSquareClick,
+  selectedSquareIds,
+  onShiftClick,
 }: {
   grid: GridType
   onSquareClick: (square: SquareType) => void
+  selectedSquareIds: Set<string>
+  onShiftClick: (square: SquareType) => void
 }){
   const squaresByPosition = new Map<string, SquareType>()
   for (const square of grid.squares) {
@@ -204,6 +218,8 @@ export function Grid({
                   square={square}
                   players={grid.players}
                   onSquareClick={onSquareClick}
+                  isSelected={selectedSquareIds.has(square.id)}
+                  onShiftClick={onShiftClick}
                 />
               )
             })}

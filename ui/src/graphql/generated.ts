@@ -26,6 +26,11 @@ export type BulkAddPlayersInput = {
   players: Array<PlayerInput>;
 };
 
+export type BulkAssignSquaresInput = {
+  gamePlayerId: Scalars['ID']['input'];
+  squareIds: Array<Scalars['ID']['input']>;
+};
+
 export type CreateGridInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -78,6 +83,7 @@ export type Grid = {
 export type Mutation = {
   __typename?: 'Mutation';
   bulkAddPlayers?: Maybe<Grid>;
+  bulkAssignSquares: Array<Square>;
   createGrid: Grid;
   createNotification: Notification;
   createUser: User;
@@ -91,6 +97,11 @@ export type Mutation = {
 
 export type MutationBulkAddPlayersArgs = {
   input: BulkAddPlayersInput;
+};
+
+
+export type MutationBulkAssignSquaresArgs = {
+  input: BulkAssignSquaresInput;
 };
 
 
@@ -335,6 +346,13 @@ export type BulkAddPlayersMutationVariables = Exact<{
 
 
 export type BulkAddPlayersMutation = { __typename?: 'Mutation', bulkAddPlayers?: { __typename?: 'Grid', id: string, name: string, players: Array<{ __typename?: 'GamePlayer', id: string, email?: string | null, phoneNumber?: string | null, fullName?: string | null, displayName?: string | null, joinedAt: string }> } | null };
+
+export type BulkAssignSquaresMutationVariables = Exact<{
+  input: BulkAssignSquaresInput;
+}>;
+
+
+export type BulkAssignSquaresMutation = { __typename?: 'Mutation', bulkAssignSquares: Array<{ __typename?: 'Square', id: string, rowIndex: number, columnIndex: number, rowValue: number, columnValue: number, gamePlayer?: { __typename?: 'GamePlayer', id: string, displayName?: string | null, email?: string | null } | null }> };
 
 
 export const NotificationsDocument = gql`
@@ -842,3 +860,42 @@ export function useBulkAddPlayersMutation(baseOptions?: ApolloReactHooks.Mutatio
         return ApolloReactHooks.useMutation<BulkAddPlayersMutation, BulkAddPlayersMutationVariables>(BulkAddPlayersDocument, options);
       }
 export type BulkAddPlayersMutationHookResult = ReturnType<typeof useBulkAddPlayersMutation>;
+export const BulkAssignSquaresDocument = gql`
+    mutation BulkAssignSquares($input: BulkAssignSquaresInput!) {
+  bulkAssignSquares(input: $input) {
+    id
+    rowIndex
+    columnIndex
+    rowValue
+    columnValue
+    gamePlayer {
+      id
+      displayName
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useBulkAssignSquaresMutation__
+ *
+ * To run a mutation, you first call `useBulkAssignSquaresMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBulkAssignSquaresMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bulkAssignSquaresMutation, { data, loading, error }] = useBulkAssignSquaresMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useBulkAssignSquaresMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<BulkAssignSquaresMutation, BulkAssignSquaresMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<BulkAssignSquaresMutation, BulkAssignSquaresMutationVariables>(BulkAssignSquaresDocument, options);
+      }
+export type BulkAssignSquaresMutationHookResult = ReturnType<typeof useBulkAssignSquaresMutation>;

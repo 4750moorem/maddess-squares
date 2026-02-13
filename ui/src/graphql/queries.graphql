@@ -133,3 +133,18 @@ mutation BulkAddPlayers($input: BulkAddPlayersInput!) {
     }
   }
 }
+
+mutation BulkAssignSquares($input: BulkAssignSquaresInput!) {
+  bulkAssignSquares(input: $input) {
+    id
+    rowIndex
+    columnIndex
+    rowValue
+    columnValue
+    gamePlayer {
+      id
+      displayName
+      email
+    }
+  }
+}
