@@ -77,3 +77,12 @@ input UpdateSquareInput {
   value: String
   gamePlayerId: ID
 }
+
+input BulkAssignSquaresInput {
+  squareIds: [ID!]!
+  gamePlayerId: ID!
+}
+
+extend type Mutation {
+  bulkAssignSquares(input: BulkAssignSquaresInput!): [Square!]!
+}

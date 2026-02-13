@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -19,6 +19,7 @@ import {
   useCreateGridMutation,
   useBulkAddPlayersMutation,
   useUpdateSquareMutation,
+  useBulkAssignSquaresMutation,
   MyGridsDocument,
   type MyGridsQuery,
 } from '@/graphql/generated'
@@ -31,7 +32,11 @@ function Home() {
   const [createGrid, { loading: createGridLoading }] = useCreateGridMutation()
   const [bulkAddPlayers, { loading: addingPlayers }] = useBulkAddPlayersMutation()
   const [updateSquare, { loading: assigningPlayer }] = useUpdateSquareMutation()
+  const [bulkAssignSquares, { loading: bulkAssigning }] = useBulkAssignSquaresMutation()
   const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [selectedSquares, setSelectedSquares] = useState<SquareType[]>([])
+  const [showBulkAssignDialog, setShowBulkAssignDialog] = useState(false)
+  const [bulkAssignPlayerId, setBulkAssignPlayerId] = useState<string>('')
   const [gridName, setGridName] = useState('')
   const [gridDescription, setGridDescription] = useState('')
   const [selectedGridId, setSelectedGridId] = useState<string | null>(null)
@@ -71,6 +76,39 @@ function Home() {
     setNewPlayer({ firstName: '', lastName: '', email: '', phoneNumber: '' })
     setIsSquareModalOpen(true)
   }
+
+  const handleShiftClick = useCallback((square: SquareType) => {
+    setSelectedSquares((prev) => {
+      const exists = prev.some((s) => s.id === square.id)
+      if (exists) return prev.filter((s) => s.id !== square.id)
+      return [...prev, square]
+    })
+  }, [])
+
+  const selectedSquareIds = useMemo(
+    () => new Set(selectedSquares.map((s) => s.id)),
+    [selectedSquares],
+  )
+
+  const handleBulkAssign = async () => {
+    if (selectedSquares.length === 0 || !bulkAssignPlayerId) return
+    await bulkAssignSquares({
+      variables: {
+        input: {
+          squareIds: selectedSquares.map((s) => s.id),
+          gamePlayerId: bulkAssignPlayerId,
+        },
+      },
+      refetchQueries: [{ query: MyGridsDocument }],
+    })
+    setSelectedSquares([])
+    setBulkAssignPlayerId('')
+    setShowBulkAssignDialog(false)
+  }
+
+  useEffect(() => {
+    setSelectedSquares([])
+  }, [selectedGridId])
 
   const handleAssignPlayer = async () => {
     if (!selectedSquare || !selectedPlayerId) return
@@ -226,10 +264,41 @@ function Home() {
                   </div>
                 </div>
 
+                {selectedSquares.length > 0 && (
+                  <div className="flex items-center gap-3 rounded-md border border-primary/40 bg-primary/10 px-4 py-2">
+                    <span className="text-sm font-medium">
+                      {selectedSquares.length} square{selectedSquares.length > 1 ? 's' : ''} selected
+                    </span>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setBulkAssignPlayerId('')
+                        setShowBulkAssignDialog(true)
+                      }}
+                      disabled={bulkAssigning}
+                    >
+                      Assign to Selected
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setSelectedSquares([])}
+                    >
+                      Clear
+                    </Button>
+                  </div>
+                )}
+
+                <p className="text-xs text-muted-foreground">
+                  Hold Shift to select multiple squares
+                </p>
+
                 <div className="flex justify-center">
                   <Grid
                     grid={selectedGrid}
                     onSquareClick={handleSquareClick}
+                    selectedSquareIds={selectedSquareIds}
+                    onShiftClick={handleShiftClick}
                   />
                 </div>
               </div>
@@ -484,6 +553,47 @@ function Home() {
                 </div>
               </div>
             )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showBulkAssignDialog} onOpenChange={setShowBulkAssignDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Assign {selectedSquares.length} Square{selectedSquares.length > 1 ? 's' : ''}</DialogTitle>
+            <DialogDescription>
+              Select a player to assign to the selected squares.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label
+                htmlFor="bulkAssignPlayer"
+                className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+              >
+                Select a Player
+              </label>
+              <select
+                id="bulkAssignPlayer"
+                value={bulkAssignPlayerId}
+                onChange={(e) => setBulkAssignPlayerId(e.target.value)}
+                className="retro-input w-full"
+              >
+                <option value="">Choose a player...</option>
+                {selectedGrid?.players.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.displayName || p.email || 'Unknown'}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <Button
+              onClick={handleBulkAssign}
+              disabled={!bulkAssignPlayerId || bulkAssigning}
+              className="w-full"
+            >
+              {bulkAssigning ? 'Assigning...' : `Assign ${selectedSquares.length} Square${selectedSquares.length > 1 ? 's' : ''}`}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
