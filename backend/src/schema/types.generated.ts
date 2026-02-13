@@ -26,6 +26,11 @@ export type BulkAddPlayersInput = {
   players: Array<PlayerInput>;
 };
 
+export type BulkAssignSquaresInput = {
+  gamePlayerId: Scalars['ID']['input'];
+  squareIds: Array<Scalars['ID']['input']>;
+};
+
 export type CreateGridInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -78,6 +83,7 @@ export type Grid = {
 export type Mutation = {
   __typename?: 'Mutation';
   bulkAddPlayers?: Maybe<Grid>;
+  bulkAssignSquares: Array<Square>;
   createGrid: Grid;
   createNotification: Notification;
   createUser: User;
@@ -91,6 +97,11 @@ export type Mutation = {
 
 export type MutationbulkAddPlayersArgs = {
   input: BulkAddPlayersInput;
+};
+
+
+export type MutationbulkAssignSquaresArgs = {
+  input: BulkAssignSquaresInput;
 };
 
 
@@ -337,6 +348,7 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 export type ResolversTypes = {
   BulkAddPlayersInput: BulkAddPlayersInput;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  BulkAssignSquaresInput: BulkAssignSquaresInput;
   CreateGridInput: CreateGridInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   CreateNotificationInput: CreateNotificationInput;
@@ -364,6 +376,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   BulkAddPlayersInput: BulkAddPlayersInput;
   ID: Scalars['ID']['output'];
+  BulkAssignSquaresInput: BulkAssignSquaresInput;
   CreateGridInput: CreateGridInput;
   String: Scalars['String']['output'];
   CreateNotificationInput: CreateNotificationInput;
@@ -420,6 +433,7 @@ export interface JSONScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   bulkAddPlayers?: Resolver<Maybe<ResolversTypes['Grid']>, ParentType, ContextType, RequireFields<MutationbulkAddPlayersArgs, 'input'>>;
+  bulkAssignSquares?: Resolver<Array<ResolversTypes['Square']>, ParentType, ContextType, RequireFields<MutationbulkAssignSquaresArgs, 'input'>>;
   createGrid?: Resolver<ResolversTypes['Grid'], ParentType, ContextType, RequireFields<MutationcreateGridArgs, 'input'>>;
   createNotification?: Resolver<ResolversTypes['Notification'], ParentType, ContextType, RequireFields<MutationcreateNotificationArgs, 'input'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationcreateUserArgs, 'input'>>;
