@@ -9,22 +9,28 @@ function getFirebaseAdmin(): App {
   const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT
   if (serviceAccountJson) {
     const parsed: unknown = JSON.parse(serviceAccountJson)
-    if (
-      typeof parsed !== 'object' ||
-      parsed === null ||
-      !('projectId' in parsed) ||
-      !('clientEmail' in parsed) ||
-      !('privateKey' in parsed)
-    ) {
+    if (typeof parsed !== 'object' || parsed === null) {
       throw new Error('Invalid Firebase service account config')
     }
-    const serviceAccount = parsed as {
-      projectId: string
-      clientEmail: string
-      privateKey: string
+    const raw = parsed as Record<string, unknown>
+
+    // Firebase service account JSON uses snake_case keys
+    const projectId = raw.projectId ?? raw.project_id
+    const clientEmail = raw.clientEmail ?? raw.client_email
+    const privateKey = raw.privateKey ?? raw.private_key
+
+    if (
+      typeof projectId !== 'string' ||
+      typeof clientEmail !== 'string' ||
+      typeof privateKey !== 'string'
+    ) {
+      throw new Error(
+        'Firebase service account missing projectId, clientEmail, or privateKey',
+      )
     }
+
     firebaseAdmin = initializeApp({
-      credential: cert(serviceAccount),
+      credential: cert({ projectId, clientEmail, privateKey }),
     })
   } else {
     firebaseAdmin = initializeApp()
