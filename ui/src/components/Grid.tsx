@@ -86,7 +86,7 @@ function QuickPickDropdown({
                 }}
                 className="flex w-full items-center px-2 py-1.5 text-left text-xs text-destructive hover:bg-destructive/10"
               >
-                \u2715 Unassign {currentPlayer.displayName || currentPlayer.email}
+                {'\u2715'} Unassign {currentPlayer.displayName || currentPlayer.email}
               </button>
               <div className="border-t border-border" />
             </>
