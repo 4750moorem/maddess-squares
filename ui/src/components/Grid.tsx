@@ -33,10 +33,12 @@ function getInitials(displayName?: string | null, email?: string | null): string
 function QuickPickDropdown({
   players,
   squareId,
+  currentPlayer,
 }: {
   players: PlayerType[]
   squareId: string
-}) {
+  currentPlayer?: { id: string; displayName?: string | null; email?: string | null } | null
+}){
   const [open, setOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [updateSquare] = useUpdateSquareMutation()
@@ -52,7 +54,7 @@ function QuickPickDropdown({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [open])
 
-  const handleAssign = async (playerId: string) => {
+  const handleAssign = async (playerId: string | null) => {
     await updateSquare({
       variables: { id: squareId, input: { gamePlayerId: playerId } },
       refetchQueries: [{ query: MyGridsDocument }],
@@ -70,10 +72,25 @@ function QuickPickDropdown({
         }}
         className="flex h-3 w-3 items-center justify-center rounded-tl bg-muted-foreground/20 text-[6px] leading-none text-muted-foreground hover:bg-muted-foreground/40"
       >
-        +
+        {currentPlayer ? '\u22EE' : '+'}
       </button>
       {open && (
         <div className="absolute bottom-full right-0 z-50 mb-1 max-h-48 w-40 overflow-y-auto rounded-md border border-border bg-card shadow-lg">
+          {currentPlayer && (
+            <>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleAssign(null)
+                }}
+                className="flex w-full items-center px-2 py-1.5 text-left text-xs text-destructive hover:bg-destructive/10"
+              >
+                \u2715 Unassign {currentPlayer.displayName || currentPlayer.email}
+              </button>
+              <div className="border-t border-border" />
+            </>
+          )}
           {players.length === 0 ? (
             <div className="px-2 py-1.5 text-xs text-muted-foreground">No players</div>
           ) : (
@@ -142,12 +159,11 @@ function GridSquare({
               {initials}
             </span>
           )}
-          {!square.gamePlayer && (
-            <QuickPickDropdown
-              players={players}
-              squareId={square.id}
-            />
-          )}
+          <QuickPickDropdown
+            players={players}
+            squareId={square.id}
+            currentPlayer={square.gamePlayer}
+          />
         </div>
       </TooltipTrigger>
       {playerName && (

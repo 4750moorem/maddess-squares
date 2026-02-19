@@ -119,6 +119,15 @@ function Home() {
     setIsSquareModalOpen(false)
   }
 
+  const handleUnassignPlayer = async () => {
+    if (!selectedSquare) return
+    await updateSquare({
+      variables: { id: selectedSquare.id, input: { gamePlayerId: null } },
+      refetchQueries: [{ query: MyGridsDocument }],
+    })
+    setIsSquareModalOpen(false)
+  }
+
   const handleAddAndAssign = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedGridId || !selectedSquare) return
@@ -439,7 +448,7 @@ function Home() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {selectedSquare?.gamePlayer ? 'Square Details' : 'Assign Player'}
+              {selectedSquare?.gamePlayer ? 'Manage Square Assignment' : 'Assign Player'}
             </DialogTitle>
             <DialogDescription>
               {selectedSquare && (
@@ -470,6 +479,19 @@ function Home() {
               </span>
               .
             </p>
+
+            {selectedSquare?.gamePlayer && (
+              <div className="space-y-4 border-t border-border pt-4">
+                <Button
+                  variant="destructive"
+                  onClick={handleUnassignPlayer}
+                  disabled={assigningPlayer}
+                  className="w-full"
+                >
+                  {assigningPlayer ? 'Unassigning...' : 'Unassign Player'}
+                </Button>
+              </div>
+            )}
 
             {selectedSquare && !selectedSquare.gamePlayer && selectedGrid && (
               <div className="space-y-4 border-t border-border pt-4">
